@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Benutzerverwaltung" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Benutzerverwaltung.htm#Benutzeruebersicht" />
+	</t:div>
+	<t:fieldset legend="Suche">
+		<h:panelGrid columns="5">
+			<sr:textField id="filter_username" compute="true"
+				value="#{pc.dataModel.searchObject.username}" maxlength="20"
+				size="10" label="#{sr:text('label.admin.user.username')}">
+				<p:ajax event="keyup" ignoreDupResponses="true" delay="200"
+					listener="#{pc.dataModel.reset}" update="datagroup" />
+			</sr:textField>
+
+			<sr:textField id="filter_vorname" compute="true"
+				value="#{pc.dataModel.searchObject.vorname}" maxlength="80"
+				size="20" label="#{sr:text('label.admin.user.vorname')}">
+				<p:ajax event="keyup" ignoreDupResponses="true" delay="200"
+					listener="#{pc.dataModel.reset}" update="datagroup" />
+			</sr:textField>
+
+			<sr:textField id="filter_nachname" compute="true"
+				value="#{pc.dataModel.searchObject.nachname}" maxlength="80"
+				size="20" label="#{sr:text('label.admin.user.nachname')}">
+				<p:ajax event="keyup" ignoreDupResponses="true" delay="200"
+					listener="#{pc.dataModel.reset}" update="datagroup" />
+			</sr:textField>
+
+			<sr:comboboxField id="filter_userstatus" label="Status"
+				emptyItem="true" value="#{pc.dataModel.searchObject.enabled}">
+				<f:selectItem itemLabel="Aktiviert" itemValue="true" />
+				<f:selectItem itemLabel="Deaktiviert" itemValue="false" />
+				<p:ajax event="change" listener="#{pc.dataModel.reset}"
+					update="datagroup">
+				</p:ajax>
+			</sr:comboboxField>
+		</h:panelGrid>
+	</t:fieldset>
+
+	<sr:dataTable id="data" value="#{pc.dataModel}" var="user"
+		dataScroller="true" dataScrollerInfo="true"
+		sortColumn="#{pc.dataModel.order}"
+		sortAscending="#{pc.dataModel.ascending}">
+		<t:column headerstyle="width:18px;" style="text-align:center;">
+			<f:facet name="header">
+				<t:div id="ex1">
+					<h:commandLink rendered="#{pc.dataModel.getRowCount() &gt; 0}"
+						action="#{pc.exportUser}">
+						<h:graphicImage alt="Exportieren" value="/weblets/icons/print.gif" />
+					</h:commandLink>
+				</t:div>
+			</f:facet>
+			<h:commandLink id="vorgang_load_action" action="#{pc.open}">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{user}" />
+				<t:graphicImage alt="öffnen" url="/weblets/icons/open.gif" />
+			</h:commandLink>
+		</t:column>
+		<t:column>
+			<f:facet name="header">
+				<t:commandSortHeader columnName="username" arrow="true">
+					<h:outputText value="#{sr:text('label.admin.user.username')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:commandLink id="vorgang_load_action2" action="#{pc.open}">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{user}" />
+				<h:outputText value="#{user.username}" />
+			</h:commandLink>
+		</t:column>
+		<t:column headerstyle="width:150px;">
+			<f:facet name="header">
+				<t:commandSortHeader columnName="vorname" arrow="true">
+					<h:outputText value="#{sr:text('label.admin.user.vorname')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:outputText value="#{user.vorname}" />
+		</t:column>
+		<t:column headerstyle="width:150px;">
+			<f:facet name="header">
+				<t:commandSortHeader columnName="nachname" arrow="true">
+					<h:outputText value="#{sr:text('label.admin.user.nachname')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:outputText value="#{user.nachname}" />
+		</t:column>
+		<t:column headerstyle="width:150px;">
+			<f:facet name="header">
+				<t:commandSortHeader columnName="letzterLogin" arrow="true">
+					<h:outputText value="#{sr:text('label.admin.user.lastLoginOn')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:outputText value="#{user.letzterLogin}">
+				<sr:convertDateTime type="both" />
+			</h:outputText>
+		</t:column>
+		<t:column headerstyle="width:80px;" style="text-align:center;">
+			<f:facet name="header">
+				<t:commandSortHeader columnName="enabled" propertyName="enabled"
+					arrow="true">
+					<h:outputText value="#{sr:text('label.admin.user.enabled')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:graphicImage rendered="#{user.enabled}" alt="aktiviert"
+				url="/weblets/icons/active.gif" />
+			<t:graphicImage rendered="#{ ! user.enabled}" alt="nicht aktiviert"
+				url="/weblets/icons/inactive.gif" />
+		</t:column>
+		<t:column headerstyle="width:18px;" style="text-align:center;">
+			<f:facet name="header">
+				<h:outputText value=" " />
+			</f:facet>
+			<sr:iconActionRemove id="del" disabled="#{pc.isZustaendiger(user)}">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{user}" />
+			</sr:iconActionRemove>
+		</t:column>
+	</sr:dataTable>
+	<t:div styleClass="_btn">
+		<h:commandButton id="create_action" styleClass="_button btn_new"
+			value="#{sr:text('label.new')}" disabled="#{workflow.readonly}"
+			action="#{pc.create}" />
+	</t:div>
+
+</ui:composition>
+</html>

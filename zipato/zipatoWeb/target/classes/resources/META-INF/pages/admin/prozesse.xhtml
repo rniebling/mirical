@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.prozess.Prozesssteuerung')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Uebersicht" />
+
+		<t:fieldset id="liste">
+			<sr:dataScroller for="data" render="liste" />
+
+			<t:dataTable value="#{controller.dataModel}" var="bean"
+				styleClass="dataTable" rowClasses="even,odd"
+				sortColumn="#{controller.dataModel.order}"
+				sortAscending="#{controller.dataModel.ascending}" id="data"
+				rows="10">
+
+				<t:column headerstyle="width:18px;">
+					<t:commandLink id="vorgang_load_action" action="#{controller.open}">
+						<f:setPropertyActionListener target="#{controller.valueId}"
+							value="#{bean.data[0]}" />
+						<t:graphicImage url="/weblets/icons/open.gif" />
+					</t:commandLink>
+				</t:column>
+
+				<t:column id="column_angelegtAm" headerstyle="width:70px;">
+					<f:facet name="header">
+						<t:commandSortHeader id="sort_angelegtAm" columnName="angelegtAm"
+							arrow="true">
+							<h:outputText value="#{sr:text('label.admin.prozesse.Datum')}" />
+						</t:commandSortHeader>
+					</f:facet>
+					<h:outputText value="#{bean.data[1]}">
+						<sr:convertDateTime type="date" />
+					</h:outputText>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<t:commandSortHeader id="sort_name" columnName="name" arrow="true">
+							<h:outputText value="#{sr:text('label.admin.prozess.name')}" />
+						</t:commandSortHeader>
+					</f:facet>
+					<t:commandLink id="vorgang_load_action2"
+						action="#{controller.open}">
+						<f:setPropertyActionListener target="#{controller.valueId}"
+							value="#{bean.data[0]}" />
+						<h:outputText value="#{bean.data[2]}" />
+					</t:commandLink>
+				</t:column>
+
+				<t:column id="column_aktiv" headerstyle="width:20px;"
+					style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Aktiv" />
+					</f:facet>
+					<t:graphicImage rendered="#{bean.data[3]}"
+						url="/weblets/icons/complete_status.gif" alt="Aktiv"
+						title="Aktiver Prozess" />
+				</t:column>
+
+				<c:if test="#{sr:module('ProzesseKopieren')}">
+					<t:column id="column_kopieren" headerstyle="width:20px;"
+						style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.Aktion')}" />
+						</f:facet>
+						<h:panelGrid style="width:100%" columns="1">
+							<p:commandLink id="kopieren" onclick="PF('kopieren_dlg').show();"
+								process="@this"
+								title="#{sr:text('label.admin.prozess.prozessKopieren')}">
+								<f:setPropertyActionListener target="#{controller.valueId}"
+									value="#{bean.data[0]}"></f:setPropertyActionListener>
+								<t:graphicImage
+									alt="#{sr:text('label.admin.prozess.prozessKopieren')}"
+									url="/weblets/icons/copy.gif"></t:graphicImage>
+							</p:commandLink>
+						</h:panelGrid>
+					</t:column>
+				</c:if>
+
+			</t:dataTable>
+
+			<h:panelGrid>
+				<sr:dataScrollerInfo for="data" />
+				<t:div styleClass="_btn">
+					<t:commandButton id="create_action" immediate="true"
+						styleClass="_button btn_new" value="#{sr:text('label.new')}"
+						action="#{workflow.controller.create}" />
+				</t:div>
+			</h:panelGrid>
+		</t:fieldset>
+
+
+		<p:dialog modal="true" widgetVar="kopieren_dlg"
+			styleClass="dojoDialog" width="300">
+			<h:panelGrid columns="2">
+				<f:facet name="header">
+					<h:outputText style="font-weight:normal"
+						value="#{sr:text('label.admin.prozess.frageKopieren')}" />
+				</f:facet>
+				<t:commandButton id="kopieren_dlg_ok" immediate="true"
+					onclick="PF('kopieren_dlg').hide();"
+					action="#{controller.copyProzess()}" styleClass="_button btn_save"
+					value="#{sr:text('label.kopieren')}">
+				</t:commandButton>
+				<t:commandButton id="kopieren_dlg_cancel" immediate="true"
+					styleClass="_button btn_abort" onclick="PF('kopieren_dlg').hide();"
+					value="#{sr:text('label.abbrechen')}">
+				</t:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+	</ui:define>
+
+	<ui:define name="_saveButton" />
+
+</ui:composition>
+</html>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<style>
+.height {
+	height: 100%;
+}
+</style>
+
+	<!-- <script type="text/javascript">
+		$(document).ready(function() {
+
+			$('.ui-draggable').off('click');
+
+			$('.ui-draggable').on('click', function(event) {
+					console.log("click");
+					event.stopPropagation();
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					return false;
+			});
+
+			/*$("body").on('click', function(event) {
+				if ($(event.target).parents('.ui-draggable').length) {
+					console.log("click");
+					event.stopPropagation();
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					return false;
+				}
+			}); */
+
+		});
+	</script> -->
+
+
+	<t:div rendered="#{moduleManager.isEnabled('INKASSO')}">
+		<sr:helpLink id="ink"
+			ref="Mahn/Administration Mahn/Adm_ADM_BatchJobs.htm#ADM_BatchJobs_Ausfuehrungsplan" />
+	</t:div>
+
+	<t:div
+		rendered="#{!moduleManager.isEnabled('INKASSO') and !moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Batch-Job.htm#Administration_Dialog_Ausfuehrungsplan" />
+	</t:div>
+
+	<t:div
+		rendered="#{!moduleManager.isEnabled('INKASSO') and moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="sfdk"
+			ref="SFDK/Administration SFDK/Adm_SFDK_Batch-Jobs.htm#Adm_SFDK_BatchJobs_Ausführungsplan" />
+	</t:div>
+
+	<h:panelGrid id="gr" columns="3" style="height:100%;width:100%;"
+		columnClasses="height,,height">
+
+		<p:panel id="x" header="Ausführungsplan"
+			style="width:300px;height:100%;min-height:300px;" styleClass="odd">
+
+			<p:panel id="drop1" style="height:10px;top:-20px;left:-1px;"
+				styleClass="dropProzessZone">
+				<p:droppable scope="add" activeStyleClass="dropProzessZoneOk"
+					datasource=":mainForm:vorgang_form:steps:src" tolerance="touch">
+					<p:ajax listener="#{controller.drop}"
+						update=":mainForm:vorgang_form:steps:target" />
+				</p:droppable>
+			</p:panel>
+			<t:div id="target">
+				<p:dataList id="dl" type="none" var="job" style="border:0;"
+					value="#{controller.value.jobs}" rowIndexVar="index">
+					<p:panel id="drag" styleClass="prozessElement"
+						style="text-align:left;">		
+
+						<c:set var="xlabel2" value="#{pc.getParameterWert(job)}" />													
+						<c:set var="xlabel" value="label.batch.job.#{job.jobName}" />
+
+						<h:commandLink action="#{workflow.open(job)}"
+							value="#{sr:text(xlabel).concat(xlabel2)}" title="Job bearbeiten" />
+
+						<h:graphicImage alt="" style="margin:0px 0px 0px 5px;padding:0px;"
+							value="/weblets/icons/threadgroup_obj.gif" />
+						<p:draggable revert="true" scope="remove" opacity="0.7" />
+					</p:panel>
+					<p:panel id="drop" styleClass="dropProzessZone"
+						style="height:10px;top:-20px;left:-2px;">
+						<p:droppable scope="add" activeStyleClass="dropProzessZoneOk"
+							datasource=":mainForm:vorgang_form:steps:src" tolerance="touch">
+							<p:ajax listener="#{controller.drop}"
+								update=":mainForm:vorgang_form:steps:target" />
+						</p:droppable>
+					</p:panel>
+				</p:dataList>
+			</t:div>
+		</p:panel>
+
+		<t:div styleClass="space" />
+
+		<p:panel id="x2" header="Verfügbare Jobs"
+			style="width:350px;height:100%;" styleClass="odd">
+			<p:droppable scope="remove" activeStyleClass="dropok"
+				tolerance="intersect">
+				<p:ajax listener="#{controller.removeJob}"
+					update=":mainForm:vorgang_form:steps:target src" />
+			</p:droppable>
+			<p:dataList id="src" type="none" value="#{controller.availableJobs}"
+				var="job" style="width:300px;">
+				<p:panel id="xxx" styleClass="prozessElement"
+					style="text-align:left;">
+					<c:set var="xlabel" value="label.batch.job.#{job}" />
+					<h:outputText value="#{sr:text(xlabel)}" />
+					<h:graphicImage alt="" style="margin:0px 0px 0px 5px;padding:0px;"
+						value="/weblets/icons/threadgroup_obj.gif" />
+					<p:draggable revert="true" scope="add"
+						helper='clone",cursorAt:{left:0,top:15},opacity:"0.7' />
+				</p:panel>
+			</p:dataList>
+		</p:panel>
+	</h:panelGrid>
+
+
+</ui:composition>
+</html>

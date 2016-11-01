@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<info>
+	<element name='phase'>
+		<attribute name='id' property='phaseId' />
+		<attribute name='config-controller' property='configController' />
+		<attribute name='config-page' property='configPage' />
+		<attribute name='save-transaction-id' property='saveTransactionId' />
+		<element name="phases">
+			<element property='phases' updater="addPhase"/>
+		</element>
+		<element name='phase' property='phases'
+			class='de.subito.sunrise.webapp.workflow.model.WorkflowPhaseImpl' />
+		<element name='tab' property='tabs'
+			class='de.subito.sunrise.webapp.workflow.model.TabImpl' />
+		<addDefaults />
+	</element>
+</info>

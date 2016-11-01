@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<h:panelGrid>
+
+		<sr:comboboxField id="prozess" value="#{pc.value.prozess}"
+			render="slas  significant_sl" items="#{pc.prozessListe}"
+			required="true" emptyItem="true"
+			label="#{sr:text('label.admin.prozesskosten.servicelevel.Prozessauswahl')}" />
+
+		<t:fieldset id="slas"
+			legend="#{sr:text('label.admin.prozesskosten.servicelevel.Durchlaufzeit')}">
+			<sr:dataTable id="data" value="#{pc.value.slas}" var="sla"
+				columnClasses="headerInfo">
+				<t:column>
+					<h:outputText value="#{sla.name}" />
+				</t:column>
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.days')}" />
+					</f:facet>
+					<sr:integerField id="durchlauf_d" size="3"
+						value="#{sla.durchlaufzeit.days}" />
+				</t:column>
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.hours')}" />
+					</f:facet>
+					<sr:integerField id="durchlauf_h" render="durchlauf_d durchlauf_h"
+						value="#{sla.durchlaufzeit.hours}" />
+				</t:column>
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.minutes')}" />
+					</f:facet>
+					<sr:integerField id="durchlauf_m"
+						render="durchlauf_m durchlauf_d durchlauf_h" size="3"
+						value="#{sla.durchlaufzeit.minutes}" />
+				</t:column>
+			</sr:dataTable>
+		</t:fieldset>
+
+		<sr:comboboxField id="significant_sl"
+			value="#{pc.value.significantServiceLevel}"
+			items="#{serviceLevelAgreementItemGenerator.getAll(pc.value)}"
+			converter="#{serviceLevelAgreementItemGenerator.converterAll}"
+			emptyItem="true" label="Überwachter Service Level" />
+
+		<sr:integerField id="bearbeitungszeit" disabled="true"
+			value="#{pc.value.prozess.bearbeitungszeit}"
+			label="#{sr:text('label.admin.prozesskosten.servicelevel.bearbeitungszeit')}" />
+
+		<!-- 		<sr:moneyField id="preis" value="#{pc.value.stueckpreis}" -->
+		<!-- 			label="#{sr:text('label.admin.prozesskosten.servicelevel.Stueckpreis')}" -->
+		<!-- 			required="true" reRender="preis" /> -->
+
+		<sr:comboboxField id="ueberwachung"
+			value="#{pc.value.eskalationsregel}" items="#{pc.eskalationsregeln}"
+			emptyItem="true" converter="#{pc.eskalationsregelConverter}"
+			label="#{sr:text('label.admin.prozesskosten.servicelevel.Ueberwachungsregel')}" />
+
+	</h:panelGrid>
+
+</ui:composition>
+</html>

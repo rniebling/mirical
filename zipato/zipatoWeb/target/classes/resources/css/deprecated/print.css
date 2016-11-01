@@ -1,0 +1,15 @@
+#header, #nav, #sub, #sub h2, #footer, #local {
+    display: none;
+}
+
+#main, #content, .table {
+    width: 700px;
+}
+
+.rich-stglpanel {
+    page-break-inside:avoid;
+}
+
+fieldset {
+    page-break-inside:avoid;
+}

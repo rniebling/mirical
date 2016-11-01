@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Protokoll" />
+	<style type="text/css">
+.normalWidth, #commandBar {
+	width: 100em;
+}
+</style>
+
+	<p:poll id="pollExport" global="true" interval="1" process="@this"
+		stop="#{!tc.inProgressExport}" async="true"
+		update="progressBar_export pollExport exportbuttons fld_csvExportFiles" />
+
+	<p:poll id="pollDelete" global="true" interval="1" process="@this"
+		stop="#{!tc.inProgressDelete}" async="true"
+		update="progressPanel pollDelete deletebuttons fld_csvExportFiles" />
+
+	<h:panelGrid columns="3">
+		<sr:comboboxField id="user" label="Benutzer"
+			value="#{tc.searchObject.benutzer}" items="#{userItemGenerator.all}"
+			emptyItem="true">
+			<p:ajax event="change" update="div_buttons" />
+		</sr:comboboxField>
+		<sr:dateField id="datumVon" label="Datum von" render="div_buttons"
+			value="#{tc.searchObject.von}">
+		</sr:dateField>
+		<sr:dateField id="datumBis" label="Datum bis" render="div_buttons"
+			value="#{tc.searchObject.bis}">
+		</sr:dateField>
+	</h:panelGrid>
+
+	<h:panelGrid columns="2" id="div_buttons">
+
+		<t:div id="exportbuttons" styleClass="_btn">
+			<p:commandButton id="button_export_1" value="CSV-Datei ERZEUGEN"
+				rendered="#{!tc.inProgressExport}" style="width:14em;"
+				onclick="PF('exportProgressBar').start()" global="false"
+				disabled="#{workflow.readonly or !tc.hasAuthorityToSearch() or !tc.hasSucheInput() or tc.inProgressDelete}"
+				action="#{tc.createCsvFile}" styleClass="_button btn_export"
+				update="div_buttons">
+			</p:commandButton>
+			<p:commandButton id="button_export_2" value="FORTSCHRITT ANSEHEN"
+				rendered="#{tc.inProgressExport}" style="width:18em;"
+				disabled="#{workflow.readonly or !tc.hasAuthorityToSearch()}"
+				styleClass="_button btn_export"
+				onclick="PF('mpl_dlg_export').show();" update="div_buttons">
+			</p:commandButton>
+		</t:div>
+
+		<t:div id="deletebuttons" styleClass="_btn">
+			<p:commandButton id="btn_prot_loeschen" value="PROTOKOLL LÖSCHEN"
+				rendered="#{!tc.inProgressDelete}" style="width:16em;"
+				disabled="#{workflow.readonly or !tc.hasAuthorityToDelete() or !tc.hasSucheInput() or tc.inProgressExport}"
+				styleClass="_button btn_delete" update="#{p:component('errorBox')} div_buttons"
+				actionListener="#{tc.checkInputForDelete()}"
+				action="#{tc.showDeleteDialog()}" />
+			<p:commandButton id="btn_prot_loeschen_2" value="FORTSCHRITT ANSEHEN"
+				rendered="#{tc.inProgressDelete}" style="width:16em;"
+				disabled="#{workflow.readonly or !tc.hasAuthorityToDelete() or !tc.hasSucheInput() or tc.inProgressExport}"
+				styleClass="_button btn_delete" update="#{p:component('errorBox')} div_buttons"
+				onclick="PF('confirm_prot_del_dlg').show();">
+			</p:commandButton>
+		</t:div>
+
+	</h:panelGrid>
+
+	<t:div styleClass="space" />
+	<t:fieldset id="fld_csvExportFiles" legend="Erzeugte CSV-Dateien">
+		<sr:dataTable value="#{tc.colCsvExportFile}" id="tbl_csvExportFiles"
+			deleteController="#{protokollSucheController}" var="csvFile"
+			deleteReRender="fld_csvExportFiles" rows="10">
+			<t:column style="width:20px;text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="Datum" />
+				</f:facet>
+				<h:outputText value="#{csvFile.historie.datum}"
+					style="white-space: nowrap;">
+					<sr:convertDateTime type="both" />
+				</h:outputText>
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<h:outputText value="Benutzer" />
+				</f:facet>
+				<h:outputText value="#{csvFile.historie.ausfuehrenderUser.name}"
+					style="white-space: nowrap;" />
+			</t:column>
+			<t:column style="width:80%;text-align:left;">
+				<f:facet name="header">
+					<h:outputText value="Details" />
+				</f:facet>
+				<h:outputText value="#{csvFile.historie.details}" />
+			</t:column>
+			<t:column style="text-align:left;">
+				<f:facet name="header">
+					<h:outputText value="Dateikennzeichen" />
+				</f:facet>
+				<h:outputText value="#{csvFile.kennzeichen}" />
+			</t:column>
+			<t:column style="width:2%;text-align:left;">
+				<f:facet name="header">
+					<h:outputText value="Dateigröße" />
+				</f:facet>
+				<h:outputText value="#{csvFile.groesse} KB"
+					style="white-space: nowrap;" />
+			</t:column>
+			<t:column style="width:20px;text-align:left;">
+				<f:facet name="header">
+					<h:outputText value="Aktionen" />
+				</f:facet>
+				<h:panelGrid columns="2">
+					<t:commandLink id="open_action" title="Datei öffnen/speichern"
+						action="#{tc.preview(csvFile)}">
+						<t:graphicImage url="/weblets/icons/nav_down.gif"
+							alt="Datei öffnen/speichern" />
+					</t:commandLink>
+					<sr:iconActionRemove tableId="tbl_csvExportFiles">
+						<f:setPropertyActionListener target="#{tc.csvExportFile}"
+							value="#{csvFile}" />
+					</sr:iconActionRemove>
+				</h:panelGrid>
+			</t:column>
+		</sr:dataTable>
+		<t:div styleClass="_btn">
+			<h:panelGrid columns="2">
+				<p:commandButton id="cmd_file_aktualisieren" value="AKTUALISIEREN"
+					style="width:14em;" styleClass="_button btn_refresh"
+					process="@this" action="#{tc.refreshExpportFile}"
+					update="tbl_csvExportFilesgroup" />
+				<p:commandButton id="cmd_deleteAll" value="ALLE LÖSCHEN"
+					onclick="PF('confirm_delete_all').show();" process="@this"
+					disabled="#{workflow.readonly}" title="Alle löschen"
+					styleClass="_button btn_delete" style="width:14em;" />
+			</h:panelGrid>
+		</t:div>
+	</t:fieldset>
+
+	<ui:include src="inc-dlg-protokoll-export.xhtml" />
+	<ui:include src="inc-dlg-protokoll-delete.xhtml" />
+	<ui:include src="../../inc-dlg-delete-all-confirm.xhtml">
+		<ui:param name="id" value="confirm_delete_all" />
+		<ui:param name="deleteController" value="#{protokollSucheController}" />
+		<ui:param name="deleteAction" value="removeAllExpportFiles" />
+	</ui:include>
+</ui:composition>
+</html>

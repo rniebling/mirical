@@ -1,0 +1,21 @@
+#c_main {
+	width: 100%;
+	min-width: 600px;
+	display: table-cell;
+	margin: 0;
+	padding-left: 10px;
+}
+
+#c_left {
+	width: 2em !important;
+}
+
+.addBausteinPanel {
+	height: 40em;
+	width: 17em;
+}
+
+.bausteinPanel {
+	width: 57em;
+	height: 40em;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Allgemein" />
+
+	<t:fieldset
+		legend="#{sr:text('label.admin.externe-prozesse.uploadtabelle')}">
+		<t:panelGrid columns="2">
+			<t:div rendered="#{!workflow.readonly}">
+				<p:fileUpload id="uploadFile" styleClass="fileUploadInput"
+					fileUploadListener="#{pc.upload}" label="Datei auswählen"
+					uploadLabel="Hochladen" cancelLabel="Abbrechen" mode="advanced"
+					dragDropSupport="true" fileLimit="1" update="uploadFile #{p:component('errorBox')}"
+					disabled="#{workflow.readonly}"
+					fileLimitMessage="Die maximale Anzahl zulässiger Dateien wurde überschritten."
+					allowTypes="/(\.|\/)(csv)$/"
+					invalidFileMessage="Es muss eine Datei mit der Endung .CSV ausgewählt werden." />
+			</t:div>
+		</t:panelGrid>
+	</t:fieldset>
+	<t:panelGrid style="width:100%" cellspacing="0" cellpadding="0">
+		<t:fieldset
+			legend="#{sr:text('label.admin.externe-prozesse.uploads')}">
+			<sr:dataTable id="uploadFiles"
+				value="#{workflow.controller.dataModel}" dataScrollerInfo="true"
+				var="bean">
+				<t:column style="width:120px;text-align:left;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.externe-prozesse.liste.uploadam')}" />
+					</f:facet>
+					<h:outputText value="#{bean.uploadDatum}" />
+				</t:column>
+
+				<t:column style="text-align:left;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.externe-prozesse.liste.uploaddurch')}" />
+					</f:facet>
+					<h:outputText value="#{bean.sachbearbeiter.name}" />
+				</t:column>
+
+				<t:column style="text-align:left;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.externe-prozesse.liste.uploaddatei')}" />
+					</f:facet>
+					<h:outputText value="#{bean.uploadDatei}" />
+				</t:column>
+
+			</sr:dataTable>
+		</t:fieldset>
+
+	</t:panelGrid>
+</ui:composition>
+
+</html>

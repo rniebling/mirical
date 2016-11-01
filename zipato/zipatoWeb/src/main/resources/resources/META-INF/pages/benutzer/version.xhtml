@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Benutzereinstellungen/Benutzereinstellungen.htm#Dialog_Version" />
+	<t:fieldset legend="Applicationserver">
+
+		<h:panelGrid>
+
+			<t:htmlTag value="table">
+				<f:param name="class" value="dataTable" />
+				<t:htmlTag value="tr">
+					<f:param name="class" value="odd" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<f:param name="style" value="width:120px;" />
+						<h:outputText value="Name" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<h:outputText value="#{tc.localName}" />
+					</t:htmlTag>
+				</t:htmlTag>
+				<t:htmlTag value="tr">
+					<f:param name="class" value="even" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<h:outputText value="IP" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<h:outputText value="#{tc.localAddr}" />
+					</t:htmlTag>
+				</t:htmlTag>
+				<t:htmlTag value="tr">
+					<f:param name="class" value="odd" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<h:outputText value="Port" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<h:outputText value="#{tc.localPort}" />
+					</t:htmlTag>
+				</t:htmlTag>
+				<t:htmlTag value="tr">
+					<f:param name="class" value="even" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<h:outputText value="Version" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<h:outputText value="#{tc.version}" />
+					</t:htmlTag>
+				</t:htmlTag>
+				<t:htmlTag value="tr">
+					<f:param name="class" value="odd" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<h:outputText value="Buildnummer" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<f:param name="style" value="width:300px;" />
+						<h:outputText value="#{tc.buildnummer}" />
+					</t:htmlTag>
+				</t:htmlTag>
+			</t:htmlTag>
+
+		</h:panelGrid>
+	</t:fieldset>
+
+
+	<t:fieldset legend="Datenbankverbindung">
+		<h:panelGrid>
+			<t:htmlTag value="table">
+				<f:param name="class" value="dataTable" />
+				<t:htmlTag value="tr">
+					<f:param name="class" value="odd" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<f:param name="style" value="width:120px;" />
+						<h:outputText value="JDBC URL" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<f:param name="style" value="width:300px;" />
+						<h:outputText value="#{tc.jdbcUrl}" />
+					</t:htmlTag>
+				</t:htmlTag>
+				<t:htmlTag value="tr" rendered="#{tc.jdbcUser != null}">
+					<f:param name="class" value="even" />
+					<t:htmlTag value="td">
+						<f:param name="class" value="headerInfo" />
+						<h:outputText value="Schema" />
+					</t:htmlTag>
+					<t:htmlTag value="td">
+						<h:outputText value="#{tc.jdbcUser}" />
+					</t:htmlTag>
+				</t:htmlTag>
+			</t:htmlTag>
+		</h:panelGrid>
+	</t:fieldset>
+
+</ui:composition>
+
+</html>

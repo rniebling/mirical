@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/admin/adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.menu.ueberwachungsregel')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Ueberwachung_Rege" />
+
+		<t:fieldset>
+			<h:panelGrid>
+
+				<h:panelGrid>
+					<sr:textField id="bezeichnung" compute="true" required="true"
+						label="#{sr:text('label.esmregel.bezeichnung')}"
+						readonly="#{!workflow.controller.inBearbeitung}"
+						value="#{workflow.value.regel.bezeichnung}" />
+				</h:panelGrid>
+				<t:fieldset legend="#{sr:text('label.esmregel.warnung')}">
+					<h:panelGrid columns="4">
+						<sr:integerField id="warnung_d" compute="true" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.days')}"
+							value="#{workflow.value.regel.warnung.days}" />
+
+						<sr:integerField id="warnung_h" render="warnung_d warnung_h"
+							size="3" readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.hours')}"
+							value="#{workflow.value.regel.warnung.hours}" />
+
+						<sr:integerField id="warnung_m"
+							render="warnung_m warnung_d warnung_h" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.minutes')}"
+							value="#{workflow.value.regel.warnung.minutes}" />
+					</h:panelGrid>
+				</t:fieldset>
+				<t:fieldset legend="#{sr:text('label.esmregel.stufe1')}">
+					<h:panelGrid columns="4">
+						<sr:integerField id="stufe1_d" compute="true" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.days')}"
+							value="#{workflow.value.regel.stufe1.days}" />
+
+						<sr:integerField id="stufe1_h" render="stufe1_d stufe1_h" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.hours')}"
+							value="#{workflow.value.regel.stufe1.hours}" />
+
+						<sr:integerField id="stufe1_m" render="stufe1_m stufe1_d stufe1_h"
+							size="3" readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.minutes')}"
+							value="#{workflow.value.regel.stufe1.minutes}" />
+					</h:panelGrid>
+				</t:fieldset>
+				<t:fieldset legend="#{sr:text('label.esmregel.stufe2')}">
+					<h:panelGrid columns="4">
+						<sr:integerField id="stufe2_d" compute="true" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.days')}"
+							value="#{workflow.value.regel.stufe2.days}" />
+
+						<sr:integerField id="stufe2_h" render="stufe2_d stufe2_h" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.hours')}"
+							value="#{workflow.value.regel.stufe2.hours}" />
+
+						<sr:integerField id="stufe2_m" render="stufe2_m stufe2_d stufe2_h"
+							size="3" readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.minutes')}"
+							value="#{workflow.value.regel.stufe2.minutes}" />
+					</h:panelGrid>
+				</t:fieldset>
+				<t:fieldset legend="#{sr:text('label.esmregel.stufe3')}">
+					<h:panelGrid columns="5">
+						<sr:integerField id="stufe3_d" compute="true" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.days')}"
+							value="#{workflow.value.regel.stufe3.days}" />
+
+						<sr:integerField id="stufe3_h" render="stufe3_d stufe3_h" size="3"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.hours')}"
+							value="#{workflow.value.regel.stufe3.hours}" />
+
+						<sr:integerField id="stufe3_m" render="stufe3_m stufe3_d stufe3_h"
+							size="3" readonly="#{!workflow.controller.inBearbeitung}"
+							label="#{sr:text('label.esmregel.minutes')}"
+							value="#{workflow.value.regel.stufe3.minutes}" />
+
+						<sr:comboboxField id="empfaenger"
+							value="#{workflow.value.regel.empfaenger}"
+							readonly="#{!workflow.controller.inBearbeitung}"
+							items="#{workflow.controller.users}" emptyItem="true"
+							compute="true" label="#{sr:text('label.esmregel.empfaenger')}" />
+					</h:panelGrid>
+				</t:fieldset>
+
+				<t:div styleClass="_btn">
+					<t:commandButton id="edit_action" immediate="true"
+						rendered="#{!workflow.controller.inBearbeitung}"
+						styleClass="_button btn_default"
+						value="#{sr:text('label.aendern')}"
+						action="#{workflow.controller.edit}">
+					</t:commandButton>
+				</t:div>
+			</h:panelGrid>
+		</t:fieldset>
+	</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<h:panelGrid columns="2">
+
+		<sr:textField id="suche_kurzname" compute="true"
+			value="#{workflow.controller.dataModel.searchObject.kurzname}"
+			maxlength="40" size="20"
+			label="#{sr:text('label.admin.mandantenliste.suche.Bezeichnung')}" />
+
+
+		<sr:textField id="suche_name" compute="true"
+			value="#{workflow.controller.dataModel.searchObject.name}"
+			maxlength="40" size="20"
+			label="#{sr:text('label.admin.mandantenliste.suche.Name')}" />
+
+	</h:panelGrid>
+
+	<t:div styleClass="_btn">
+		<t:commandButton id="suche_action" value="#{sr:text('label.search')}"
+			action="#{workflow.controller.search}"
+			styleClass="_button btn_search">
+		</t:commandButton>
+	</t:div>
+
+</ui:composition>
+</html>

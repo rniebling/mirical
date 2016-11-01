@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.prozess.Mandanten')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:panelTabbedPane id="mandantenliste_tabs">
+			<f:facet name="emptycell">
+				<sr:helpLink
+					ref="Administration/Administration Allgemein.htm#Administration_Dialog_Mandantenliste" />
+			</f:facet>
+			<t:panelTab id="man"
+				label="#{sr:text('label.admin.mandantenliste.Mandantenliste')}">
+				<ui:include src="mandantenliste/liste.xhtml" />
+			</t:panelTab>
+			<t:panelTab id="suche" rendered="#{sr:module('Mehrmandanten')}"
+				label="#{sr:text('label.admin.mandantenliste.Suche')}">
+				<ui:include src="mandantenliste/suche.xhtml" />
+			</t:panelTab>
+		</sr:panelTabbedPane>
+
+
+	</ui:define>
+
+	<ui:define name="_saveButton" />
+</ui:composition>
+</html>

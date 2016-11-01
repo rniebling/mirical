@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<info primitiveTypes="attribute">
+	<element name="application">	
+		<element name="phase" property="phases"
+			class="de.subito.sunrise.webapp.workflow.model.WorkflowPhaseImpl" >
+		</element>
+		<addDefaults />
+	</element>
+</info>

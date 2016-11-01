@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Allgemein" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Benutzerverwaltung.htm#Allgemeines" />
+	</t:div>
+
+	<h:panelGrid columns="2">
+
+		<t:panelGroup>
+			<h:panelGrid columns="3">
+
+				<sr:textField id="username"
+					value="#{workflow.controller.value.username}" maxlength="40"
+					size="15" disabled="#{! empty workflow.controller.value.id }"
+					compute="true" required="true"
+					label="#{sr:text('label.admin.user.username')}">
+					<f:validateLength minimum="4" />
+				</sr:textField>
+
+				<sr:textField id="foreignUserNumber"
+					value="#{workflow.controller.value.foreignUserNumber}"
+					maxlength="40" size="15" compute="true"
+					label="#{sr:text('label.admin.user.username.externalsystem')}">
+				</sr:textField>
+
+				<t:div>
+					<sr:checkboxField id="externAuthentifiziert"
+						value="#{workflow.controller.value.externAuthentifiziert}"
+						disabled="#{workflow.controller.value.externVerwaltet}"
+						rendered="#{moduleManager.isEnabled('LDAP-LIGHT')}"
+						render="pwgrid"
+						label="#{sr:text('label.admin.user.externAuthentifiziert')}"
+						compute="true" />
+				</t:div>
+
+				<sr:comboboxField id="anrede" value="#{workflow.value.anrede}"
+					required="true"
+					items="#{enumType['de.subito.sunrise.model.Anrede']}"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.anrede')}" />
+
+				<sr:textField id="titel" value="#{workflow.controller.value.titel}"
+					maxlength="40" compute="true" size="10"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.titel')}">
+					<f:validateLength minimum="2" />
+				</sr:textField>
+
+				<t:div />
+
+				<sr:textField id="given_name"
+					value="#{workflow.controller.value.vorname}" maxlength="40"
+					compute="true" size="20" required="true"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.vorname')}">
+					<f:validateLength minimum="2" />
+				</sr:textField>
+
+				<sr:textField id="surname"
+					value="#{workflow.controller.value.nachname}" compute="true"
+					maxlength="40" size="20"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.nachname')}" required="true">
+					<f:validateLength minimum="3" />
+				</sr:textField>
+
+				<sr:textField id="sz"
+					value="#{workflow.controller.value.schriftzeichen}" compute="true"
+					autocomplete="off" maxlength="40" size="20"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.schriftzeichen')}">
+				</sr:textField>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2" id="pwgrid">
+				<sr:checkboxField id="enabled"
+					value="#{workflow.controller.value.enabled}"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.enabled')}" compute="true" />
+
+				<t:div />
+
+				<t:div styleClass="fieldBox">
+					<t:inputSecret id="password" autocomplete="off"
+						value="#{workflow.controller.password}"
+						required="#{empty workflow.controller.value.id and workflow.required}"
+						compute="true"
+						readonly="#{workflow.controller.value.externVerwaltet or workflow.controller.value.externAuthentifiziert or workflow.readonly}"
+						disabled="#{workflow.controller.value.externVerwaltet or workflow.controller.value.externAuthentifiziert or workflow.readonly}"
+						maxlength="40" size="20">
+						<p:ajax event="blur" listener="#{workflow.compute}" />
+						<c:if test="#{empty workflow.controller.value.id}">
+							<f:validateLength minimum="4" />
+						</c:if>
+						<sr:error />
+					</t:inputSecret>
+					<sr:outputLabel for="password"
+						required="#{empty workflow.controller.value.id }"
+						value="#{sr:text('label.admin.user.password')}" />
+				</t:div>
+				<t:div styleClass="fieldBox">
+					<t:inputSecret id="password2" autocomplete="off"
+						value="#{workflow.controller.password2}"
+						required="#{empty workflow.controller.value.id and workflow.required}"
+						compute="true"
+						readonly="#{workflow.controller.value.externVerwaltet or workflow.controller.value.externAuthentifiziert or workflow.readonly}"
+						disabled="#{workflow.controller.value.externVerwaltet or workflow.controller.value.externAuthentifiziert or workflow.readonly}"
+						maxlength="40" size="20">
+						<p:ajax event="blur" listener="#{workflow.compute}" />
+						<sr:error />
+					</t:inputSecret>
+					<sr:outputLabel for="password2"
+						required="#{empty workflow.controller.value.id }"
+						value="#{sr:text('label.admin.user.password2')}" />
+				</t:div>
+
+				<sr:dateField id="accountExpiresOn" compute="true"
+					value="#{workflow.value.accountExpiresOn}"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.benutzer.allgemein.Zuganggueltigbis')}" />
+
+				<sr:dateField id="credentialsExpiresOn" disabled="true"
+					value="#{workflow.value.credentialsExpiresOn}"
+					label="#{sr:text('label.admin.benutzer.allgemein.Passwortgueltigbis')}" />
+
+				<sr:textField id="telefon" value="#{workflow.value.telefon}"
+					maxlength="30" compute="true" size="20" required="false"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.telefon')}" />
+
+				<sr:textField id="telefax" value="#{workflow.value.telefax}"
+					maxlength="30" compute="true" size="20"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.telefax')}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="3">
+
+				<sr:textField id="email" value="#{workflow.value.email}"
+					maxlength="60" compute="true" size="49"
+					disabled="#{workflow.controller.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.email')}" />
+
+				<sr:comboboxField id="select_default_mandant"
+					value="#{workflow.controller.value.defaultMandant}"
+					items="#{mandantItemGenerator.getAll()}" compute="true"
+					render="select_filiale"
+					label="#{sr:text('label.admin.user.defaultMandant')}">
+				</sr:comboboxField>
+
+				<sr:comboboxField id="select_filiale"
+					value="#{workflow.controller.value.filiale}"
+					items="#{filialenItemGenerator.getAllOf(workflow.controller.value.defaultMandant)}"
+					converter="#{filialenItemGenerator.converterAll}" emptyItem="true"
+					compute="true"
+					label="#{sr:text('label.admin.user.abteilungfiliale')}">
+				</sr:comboboxField>
+
+			</h:panelGrid>
+
+		</t:panelGroup>
+
+		<sr:textField id="fehlerhafte_logins"
+			value="#{workflow.value.fehlerhafteLogins}" maxlength="2" size="2"
+			disabled="true"
+			label="#{sr:text('label.admin.user.fehlerhafte.logins')}" />
+
+	</h:panelGrid>
+</ui:composition>
+</html>

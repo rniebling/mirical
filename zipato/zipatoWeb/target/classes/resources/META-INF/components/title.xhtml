@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<h:panelGrid styleClass="title" cellspacing="0" cellpadding="0"
+		rendered="#{rendered}">
+		<t:div styleClass="titleText">
+			<t:outputText value="#{sr:abbreviate(value,100)}" />
+			<ui:insert />
+		</t:div>
+	</h:panelGrid>
+</ui:component>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Allgemein" />
+
+	<t:div id="prozessPanel">
+
+		<c:choose>
+			<c:when test="#{workflow.value.phaseId == 'ctrl-steuerungsprozess'}">
+				<ui:include src="inc-steuerungsprozess.xhtml" />
+			</c:when>
+			<c:when
+				test="#{workflow.value.phaseId == 'ctrl-steuerungsprozess-extern'}">
+				<ui:include src="inc-steuerungsprozess-extern.xhtml" />
+			</c:when>
+			<c:otherwise>
+				<ui:include src="inc-standard.xhtml" />
+			</c:otherwise>
+		</c:choose>
+
+
+		<c:if test="#{! empty controller.slas}">
+			<t:fieldset
+				legend="#{sr:text('label.admin.prozesskosten.servicelevel.durchlaufzeiten')}">
+
+				<sr:dataTable id="slas" value="#{workflow.controller.slas}"
+					var="sla" columnClasses="headerInfo" style="text-align: center;">
+					<t:column>
+						<h:outputText value="#{sla.name}" />
+					</t:column>
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.days')}" />
+						</f:facet>
+						<h:outputText id="durchlauf_d" value="#{sla.days}" />
+					</t:column>
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.hours')}" />
+						</f:facet>
+						<h:outputText id="durchlauf_h" value="#{sla.hours}" />
+					</t:column>
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.minutes')}" />
+						</f:facet>
+						<h:outputText id="durchlauf_m" value="#{sla.minutes}" />
+					</t:column>
+					<t:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{sr:text('label.admin.prozesskosten.servicelevel.Ueberwachungsregel')}" />
+						</f:facet>
+						<h:outputText id="durchlauf_"
+							value="#{sla.eskalationsregel.regel.bezeichnung}" />
+					</t:column>
+				</sr:dataTable>
+
+				<sr:comboboxField id="show_in_list_#{rowIndex}" class="show_in_list"
+					value="#{workflow.controller.aufgabenlisteSla}" emptyItem="true"
+					items="#{workflow.controller.slaItems}"
+					label="#{sr:text('label.admin.prozesskosten.serviceLevel.AnzuzeigendeRegel')}" />
+
+			</t:fieldset>
+
+		</c:if>
+
+		<ui:include src="allgemein_inc/prolongation.xhtml" />
+
+		<t:div styleClass="blankline-reduced" />
+
+		<sr:textAreaField id="hinweis" maxlength="1000" rows="3"
+			value="#{workflow.value.hinweis}"
+			label="#{sr:text('label.admin.prozess.infotext')}" />
+	</t:div>
+
+</ui:composition>
+
+</html>

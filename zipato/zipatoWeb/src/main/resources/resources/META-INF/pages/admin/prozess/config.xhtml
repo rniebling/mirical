@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink ref="Administration/Administration Prozess.htm" />
+
+	<t:div id="teilprozess_details" style="width:550px;">
+
+		<c:if test="#{! empty controller.prozessPhase}">
+
+			<c:if test="#{!controller.prozessPhase.referenz}">
+				<t:fieldset
+					legend="#{pc.prozessPhase.sla ? sr:text('label.admin.prozess.sla.StartStop') : sr:text('label.admin.prozess.config.Teilprozess')}">
+					<h:panelGrid>
+
+
+						<h:panelGrid columns="4">
+							<sr:textField id="teilprozess_name"
+								value="#{controller.prozessPhase.name}" maxlength="80" size="50"
+								label="#{sr:text('label.admin.teilprozess.name')}"
+								required="true" />
+
+							<sr:integerField id="teilprozess_lfd_nr"
+								rendered="#{pc.prozessPhase.oneForMany}"
+								value="#{controller.prozessPhase.listindex}" size="2"
+								label="Laufende Nummer" />
+
+							<sr:checkboxField id="abfrage_enabled"
+								value="#{controller.prozessPhase.abfrageEnabled}"
+								rendered="#{pc.prozessPhase.abfrage}" label="Abfrage aktivieren" />
+
+							<sr:integerField id="teilprozess_bearbeitungszeit"
+								rendered="#{!pc.prozessPhase.sla and parameterHolder['showMinuteColumn'].booleanValue}"
+								value="#{controller.prozessPhase.bearbeitungszeit}" size="5"
+								label="#{sr:text('label.admin.teilprozess.bearbeitungszeit')}" />
+						</h:panelGrid>
+
+						<t:div id="teilprozess_nextRoleBlock">
+							<t:div rendered="#{controller.prozessPhase.rollenWechsel}">
+
+								<t:panelGrid columns="2">
+									<sr:comboboxField id="teilprozess_nextRole"
+										items="#{rolleItems.items}" emptyItem="true"
+										converter="#{rolleItems.converter}"
+										value="#{controller.prozessPhase.naechsteRolle}"
+										label="#{sr:text('label.admin.teilprozess.nextRole')}" />
+
+									<sr:checkboxField id="PersonenbezogeneZuordnung"
+										value="#{controller.prozessPhase.personenbezogeneZuordnung}"
+										label="Personenbezogene Zuordnung" />
+
+									<sr:checkboxField id="vierAugenPrinzip"
+										value="#{controller.prozessPhase.vierAugenPrinzip}"
+										label="4-Augen-Prinzip" />
+
+								</t:panelGrid>
+
+								<t:panelGrid columns="2">
+									<sr:checkboxField id="mailVersand"
+										value="#{controller.prozessPhase.mailVersand}"
+										label="Automatischer Mail-Versand"
+										render="teilprozess_nextRoleBlock" />
+
+									<t:div />
+
+									<sr:textField id="email"
+										required="#{controller.prozessPhase.mailVersand}"
+										value="#{controller.prozessPhase.email}"
+										label="E-Mail Empfänger" maxlength="100" size="70" />
+
+								</t:panelGrid>
+							</t:div>
+						</t:div>
+
+						<c:if test="#{pc.prozessPhase.sla}">
+							<h:panelGrid columns="4">
+								<sr:textField id="sla_dlz_tage" maxlength="20" size="10"
+									value="#{controller.prozessPhase.days}"
+									label="#{sr:text('label.admin.prozess.sla.DurchlaufzeitTage')}" />
+
+								<sr:textField id="sla_dlz_stunden" maxlength="20" size="10"
+									value="#{controller.prozessPhase.hours}"
+									label="#{sr:text('label.admin.prozess.sla.DurchlaufzeitStunden')}" />
+								<sr:textField id="sla_dlz_mins" maxlength="20" size="10"
+									value="#{controller.prozessPhase.minutes}"
+									label="#{sr:text('label.admin.prozess.sla.DurchlaufzeitMinuten')}" />
+								<sr:comboboxField id="ueberwachung_sla"
+									value="#{controller.prozessPhase.eskalationsregel}"
+									items="#{controller.eskalationsregeln}" emptyItem="true"
+									converter="#{controller.eskalationsregelConverter}"
+									label="#{sr:text('label.admin.prozesskosten.servicelevel.Ueberwachungsregel')}" />
+							</h:panelGrid>
+						</c:if>
+					</h:panelGrid>
+
+				</t:fieldset>
+			</c:if>
+
+			<c:if test="#{controller.workflowPhase.configPage != null}">
+				<c:if test="#{controller.workflowPhase.configController != null}">
+					<c:set var="configController"
+						value="#{controller.configController}" />
+				</c:if>
+				<ui:include
+					src="/pages/#{controller.workflowPhase.configPage}.xhtml" />
+			</c:if>
+
+			<c:if
+				test="#{!controller.prozessPhase.entscheidung       and controller.prozessPhase.phaseId != 'baufismart-info2'        and controller.prozessPhase.phaseId != 'baufiinternet-info2'      and controller.prozessPhase.phaseId != 'ctrl-steuerung'}">
+				<c:if test="#{!controller.tabs.isEmpty()}">
+					<t:fieldset
+						legend="#{sr:text('label.admin.prozess.config.Dialogsteuerung')}">
+						<sr:tabsConfig tabs="#{controller.tabs}" />
+					</t:fieldset>
+				</c:if>
+
+
+			</c:if>
+
+			<c:if
+				test="#{controller.prozessPhase.phaseId =='baufiinternet-finanzierungsmodelleinzel' or       controller.prozessPhase.phaseId == 'baufi-finanzierungsmodelleinzel' or       controller.prozessPhase.phaseId == 'baufi-finanzierung' or      controller.prozessPhase.phaseId == 'kredit-finanzierung'}">
+
+				<t:fieldset legend="Produktauswahl">
+					<t:div>
+						<rich:dataTable xmlns:rich="http://richfaces.org/rich"
+							id="adm_produkte" rows="50"
+							value="#{workflow.controller.admKreditProduktDm}" var="bean"
+							styleClass="dataTable" rowClasses="even,odd">
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="Produkt" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="Auswahl" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column style="width:200px;">
+								<h:outputText value="#{bean.name}" />
+							</rich:column>
+							<rich:column style="width:50px;text-align:center;">
+								<sr:checkboxField id="produkt_checkbox" compute="true"
+									value="#{workflow.controller.produktSelektiert}" />
+							</rich:column>
+						</rich:dataTable>
+
+					</t:div>
+
+				</t:fieldset>
+
+				<t:fieldset legend="Auswahl Darlehenarten">
+					<h:panelGrid columns="3">
+
+						<sr:textField id="annuitaet" style="font-weight:normal"
+							value="Annuitätendarlehen" disabled="true" />
+						<sr:checkboxField id="cbAnnuiaet"
+							value="#{controller.prozessPhase.prozessKonfigDarl.annuitaet}" />
+						<sr:integerField id="anzahlAnnuitaetendarl"
+							value="#{controller.prozessPhase.prozessKonfigDarl.anzahlAnnuitaetendarl}"
+							size="5" />
+
+						<sr:textField id="endfaellig" style="font-weight:normal"
+							value="Endfälliges Darlehen" disabled="true" />
+						<sr:checkboxField id="cbendfaellig"
+							value="#{controller.prozessPhase.prozessKonfigDarl.endfaellig}" />
+						<sr:integerField id="anzahl_Endfaelligdarl"
+							value="#{controller.prozessPhase.prozessKonfigDarl.anzahlEndfaelligdarl}"
+							size="5" />
+
+						<sr:textField id="tilgung" style="font-weight:normal"
+							value="Tilgungsdarlehen" disabled="true" />
+						<sr:checkboxField id="cbtilgung"
+							value="#{controller.prozessPhase.prozessKonfigDarl.tilgung}" />
+						<sr:integerField id="anzahl_Tilgungdarl"
+							value="#{controller.prozessPhase.prozessKonfigDarl.anzahlTilgungdarl}"
+							size="5" />
+
+						<sr:textField id="fremd" style="font-weight:normal"
+							value="Fremddarlehen" disabled="true" />
+						<sr:checkboxField id="cbfremd"
+							value="#{controller.prozessPhase.prozessKonfigDarl.fremd}" />
+						<sr:integerField id="anzahl_Fremddarl"
+							value="#{controller.prozessPhase.prozessKonfigDarl.anzahlFremddarl}"
+							size="5" />
+					</h:panelGrid>
+
+				</t:fieldset>
+			</c:if>
+			<c:if
+				test="#{controller.prozessPhase.phaseId == 'baufismart-info2' or controller.prozessPhase.phaseId == 'baufiinternet-info2'}">
+				<ui:include src="anmerkungen.xhtml" />
+			</c:if>
+
+			<c:if test="#{controller.prozessPhase.entscheidung}">
+				<t:fieldset
+					legend="#{sr:text('label.admin.prozess.config.Verzweigungen')}">
+
+					<sr:dataTable id="cases" value="#{controller.prozessPhase.faelle}"
+						var="fall" rowIndexVar="rowIndex" deleteController="#{controller}"
+						deleteAction="removeCase"
+						deleteMessage="#{sr:text('label.deleteProzessFall')}">
+
+						<t:column headerstyle="width:18px;">
+							<t:commandLink id="showFall_action_#{rowIndex}"
+								action="#{controller.showFall}">
+								<f:setPropertyActionListener target="#{controller.fall}"
+									value="#{fall}" />
+								<t:graphicImage url="/weblets/icons/open.gif" />
+							</t:commandLink>
+						</t:column>
+						<t:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{sr:text('label.admin.prozess.config.Bezeichnung')}" />
+							</f:facet>
+							<t:commandLink id="showFall_action2_#{rowIndex}"
+								value="#{fall.bezeichnung}" action="#{controller.showFall}">
+								<f:setPropertyActionListener target="#{controller.fall}"
+									value="#{fall}" />
+							</t:commandLink>
+						</t:column>
+						<t:column headerstyle="width:18px;">
+							<p:commandLink id="remove" disabled="#{workflow.readonly}"
+								process="@this" onclick="PF('cases_confirm_delete').show();">
+								<h:graphicImage value="/weblets/icons/delete.gif"></h:graphicImage>
+								<f:setPropertyActionListener target="#{controller.fall}"
+									value="#{fall}"></f:setPropertyActionListener>
+							</p:commandLink>
+						</t:column>
+					</sr:dataTable>
+
+					<t:div styleClass="_btn">
+						<h:commandButton id="add_case_action"
+							action="#{controller.addCase}" styleClass="_button btn_new"
+							value="#{sr:text('label.admin.prozess.config.HINZUFUeGEN')}" />
+					</t:div>
+				</t:fieldset>
+			</c:if>
+
+			<c:if test="#{controller.prozessPhase.referenz}">
+				<t:fieldset
+					legend="#{sr:text('label.admin.teilprozess.subprozess')}">
+
+					<h:panelGrid columns="1">
+
+						<h:panelGrid columns="2">
+
+							<sr:comboboxField id="teilprozess_referenz"
+								value="#{controller.prozessPhase.subprozess}"
+								items="#{controller.subprozesse}" emptyItem="true"
+								required="true"
+								label="#{sr:text('label.admin.teilprozess.subprozess')}"
+								render="teilprozess_name link_subprozess" />
+
+							<t:div id="link_subprozess">
+								<c:if test="#{controller.prozessPhase.subprozess != null}">
+
+									<h:commandLink
+										action="#{prozessController.open(controller.prozessPhase.subprozess)}"
+										value="#{sr:text('label.admin.teilprozess.subprozessBearbeiten')}">
+									</h:commandLink>
+
+								</c:if>
+							</t:div>
+
+						</h:panelGrid>
+
+						<sr:checkboxField id="referenz_objektbezug"
+							value="#{controller.prozessPhase.objektbezugAktiv}"
+							label="#{sr:text('label.admin.teilprozess.objektbezug')}" />
+
+						<sr:checkboxField id="referenz_bemerkungsfeld"
+							value="#{controller.prozessPhase.bemerkungAktiv}"
+							label="#{sr:text('label.admin.teilprozess.bemerkungsfeld')}" />
+
+					</h:panelGrid>
+
+				</t:fieldset>
+
+			</c:if>
+
+			<ui:include src="config_inc/prolongation.xhtml" />
+
+		</c:if>
+	</t:div>
+
+</ui:composition>
+
+</html>

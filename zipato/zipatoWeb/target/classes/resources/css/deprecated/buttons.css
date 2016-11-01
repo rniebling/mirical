@@ -1,0 +1,456 @@
+._button {
+	padding: 2px 1px 2px 20px;
+	background-color: white !important;
+}
+
+INPUT.btn_back {
+	background: url(../icons/backward.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_back {
+	background-image: url(../icons/dis_backward.gif);
+}
+
+INPUT.btn_next {
+	background: url(../icons/forward.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_next {
+	background-image: url(../icons/dis_forward.gif);
+}
+
+INPUT.btn_copy {
+	background: url(../icons/copy.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_copy {
+	background-image: url(../icons/dis_copy.gif);
+}
+
+INPUT.btn_save {
+	background: url(../icons/save.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_save {
+	background-image: url(../icons/dis_save.gif);
+}
+
+INPUT.btn_park {
+	background: url(../icons/park.gif) 2px center no-repeat;
+}
+
+INPUT.btn_close {
+	background: url(../icons/close.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_close {
+	background-image: url(../icons/dis_close.gif);
+}
+
+INPUT.btn_login {
+	background: url(../icons/login.gif) 2px center no-repeat;
+}
+
+INPUT.btn_new {
+	background: url(../icons/new.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_new {
+	background-image: url(../icons/dis_new.gif);
+}
+
+INPUT.btn_accept {
+	background: url(../icons/complete_status.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_accept {
+	background: url(../icons/dis_complete_status.gif) 2px center no-repeat;
+}
+
+INPUT.btn_info {
+	background: url(../icons/information.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_info {
+	background-image: url(../icons/dis_information.gif);
+}
+
+INPUT.btn_new_dyn {
+	background: url(../icons/new.gif) 2px center no-repeat;
+}
+
+INPUT.btn_open {
+	background: url(../icons/open.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_open {
+	background-image: url(../icons/dis_open.gif);
+}
+
+INPUT.btn_openFolder {
+	background: url(../icons/folder.gif) 2px center no-repeat;
+}
+
+INPUT.btn_print {
+	background: url(../icons/print.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_print {
+	background-image: url(../icons/dis_print.gif);
+}
+
+INPUT.btn_down {
+	background: url(../icons/nav_down.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_down {
+	background-image: url(../icons/dis_nav_down.gif);
+}
+
+INPUT.btn_up {
+	background: url(../icons/nav_up.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_up {
+	background-image: url(../icons/dis_nav_up.gif);
+}
+
+INPUT.btn_search {
+	background: url(../icons/search.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_search {
+	background-image: url(../icons/dis_search.gif);
+}
+
+INPUT.btn_search2 {
+	background: url(../icons/search2.gif) 2px center no-repeat;
+}
+
+INPUT.btn_preview {
+	background: url(../icons/preview.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_preview {
+	background-image: url(../icons/dis_preview.gif);
+}
+
+INPUT.btn_upload {
+	background: url(../icons/import.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_upload {
+	background-image: url(../icons/dis_import.gif);
+}
+
+INPUT.btn_init {
+	background: url(../icons/init.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_init {
+	background-image: url(../icons/dis_init.gif);
+}
+
+INPUT.btn_start {
+	background: url(../icons/start.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_start {
+	background-image: url(../icons/dis_start.gif);
+}
+
+INPUT.btn_stop {
+	background: url(../icons/stop.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_stop {
+	background-image: url(../icons/dis_stop.gif);
+}
+
+INPUT.btn_pause {
+	background: url(../icons/pause.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_pause {
+	background-image: url(../icons/dis_pause.gif);
+}
+
+INPUT.btn_abort {
+	background: url(../icons/close.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_abort {
+	background-image: url(../icons/dis_close.gif);
+}
+
+INPUT.btn_book {
+	background: url(../icons/book.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_book {
+	background-image: url(../icons/dis_book.gif);
+}
+
+INPUT.btn_history {
+	background: url(../icons/history.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_history {
+	background-image: url(../icons/dis_history.gif);
+}
+
+INPUT.btn_send {
+	background: url(../icons/send_mail.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_send {
+	background-image: url(../icons/dis_send_mail.gif);
+}
+
+INPUT.btn_archive {
+	background: url(../icons/archive.gif) 2px center no-repeat;
+}
+
+INPUT.btn_default {
+	background: url(../icons/default.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_default {
+	background-image: url(../icons/dis_default.gif);
+}
+
+INPUT.btn_export {
+	background: url(../icons/export.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_export {
+	background-image: url(../icons/dis_export.gif);
+}
+
+INPUT.btn_import {
+	background: url(../icons/import.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_import {
+	background-image: url(../icons/dis_import.gif);
+}
+
+INPUT.btn_overview {
+	background: url(../icons/nav_up.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_overview {
+	background-image: url(../icons/dis_nav_up.gif);
+}
+
+INPUT.btn_refresh {
+	background: url(../icons/refresh.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_refresh {
+	background-image: url(../icons/dis_refresh.gif);
+}
+
+INPUT.btn_running {
+	background: url(../icons/running.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_running {
+	background-image: url(../icons/dis_running.gif);
+}
+
+INPUT.btn_switch {
+	background: url(../icons/switch.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_switch {
+	background-image: url(../icons/dis_switch.gif);
+}
+
+INPUT.btn_lock {
+	background: url(../icons/lock.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_lock {
+	background-image: url(../icons/dis_lock.gif);
+}
+
+INPUT.btn_task {
+	background: url(../icons/task.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_task {
+	background-image: url(../icons/dis_task.gif);
+}
+
+INPUT.btn_testerr {
+	background: url(../icons/testerr.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_testerr {
+	background-image: url(../icons/dis_testerr.gif);
+}
+
+INPUT.btn_testok {
+	background: url(../icons/testok.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_testok {
+	background-image: url(../icons/dis_testok.gif);
+}
+
+INPUT.btn_assign {
+	background: url(../icons/assign.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_assign {
+	background-image: url(../icons/dis_assign.gif);
+}
+
+INPUT.btn_restdaten {
+	background: url(../icons/restdaten.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_restdaten {
+	background-image: url(../icons/dis_restdaten.gif);
+}
+
+INPUT.btn_edit {
+	background: url(../icons/text_edit.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_edit {
+	background-image: url(../icons/dis_text_edit.gif);
+}
+
+INPUT.btn_select {
+	background: url(../icons/selector.gif) 2px center no-repeat;
+}
+
+INPUT.btn_unselect {
+	background: url(../icons/unselector.gif) 2px center no-repeat;
+}
+
+INPUT.btn_delete {
+	background: url(../icons/delete.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_delete {
+	background-image: url(../icons/dis_delete.gif);
+}
+
+INPUT.btn_dateobj {
+	background: url(../icons/date_obj.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_dateobj {
+	background-image: url(../icons/dis_date_obj.gif);
+}
+
+INPUT.btn_load {
+	background: url(../icons/nav_up.gif) 2px center no-repeat;
+}
+
+INPUT.btn_calc {
+	background: url(../icons/calculator.png) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_calc {
+	background: url(../icons/dis_calculator.png) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_load {
+	background: url(../icons/dis_nav_up.gif) 2px center no-repeat;
+}
+
+INPUT.btn_home {
+	background: url(../icons/nav_home.gif) 2px center no-repeat;
+}
+
+INPUT.btn_file {
+	background: url(../icons/file.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_file {
+	background-image: url(../icons/dis_file.gif);
+}
+
+INPUT.btn_lock_closed {
+	background: url(../icons/lock_closed.png) 2px center no-repeat;
+}
+
+INPUT.btn_add {
+	background: url(../icons/add.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_add {
+	background-image: url(../icons/dis_add.gif);
+}
+
+INPUT.btn_storno {
+	background: url(../icons/s_red.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_storno {
+	background-image: url(../icons/dis_s_red.gif);
+}
+
+INPUT.btn_match {
+	background: url(../icons/match.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_match {
+	background-image: url(../icons/dis_match.gif);
+}
+
+INPUT.btn_licence {
+	background: url(../icons/license.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_licence {
+	background-image: url(../icons/dis_license.gif);
+}
+
+INPUT.btn_undo {
+	background: url(../icons/undo_edit.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_undo {
+	background-image: url(../icons/dis_undo_edit.gif);
+}
+
+INPUT.btn_graph {
+	background: url(../icons/graph.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_graph {
+	background-image: url(../icons/dis_graph.gif);
+}
+
+INPUT.btn_newFile {
+	background: url(../icons/newfile.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_newFile {
+	background-image: url(../icons/dis_newfile.gif);
+}
+
+INPUT.btn_funnelAdd {
+	background: url(../icons/funnel_add.png) 2px center no-repeat;
+}
+
+INPUT.btn_funnelDelete {
+	background: url(../icons/funnel_delete.png) 2px center no-repeat;
+}
+
+INPUT.btn_wand {
+	background: url(../icons/magic-wand.png) 2px center no-repeat;
+}
+
+INPUT.btn_group {
+	background: url(../icons/group.gif) 2px center no-repeat;
+}
+
+INPUT[disabled].btn_group {
+    background: url(../icons/dis_group.gif) 2px center no-repeat;
+}

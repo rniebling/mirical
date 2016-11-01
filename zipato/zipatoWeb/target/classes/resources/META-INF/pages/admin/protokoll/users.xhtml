@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Angemeldete_Benutz">
+		<style type="text/css">
+.normalWidth,#commandBar {
+	width: 100em;
+}
+</style>
+		<t:div id="user">
+			<h:outputFormat value="#{sr:text('label.admin.info.sessions')}">
+				<f:param value="#{applicationStateInfo.sessionCount}" />
+			</h:outputFormat>
+		</t:div>
+	</sr:helpLink>
+
+	<p:poll id="poll" interval="3" render="user" />
+
+	<t:div id="events">
+		<sr:dataTable value="#{controller.users}" var="user" id="data"
+			dataScrollerInfo="true">
+			<t:column headerstyle="width:120px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="login" propertyName="login"
+						arrow="true">
+						<h:outputText value="Angemeldet seit" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{user.login}">
+					<sr:convertDateTime type="both" />
+				</h:outputText>
+			</t:column>
+
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader columnName="username" propertyName="username"
+						arrow="true">
+						<h:outputText value="Benutzername" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{user.username}" />
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader columnName="realName" arrow="true">
+						<h:outputText value="Name" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{user.realName}" />
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader columnName="schema" arrow="true">
+						<h:outputText value="Datenbank" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{user.schema}" />
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader columnName="ip" arrow="true">
+						<h:outputText value="Adresse" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{user.ip}" />
+			</t:column>
+			<t:column headerstyle="width:18px;">
+				<p:commandLink id="remove" rendered="#{!workflow.readonly}"
+					process="@this" title="Beendet diese Benutzer-Sitzung."
+					onclick="PF('popup').show();">
+					<h:graphicImage value="/weblets/icons/delete.gif" alt="x"></h:graphicImage>
+					<f:setPropertyActionListener target="#{pc.userToKill}"
+						value="#{user}"></f:setPropertyActionListener>
+				</p:commandLink>
+				<h:graphicImage value="/weblets/icons/dis_delete.gif" alt="x"
+					rendered="#{workflow.readonly}" />
+			</t:column>
+		</sr:dataTable>
+	</t:div>
+
+	<p:dialog modal="true" widgetVar="popup" styleClass="dojoDialog"
+		width="220">
+		<h:panelGrid columns="2">
+			<f:facet name="header">
+				<h:outputText style="font-weight:normal"
+					value="Benutzer-Sitzung beenden?" />
+			</f:facet>
+			<t:commandButton id="clear_ok" immediate="true"
+				onclick="PF('popup').hide();" action="#{controller.killSession}"
+				styleClass="_button btn_save"
+				value="#{sr:text('label.button.admini.protokoll.log.ok')}">
+				<p:ajax event="click" update="events" />
+			</t:commandButton>
+			<t:commandButton id="clear_cancel" immediate="true"
+				styleClass="_button btn_abort" onclick="PF('popup').hide();"
+				value="#{sr:text('label.button.admini.protokoll.log.cancel')}">
+			</t:commandButton>
+		</h:panelGrid>
+	</p:dialog>
+
+</ui:composition>
+</html>

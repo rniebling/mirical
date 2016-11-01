@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{phase != null}">
+
+		<h:panelGrid>
+			<t:htmlTag value="center">
+				<h:panelGrid style="#{phase.entscheidung ? 'width:100%;' : ''}">
+					<p:outputPanel
+						style="#{controller.phaseStyle(phase)};min-width:120px;"
+						styleClass="prozessElement" layout="block">
+						<rich:dragSupport xmlns:rich="http://richfaces.org/rich"
+							 dragType="PHASE"
+							dragValue="#{phase}" grabbingCursors="crosshair"
+							dragIndicator="ind_baustein">
+							<rich:dndParam name="label"
+								value="#{phaseNameService.getPhaseName(phase)}" />
+							<rich:dndParam name="icon">
+								<h:graphicImage alt=""
+									style="margin:0px 0px 0px 5px;padding:0px;"
+									value="#{controller.icon(phase)}" />
+							</rich:dndParam>
+							<rich:dndParam name="style"
+								value="#{controller.phaseStyle(phase)}" />
+						</rich:dragSupport>
+						<t:htmlTag  value="center">
+							<h:panelGrid columns="2">
+								<t:commandLink action="#{controller.showDetails}"
+									render="teilprozess_details"
+									value="#{phaseNameService.getPhaseName(phase)}">
+									<f:setPropertyActionListener
+										target="#{controller.prozessPhase}" value="#{phase}" />
+								</t:commandLink>
+								<t:div>
+									<h:graphicImage alt=""
+										style="margin:0px 0px 0px 5px;padding:0px;"
+										value="#{controller.icon(phase)}" />
+									<h:graphicImage alt="" rendered="#{phase.sla}"
+										style="margin:0px 0px 0px 5px;padding:0px;"
+										value="/weblets/icons/start.gif" />
+								</t:div>
+							</h:panelGrid>
+						</t:htmlTag>
+						<rich:contextMenu xmlns:rich="http://richfaces.org/rich"
+							 event="contextmenu">
+							<rich:menuItem value="Löschen" icon="/weblets/icons/delete.gif"
+								action="#{pc.removePhase(phase)}" />
+						</rich:contextMenu>
+					</p:outputPanel>
+				</h:panelGrid>
+			</t:htmlTag>
+			<c:if test="#{phase.sla}">
+				<t:div rendered="#{phase.sla}">
+
+					<t:div styleClass="dropProzessZone">
+						<p:outputPanel styleClass="dropProzessZoneInner" layout="block">
+							<rich:dropSupport xmlns:rich="http://richfaces.org/rich"
+								
+								acceptedTypes="PHASE,ADD_PHASE" dropValue="#{phase}"
+								dropListener="#{controller.addPhaseSla}" render="processtree"></rich:dropSupport>
+							<!-- Context-Menu -->
+							<rich:contextMenu xmlns:rich="http://richfaces.org/rich"
+								 event="contextmenu">
+								<rich:menuGroup value="Einfügen" icon="/weblets/icons/add.gif">
+									<c:forEach items="#{workflow.controller.defPhases}" var="dp">
+										<rich:menuItem value="#{dp.name}"
+											icon="/weblets/icons/threadgroup_obj.gif"
+											action="#{pc.addPhase(phase, dp, true)}" />
+									</c:forEach>
+									<rich:menuSeparator />
+									<rich:menuItem value="Entscheidung"
+										icon="/weblets/icons/decision2.gif"
+										action="#{pc.addDecision(phase, true)}" />
+									<rich:menuItem value="Rollenwechsel"
+										icon="/weblets/icons/role_obj.gif"
+										action="#{pc.addRole(phase, true)}" />
+									<rich:menuItem value="Prozessaufruf"
+										icon="/weblets/icons/workflow.gif"
+										action="#{pc.addReferenz(phase, true)}" />
+									<rich:menuItem value="SLA" icon="/weblets/icons/time_obj.gif"
+										action="#{pc.addSla(phase, true)}" />
+								</rich:menuGroup>
+							</rich:contextMenu>
+						</p:outputPanel>
+					</t:div>
+
+					<t:htmlTag value="center">
+						<ui:include src="inc-process-phase.xhtml">
+							<ui:param name="phase" value="#{phase.slaPhase}" />
+						</ui:include>
+					</t:htmlTag>
+
+					<t:htmlTag value="center">
+						<h:panelGrid>
+							<t:div style="background-color: #CCFF99;min-width:120px;"
+								styleClass="prozessElement" layout="block">
+								<t:htmlTag value="center">
+									<h:panelGrid columns="2">
+										<t:commandLink action="#{controller.showDetails}"
+											render="teilprozess_details"
+											value="#{phaseNameService.getPhaseName(phase)}">
+											<f:setPropertyActionListener
+												target="#{controller.prozessPhase}" value="#{phase}" />
+										</t:commandLink>
+										<h:graphicImage alt=""
+											style="margin:0px 0px 0px 5px;padding:0px;"
+											value="/weblets/icons/stop.gif" />
+									</h:panelGrid>
+								</t:htmlTag>
+							</t:div>
+						</h:panelGrid>
+					</t:htmlTag>
+				</t:div>
+			</c:if>
+			<c:if test="#{phase.entscheidung}">
+				<t:div rendered="#{phase.entscheidung}">
+					<table cellpadding="0" cellspacing="0">
+						<tr>
+							<c:forEach items="#{phase.faelle}" var="fall">
+								<td valign="top" align="center">
+									<center>
+										<t:div
+											style="min-width:120px;width:90%;background-color:#FFF79F;"
+											styleClass="prozessElement" layout="block">
+											<h:commandLink action="#{controller.showFall}"
+												value="#{fall.bezeichnung}">
+												<f:setPropertyActionListener
+													target="#{controller.prozessPhase}" value="#{phase}" />
+												<f:setPropertyActionListener target="#{controller.fall}"
+													value="#{fall}" />
+											</h:commandLink>
+										</t:div>
+										<t:div styleClass="dropProzessZone">
+											<p:outputPanel styleClass="dropProzessZoneInner"
+												layout="block">
+												<rich:dropSupport xmlns:rich="http://richfaces.org/rich"
+													
+													acceptedTypes="PHASE,ADD_PHASE" dropValue="#{fall}"
+													dropListener="#{controller.addPhase}" render="processtree"></rich:dropSupport>
+												<!-- Context-Menu -->
+												<rich:contextMenu xmlns:rich="http://richfaces.org/rich"
+													 event="contextmenu">
+													<rich:menuGroup value="Einfügen"
+														icon="/weblets/icons/add.gif">
+														<c:forEach items="#{workflow.controller.defPhases}"
+															var="dp">
+															<rich:menuItem value="#{dp.name}"
+																icon="/weblets/icons/threadgroup_obj.gif"
+																action="#{pc.addPhase(fall, dp, false)}" />
+														</c:forEach>
+														<rich:menuSeparator />
+														<rich:menuItem value="Entscheidung"
+															icon="/weblets/icons/decision2.gif"
+															action="#{pc.addDecision(fall, false)}" />
+														<rich:menuItem value="Rollenwechsel"
+															icon="/weblets/icons/role_obj.gif"
+															action="#{pc.addRole(fall, false)}" />
+														<rich:menuItem value="Prozessaufruf"
+															icon="/weblets/icons/workflow.gif"
+															action="#{pc.addReferenz(fall, false)}" />
+														<rich:menuItem value="SLA"
+															icon="/weblets/icons/time_obj.gif"
+															action="#{pc.addSla(fall, false)}" />
+													</rich:menuGroup>
+												</rich:contextMenu>
+											</p:outputPanel>
+										</t:div>
+										<ui:include src="inc-process-phase.xhtml">
+											<ui:param name="phase" value="#{fall.phase}" />
+										</ui:include>
+
+										<c:if test="#{fall.schleife}">
+
+											<h:panelGrid>
+												<p:outputPanel styleClass="prozessElement"
+													style="background-color:#AFD1FD;height:15px;width:15px;-moz-border-radius:10px;padding:0px;"
+													layout="block" />
+											</h:panelGrid>
+
+										</c:if>
+									</center>
+								</td>
+							</c:forEach>
+						</tr>
+					</table>
+					<t:div style="background-color: #AFD1FD;"
+						styleClass="prozessElement" layout="block" />
+				</t:div>
+			</c:if>
+		</h:panelGrid>
+		<t:div styleClass="dropProzessZone">
+			<p:outputPanel styleClass="dropProzessZoneInner" layout="block">
+				<rich:dropSupport xmlns:rich="http://richfaces.org/rich"
+					
+					acceptedTypes="PHASE,ADD_PHASE" dropValue="#{phase}"
+					dropListener="#{controller.addPhase}" render="processtree"></rich:dropSupport>
+				<rich:contextMenu xmlns:rich="http://richfaces.org/rich"
+					 event="contextmenu">
+					<rich:menuGroup value="Einfügen" icon="/weblets/icons/add.gif">
+						<c:forEach items="#{workflow.controller.defPhases}" var="dp">
+							<rich:menuItem value="#{dp.name}"
+								icon="/weblets/icons/threadgroup_obj.gif"
+								action="#{pc.addPhase(phase, dp, false)}" />
+						</c:forEach>
+						<rich:menuSeparator />
+						<rich:menuItem value="Entscheidung"
+							icon="/weblets/icons/decision2.gif"
+							action="#{pc.addDecision(phase, false)}" />
+						<rich:menuItem value="Rollenwechsel"
+							icon="/weblets/icons/role_obj.gif"
+							action="#{pc.addRole(phase, false)}" />
+						<rich:menuItem value="Prozessaufruf"
+							icon="/weblets/icons/workflow.gif"
+							action="#{pc.addReferenz(phase, false)}" />
+						<rich:menuItem value="SLA" icon="/weblets/icons/time_obj.gif"
+							action="#{pc.addSla(phase, false)}" />
+					</rich:menuGroup>
+				</rich:contextMenu>
+			</p:outputPanel>
+		</t:div>
+
+		<ui:include src="inc-process-phase.xhtml">
+			<ui:param name="phase" value="#{phase.nachfolger}" />
+		</ui:include>
+
+	</c:if>
+
+</ui:component>
+
+</html>

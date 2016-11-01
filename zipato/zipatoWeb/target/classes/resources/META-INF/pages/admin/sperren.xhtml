@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.prozess.Datensatzsperren')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Allgemein.htm#Administration_Dialog_Datensatzsperren" />
+
+		<t:fieldset id="liste"
+			legend="#{sr:text('label.admin.prozess.Datensatzsperren')}">
+			<sr:mdCommandButton id="sperre_deleteAll_action"
+				value="#{sr:text('label.admin.datensatzsperren.alleEntfernen')}"
+				buttonStyleClass="btn_close" disabled="#{workflow.readonly}"
+				buttonStyle="width:13em;" backingbean="#{workflow.controller}"
+				action="removeAll"
+				mbtitle="#{sr:text('label.admin.sperren.Datensatzsperrenentfernen')}"
+				mbmessage="#{sr:text('label.admin.sperren.AlleDatensatzsperrenentfernen')}" />
+
+			<sr:dataTable value="#{workflow.controller.sperren}" var="sperre"
+				sortColumn="#{workflow.controller.sort}"
+				sortAscending="#{workflow.controller.ascending}" dataScroller="true"
+				dataScrollerInfo="true" id="data"
+				deleteMessage="#{sr:text('label.admin.sperren.Datensatzsperreloeschen')}">
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.admin.prozess.Tabelle')}" />
+					</f:facet>
+					<h:outputText value="#{sperre.shortName}" />
+				</t:column>
+				<t:column headerstyle="width:150px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozess.Datensatz-Id')}" />
+					</f:facet>
+					<h:outputText value="#{sperre.datensatzId}" />
+				</t:column>
+				<t:column headerstyle="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="Benutzer" />
+					</f:facet>
+					<h:outputText rendered="#{sperre.benutzer != null}"
+						value="#{sperre.benutzer.name} (#{sperre.benutzer.username})" />
+					<h:outputText title="Nicht angemeldet!" styleClass="redFont"
+						rendered="#{!workflow.controller.isLoggedIn(sperre.sessionId)}"
+						value=" *" />
+				</t:column>
+				<t:column headerstyle="width:150px;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.admin.prozess.Seit')}" />
+					</f:facet>
+					<h:outputText value="#{sperre.angelegtAm}">
+						<sr:convertDateTime type="both" />
+					</h:outputText>
+				</t:column>
+				<t:column headerstyle="width:18px;">
+					<f:facet name="header">
+						<h:outputText value="" />
+					</f:facet>
+					<p:commandLink id="remove" disabled="#{workflow.readonly}"
+						process="@this" onclick="PF('data_confirm_delete').show();">
+						<h:graphicImage value="/weblets/icons/delete.gif"
+							alt="Sperre entfernen"></h:graphicImage>
+						<f:setPropertyActionListener target="#{workflow.controller.value}"
+							value="#{sperre}"></f:setPropertyActionListener>
+					</p:commandLink>
+				</t:column>
+			</sr:dataTable>
+		</t:fieldset>
+
+	</ui:define>
+
+	<ui:define name="_saveButton" />
+</ui:composition>
+</html>

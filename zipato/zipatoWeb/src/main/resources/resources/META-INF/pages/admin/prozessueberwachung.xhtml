@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/admin/adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.menu.prozessueberwachung')}" />
+	</ui:define>
+
+	<ui:define name="_saveButton">
+
+		<c:if test="#{sr:module('AnzeigeSlaZeiten')}">
+			<t:commandButton id="action_save" styleClass="_button btn_save"
+				value="#{sr:text('label.save')}" actionFor="admin_form"
+				action="#{baseParameterHolder.save}" />
+		</c:if>
+
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<c:if test="#{sr:module('AnzeigeSlaZeiten')}">
+			<sr:checkboxField id="prozess_sla_anzeige_aktivieren"
+				readonly="never" disabled="never"
+				value="#{baseParameterHolder['ctrl.plausi.anzeigeSlaZeiten'].booleanValue}"
+				label="#{sr:text('label.admin.prozess.anzeigeProzessSlaZeitenAktivieren')}" />
+		</c:if>
+
+		<ui:include src="esm/regelliste.xhtml" />
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

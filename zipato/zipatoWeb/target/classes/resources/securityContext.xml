@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	default-lazy-init="false">
+
+	<!-- -->
+	<http pattern="/pages/status.jsf*" security="none" />
+	<http pattern="/pages/force-change-password.jsf*" security="none" />
+	<http pattern="/pages/dbtools/start.jsf*" security="none" />
+	<http pattern="/pages/dbtools/index.jsf*" security="none" />
+	<http auto-config="false" use-expressions="true">
+		<intercept-url pattern="/logout.jsf*"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/errors/*.jsf*"
+			access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/pages/login.jsf*"
+			access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/pages/home.jsf*"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_DBA')" />
+		<intercept-url pattern="/pages/admin/*.jsf*"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/index.jsf*"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/pages/dbhelper/**/*.jsf*"
+			access="hasRole('ROLE_ANONYMOUS')" />
+		<intercept-url pattern="/pages/dbtools/**/*.jsf*"
+			access="hasRole('ROLE_DBA')" />
+		<intercept-url pattern="/pages/**/*.jsf*"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" />
+		<intercept-url pattern="/bitmaps/**"
+			access="hasRole('ROLE_SUPER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasIpAddress('127.0.0.1')" />
+
+		<form-login login-page="/pages/login.jsf" />
+		<anonymous />
+		<custom-filter position="REMEMBER_ME_FILTER" ref="rememberMeFilter" />
+
+		<!-- <remember-me key="a976fd85c19507d04b7229422f23f902" /> -->
+	</http>
+
+	<!-- HINWEIS die Liste der Provider wird in SecurityBean.lazyInitializeProvider() 
+		überschrieben -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="rememberMeAuthenticationProvider" />
+		<authentication-provider ref="daoAuthenticationProvider" />
+		<authentication-provider ref="ldapLightAuthenticationProvider" />
+		<authentication-provider ref="ldapAuthenticationProvider" />
+		<authentication-provider ref="interfaceAuthenticationProvider" />
+	</authentication-manager>
+
+	<!-- -->
+	<beans:bean id="daoAuthenticationProvider"
+		class="de.subito.sunrise.webapp.security.ExtendedDaoAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDao" />
+		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+		<beans:property name="saltSource" ref="saltSource" />
+	</beans:bean>
+
+	<!-- LDAP START -->
+
+	<beans:bean id="ldapLightAuthenticationProvider" scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseLdapLightAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDao" />
+		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+		<beans:property name="saltSource" ref="saltSource" />
+		<beans:property name="ldapAuthenticationProvider"
+			ref="nonCheckingLdapAuthenticationProvider" />
+		<beans:property name="ldapUserService" ref="ldapUserService" />
+	</beans:bean>
+
+	<beans:bean id="nonCheckingLdapAuthenticationProvider"
+		scope="schema"
+		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+		<aop:scoped-proxy />
+		<beans:constructor-arg index="0" ref="bindAuthenticator" />
+		<beans:constructor-arg index="1"
+			ref="sunriseLdapAuthoritiesPopulatorFactory" />
+		<beans:property name="userDetailsContextMapper" ref="sunriseUserDetailsContextMapper" />
+	</beans:bean>
+
+	<beans:bean id="ldapAuthenticationProvider" lazy-init="true"
+		scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseLdapAuthenticationProviderFactory">
+		<aop:scoped-proxy />
+		<beans:property name="authenticator" ref="bindAuthenticator" />
+		<beans:property name="populator"
+			ref="sunriseLdapAuthoritiesPopulatorFactory" />
+		<beans:property name="userDetailsContextMapper" ref="sunriseUserDetailsContextMapper" />
+	</beans:bean>
+
+	<beans:bean id="sunriseLdapAuthoritiesPopulatorFactory"
+		lazy-init="true" scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseLdapAuthoritiesPopulatorFactory">
+		<aop:scoped-proxy />
+	</beans:bean>
+
+	<beans:bean id="sunriseUserDetailsContextMapper" lazy-init="true"
+		scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseUserDetailsContextMapperFactory">
+		<aop:scoped-proxy />
+	</beans:bean>
+
+	<beans:bean id="bindAuthenticator" lazy-init="true" scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseBindAuthenticatorFactory">
+		<aop:scoped-proxy />
+		<beans:property name="contextSource" ref="initialDirContext" />
+		<beans:property name="userSearch">
+			<beans:bean id="userSearch" scope="prototype"
+				class="de.subito.sunrise.webapp.security.ldap.SunriseLdapUserSearchFactory">
+			</beans:bean>
+		</beans:property>
+		<beans:property name="userAttributes">
+			<beans:bean id="userAttributes" scope="prototype"
+				class="de.subito.sunrise.webapp.security.ldap.SunriseLdapUserAttributesFactory">
+			</beans:bean>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="initialDirContext" lazy-init="true" scope="schema"
+		class="de.subito.sunrise.webapp.security.ldap.SunriseLdapContextSourceFactory">
+		<aop:scoped-proxy />
+	</beans:bean>
+
+	<!-- LDAP END -->
+
+	<!-- -->
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+	<!-- -->
+	<beans:bean id="saltSource"
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<beans:property name="userPropertyToUse" value="getUsername" />
+	</beans:bean>
+
+	<beans:bean id="interfaceAuthenticationProvider"
+		class="de.subito.sunrise.webapp.interfaces.InterfaceAuthenticationProvider" />
+
+	<beans:bean id="rememberMeFilter"
+		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<beans:property name="rememberMeServices" ref="rememberMeServices" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+	</beans:bean>
+
+	<beans:bean id="rememberMeServices"
+		class="de.subito.sunrise.webapp.security.RememberMeServices">
+		<beans:constructor-arg name="key"
+			value="a976fd85c19507d04b7229422f23f902" />
+		<beans:constructor-arg name="userDetailsService"
+			ref="userDao" />
+	</beans:bean>
+
+	<beans:bean id="rememberMeAuthenticationProvider"
+		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<beans:property name="key" value="a976fd85c19507d04b7229422f23f902" />
+	</beans:bean>
+
+
+</beans:beans>

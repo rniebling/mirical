@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('INKASSO')}">
+		<sr:helpLink id="ink"
+			ref="Mahn/Administration Mahn/Adm_ADM_BatchJobs.htm#ADM_BatchJobs_Ausfuehrungen" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('INKASSO') and !moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Batch-Job.htm#Administration_Dialog_Ausfuehrungen" />
+	</t:div>
+
+	<t:div
+		rendered="#{!moduleManager.isEnabled('INKASSO') and moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="sfdk"
+			ref="SFDK/Administration SFDK/Adm_SFDK_Batch-Jobs.htm#Adm_SFDK_BatchJobs_Ausführungen" />
+	</t:div>
+
+	<sr:dataTable id="data" value="#{controller.executions}" var="bean">
+		<t:column headerstyle="width:120px;">
+			<f:facet name="header">
+				<h:outputText value="Start" />
+			</f:facet>
+			<h:outputText value="#{bean.startTime}">
+				<sr:convertDateTime type="both" />
+			</h:outputText>
+		</t:column>
+		<t:column headerstyle="width:120px;">
+			<f:facet name="header">
+				<h:outputText value="Ende" />
+			</f:facet>
+			<h:outputText value="#{bean.endTime}">
+				<sr:convertDateTime type="both" />
+			</h:outputText>
+		</t:column>
+		<t:column headerstyle="width:50px;" style="text-align:right;">
+			<f:facet name="header">
+				<h:outputText value="Dauer" />
+			</f:facet>
+			<h:outputText value="#{bean.duration}" />
+		</t:column>
+		<t:column>
+			<f:facet name="header">
+				<h:outputText value="Job" />
+			</f:facet>
+			<c:set var="xlabel" value="label.batch.job.#{bean.stepName}" />
+			<h:outputText value="#{sr:text(xlabel)}" />
+		</t:column>
+		<t:column headerstyle="width:18px;" style="text-align:center">
+			<f:facet name="header">
+				<h:outputText value="Status" />
+			</f:facet>
+			<h:graphicImage rendered="#{bean.exitStatus == 'COMPLETED'}"
+				alt="Abgeschlossen" title="Abgeschlossen"
+				url="/weblets/icons/complete_status.gif" />
+			<h:graphicImage rendered="#{bean.exitStatus == 'EXECUTING'}"
+				alt="Laufend" title="Laufend" url="/weblets/icons/running.gif" />
+			<h:graphicImage rendered="#{bean.exitStatus == 'FAILED'}"
+				alt="Fehlerhaft" title="Fehlerhaft"
+				url="/weblets/icons/prio_high.gif" />
+			<h:graphicImage rendered="#{bean.exitStatus == 'STOPPED'}"
+				alt="Gestoppt" title="Gestoppt" url="/weblets/icons/stop.gif" />
+		</t:column>
+		<t:column headerstyle="width:18px;" style="text-align:center">
+			<h:commandLink action="#{controller.showExecution(bean)}"
+				rendered="#{pc.hasWarnings(bean)}">
+				<h:graphicImage alt="!" title="Protokoll"
+					url="/weblets/icons/message_warning.gif" />
+			</h:commandLink>
+		</t:column>
+	</sr:dataTable>
+</ui:composition>
+</html>

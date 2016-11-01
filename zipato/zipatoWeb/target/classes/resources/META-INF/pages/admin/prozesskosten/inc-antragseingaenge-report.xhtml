@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:panelTab id="report"
+		label="#{sr:text('label.admin.prozesskosten.report')}">
+
+		<sr:helpLink
+			ref="Administration/Administration Auswertungen.htm#AdminiProzess_Report_Eingang" />
+
+		<t:fieldset id="ergebnisse"
+			legend="#{sr:text('label.admin.prozesskosten.reportergebnis')}">
+
+			<sr:dataTable value="#{pc.ergebnis.listProzess}" var="slaErgebnis"
+				id="ergebnis" dataScrollerInfo="true">
+
+				<t:column style="width:150px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.mandant')}" />
+					</f:facet>
+					<h:outputText value="#{slaErgebnis.mandant.name}" />
+				</t:column>
+
+				<t:column style="width:150px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.prozess')}" />
+					</f:facet>
+					<h:outputText value="#{slaErgebnis.prozess.name}" />
+				</t:column>
+
+				<t:column style="width:60px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.anzahlGestartet')}" />
+					</f:facet>
+					<h:outputText value="#{slaErgebnis.anzahlGestartet}" />
+				</t:column>
+
+				<t:column style="width:60px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.anzahlBearbeitet')}" />
+					</f:facet>
+					<h:outputText value="#{slaErgebnis.anzahlBearbeitet}" />
+				</t:column>
+
+				<t:column style="width:60px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.anzahlSlaEingehalten')}" />
+					</f:facet>
+					<h:outputText value="#{pc.anzahlSlaEingehaltenString(slaErgebnis)}" />
+				</t:column>
+
+			</sr:dataTable>
+		</t:fieldset>
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="print_action_liste"
+				styleClass="_button btn_print"
+				disabled="#{workflow.readonly or pc.ergebnis == null}" value="LISTE"
+				action="#{workflow.controller.printListe}" />
+		</t:div>
+
+		<t:div styleClass="space-wide" />
+
+		<t:fieldset id="bericht" legend="Berichte">
+
+			<h:panelGrid>
+
+				<sr:checkboxField id="showGesamtReport"
+					value="#{pc.showGesamtReport}" label="Übersicht" />
+
+				<sr:checkboxField id="showJahresReport"
+					value="#{pc.showJahresReport}" label="Jahre" />
+
+				<sr:checkboxField id="showQuartalsReport"
+					value="#{pc.showQuartalsReport}" label="Quartale" />
+
+				<sr:checkboxField id="showMonatsReport"
+					value="#{pc.showMonatsReport}" label="Monate" />
+			</h:panelGrid>
+		</t:fieldset>
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="print_action_bericht"
+				styleClass="_button btn_print"
+				disabled="#{workflow.readonly or pc.ergebnis == null}"
+				value="BERICHT" action="#{workflow.controller.printReport}" />
+		</t:div>
+
+	</t:panelTab>
+
+</ui:composition>
+</html>

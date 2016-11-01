@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+
+<!-- 
+	Custom Tag - ComboBox erweitert um zwei Buttons, die rechts und links vom Button angeordnet
+	sind und mit deren Hilfe, in der ComboBox das n&auml;chste oder das vorherige Element selektiert werden kann. 
+	
+	
+	Zus&auml;tzliche Parameter zu der Tomahawk selectOneMenu Komponente:
+		(Es werden nicht alle Parameter der Tomahawk Komponente gemappt !
+		 Bei Bedarf muss die selectOneMenu Komponente innerhalb dieser Datei 
+		 angepasst werden !)
+		 		 
+		(Pflichtfeld)	backingbean: Bean, auf der die action aufgerufen wird
+		(Pflichtfeld)	action: 	 Name der Funktion, die aufgerufen werden soll
+		
+	Gemappte Parameter:
+		
+		value
+		reRender
+		converter
+		converterId		
+				
+	-->
+
+<ui:component>
+
+	<!-- combobox element id nach javascript uebertragen. -->
+	<t:jsValueSet name="comboBoxId" value="#{id}" />
+
+	<script language="javascript">
+				
+				function next#{id}(){																			
+					var i =document.getElementById(comboBoxId).selectedIndex+1;
+					if(i&lt;document.getElementById(comboBoxId).length){
+						document.getElementById(comboBoxId).selectedIndex=i;
+						checkButtons#{id}();
+						document.getElementById(comboBoxId).onchange();												
+						return true;												
+					}						
+					return true;														
+				}
+				function back#{id}(){					
+					var i =document.getElementById(comboBoxId).selectedIndex;
+					if(i&gt;0){
+						document.getElementById(comboBoxId).selectedIndex=i-1;
+						checkButtons#{id}();
+						document.getElementById(comboBoxId).onchange();														
+						return true;																
+					}			
+					return true;																
+				}
+				
+				function traverseDocument#{id}(node,findId){					
+					if(node.id!=null &amp;&amp; node.id.indexOf(findId)!=-1){
+						return node;
+					}					
+					if(node.hasChildNodes()){
+						var childNodes = node.childNodes;
+						for(var i=0;i&lt;childNodes.length;i++){
+							var childNode = childNodes[i];
+							var founded =  traverseDocument#{id}(childNode,findId);
+							if(founded!=null) return founded;
+						}
+					}
+					return null;		
+				}
+								
+				function checkButtons#{id}(){
+					var cb_back='cb_back#{id}';
+					var cb_next='cb_next#{id}';					
+					
+					
+					var backButton = traverseDocument#{id}(document,cb_back);
+					var nextButton = traverseDocument#{id}(document,cb_next);
+					
+					if(document.getElementById(comboBoxId).selectedIndex&gt;=document.getElementById(comboBoxId).length-1){						
+						nextButton.disabled=true;
+					}else{
+						nextButton.disabled=false;
+					}
+					
+					if(document.getElementById(comboBoxId).selectedIndex&lt;1){						
+						backButton.disabled=true;
+					}else{
+						backButton.disabled=false;
+					}
+				}
+				
+				function addLoadEvent#{id}(func) {   
+  					var oldonload = window.onload;   
+   					if (typeof window.onload != 'function') {   
+     					window.onload = func;   
+   					} else {   
+     					window.onload = function() {   
+       					if (oldonload) {   
+         					oldonload();   
+       					}   
+       					func();   
+     					}
+   					}   
+ 				}   
+   
+ 				addLoadEvent#{id}(checkButtons#{id});   				
+							
+			</script>
+
+	<h:panelGrid columns="3">
+		<t:div styleClass="_btn">
+			<a4j:region selfRendered="true">
+				<a4j:commandButton id="cb_back#{id}"
+					disabled="#{readonly or disabled or workflow.readonly}"
+					styleClass="_button btn_back"
+					value="#{sr:text('label.rmk.akte.zurueck')}" render="#{render}"
+					onclick="back#{id}()" action="#{backingBean[action]}" />
+			</a4j:region>
+
+		</t:div>
+
+		<t:div styleClass="group2" style="margin-right:10px;#{style}">
+			<t:selectOneMenu id="#{id}" value="#{value}"
+				styleClass="#{component.valid ? '' : 'inputTextError'}"
+				style="border-width: 1px;border-style: solid;"
+				required="#{required and workflow.required}"
+				readonly="#{readonly or disabled or workflow.readonly}">
+				<c:if test="#{converter  != null}">
+					<f:attribute name="converter" value="#{converter}" />
+				</c:if>
+				<c:if test="#{emptyItem}">
+					<f:selectItem itemValue="" itemLabel="" />
+				</c:if>
+				<c:if test="#{converterId  != null}">
+					<f:converter converterId="#{converterId}" />
+				</c:if>
+				<c:if test="#{! empty items}">
+					<f:selectItems value="#{items}" />
+				</c:if>
+				<sr:dbref />
+				<c:if test="#{render != null}">
+					<p:ajax event="change" listener="#{backingBean[action]}"
+						update="#{render}" onsubmit="checkButtons#{id}()" />
+				</c:if>
+				<ui:insert />
+
+			</t:selectOneMenu>
+			<c:if test="#{label != null }">
+				<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+					style="#{labelStyle}" />
+			</c:if>
+		</t:div>
+
+		<t:div styleClass="_btn">
+			<p:commandButton id="cb_next#{id}"
+				disabled="#{readonly or disabled or workflow.readonly}"
+				styleClass="_button btn_next" process="@this"
+				value="#{sr:text('label.rmk.akte.vor')}" update="#{render}"
+				onclick="next#{id}()" action="#{backingBean[action]}" />
+		</t:div>
+	</h:panelGrid>
+</ui:component>
+</html>

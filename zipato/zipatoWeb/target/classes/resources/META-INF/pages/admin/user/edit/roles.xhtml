@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Rollen" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Benutzerverwaltung.htm#Rollen" />
+	</t:div>
+
+	<h:panelGrid cellspacing="0" cellpadding="0">
+		<t:dataTable value="#{tc.roles}" var="bean" newspaperColumns="4"
+			newspaperOrientation="horizontal">
+			<t:column style="width:190px;">
+				<sr:checkboxField id="r1" rendered="#{tc.isGroupRole(bean)}"
+					value="#{true}" label=" #{bean.name}" disabled="true" />
+				<sr:checkboxField id="r2" rendered="#{!tc.isGroupRole(bean)}"
+					value="#{tc.active[bean]}" label=" #{bean.name}" />
+			</t:column>
+		</t:dataTable>
+	</h:panelGrid>
+
+</ui:composition>
+</html>

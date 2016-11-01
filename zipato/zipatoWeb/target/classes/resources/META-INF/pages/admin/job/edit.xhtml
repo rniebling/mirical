@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('INKASSO')}">
+		<sr:helpLink id="ink"
+			ref="Mahn/Administration Mahn/Adm_ADM_BatchJobs.htm#ADM_BatchJobs_Allgemein" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('INKASSO') and !moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Batch-Job.htm#Administration_Dialog_Allgemein1" />
+	</t:div>
+
+	<t:div
+		rendered="#{!moduleManager.isEnabled('INKASSO') and moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="sfdk"
+			ref="SFDK/Administration SFDK/Adm_SFDK_Batch-Jobs.htm#Adm_SFDK_BatchJobs_Allgemein" />
+	</t:div>
+
+	<h:panelGrid>
+
+		<sr:textField id="name" value="#{controller.value.name}"
+			required="true" label="Name" />
+
+		<sr:textField id="kommentar" value="#{controller.value.kommentar}"
+			size="80" label="Kommentar" />
+
+		<sr:integerField id="threads" required="true"
+			value="#{controller.value.numberOfThreads}" maxlength="2" size="3"
+			label="Anzahl paralleler Prozesse">
+			<f:validateLongRange minimum="1" maximum="64" />
+		</sr:integerField>
+
+		<sr:checkboxField id="on" value="#{controller.value.aktiviert}"
+			label="Automatischer Start" render="timeplan" />
+
+		<t:div id="timeplan">
+			<t:fieldset legend="Zeitplan"
+				rendered="#{controller.value.aktiviert}">
+
+				<h:panelGrid columns="2" styleClass="dataTable"
+					rowClasses="odd,even" columnClasses="headerInfo">
+
+					<sr:outputLabel value="Sekunde" for="sec" />
+					<sr:textField id="sec" value="#{controller.expression.second}"
+						size="10" />
+
+					<sr:outputLabel value="Minute" for="min" />
+					<sr:textField id="min" value="#{controller.expression.minute}"
+						size="10" />
+
+					<sr:outputLabel value="Stunde" for="hour" />
+					<sr:textField id="hour" value="#{controller.expression.hour}"
+						size="10" />
+
+					<sr:outputLabel value="Tag des Monats" for="dom" />
+					<sr:textField id="dom" value="#{controller.expression.dayOfMonth}"
+						size="10" />
+
+					<sr:outputLabel value="Monat" for="month" />
+					<sr:textField id="month" value="#{controller.expression.month}"
+						size="10" />
+
+					<sr:outputLabel value="Wochentag" for="dow" />
+					<sr:textField id="dow" value="#{controller.expression.dayOfWeek}"
+						size="10" />
+
+				</h:panelGrid>
+
+			</t:fieldset>
+		</t:div>
+	</h:panelGrid>
+
+</ui:composition>
+</html>

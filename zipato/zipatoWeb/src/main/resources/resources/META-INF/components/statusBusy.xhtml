@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{url == null }">
+		<c:set var="url" value="/weblets/icons/animated/busy.gif" />
+	</c:if>
+	<c:if test="#{value == null }">
+		<c:set var="value" value="Bitte warten..." />
+	</c:if>
+
+<!-- 	<a4j:status for="#{for}" onstart="document.body.style.cursor = 'wait';" -->
+<!-- 		onstop="document.body.style.cursor = 'default';"> -->
+<!-- 		<f:facet name="start"> -->
+<!-- 			<h:panelGrid columns="2" cellspacing="2" cellpadding="0"> -->
+<!-- 				<t:graphicImage title="" alt="" url="#{url}" /> -->
+<!-- 				<h:outputText value="#{value}" /> -->
+<!-- 			</h:panelGrid> -->
+<!-- 		</f:facet> -->
+<!-- 	</a4j:status> -->
+
+	<p:ajaxStatus onstart="document.body.style.cursor = 'wait';"
+		onstop="document.body.style.cursor = 'default';">
+		<f:facet name="start">
+			<p:graphicImage value="#{url}" />
+			<h:outputText value="#{value}" />
+		</f:facet>
+		<f:facet name="complete">
+			<h:outputText value="Beendet" />
+		</f:facet>
+	</p:ajaxStatus>
+
+</ui:component>
+</html>

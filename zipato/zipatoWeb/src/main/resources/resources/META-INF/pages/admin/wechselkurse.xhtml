@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="adminVorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.prozess.Wechselkurse')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Allgemein.htm#AdminiAllgemein_Wechselkurse" />
+
+		<!-- **************************** Institutswaehrung setzen **************************** -->
+		<t:fieldset legend="#{sr:text('label.admin.prozess.Waehrung')}">
+			<h:panelGrid columns="2">
+
+				<sr:comboboxField id="wechselkurse_systemwaehrung"
+					value="#{workflow.controller.systemWaehrung}" required="true"
+					items="#{workflow.controller.waehrungen}"
+					render="wechselkurse_systemwaehrung wechselkurse_systemwaehrung_lang"
+					label="#{sr:text('label.admin.wechselkurse.systemwaehrung')}" />
+
+				<sr:textField id="wechselkurse_systemwaehrung_lang" size="35"
+					required="true" readonly="true"
+					value="#{workflow.controller.systemWaehrung.text}" />
+
+			</h:panelGrid>
+		</t:fieldset>
+
+
+		<!-- **************************** Neue Währung /Währungskurs erfassen **************************** -->
+
+		<t:subform id="wechselkurse_neuewaehrung_erfassen">
+			<t:fieldset legend="#{sr:text('label.admin.prozess.NeuerKurs')}">
+				<h:panelGrid columns="1">
+
+					<sr:dateField id="wechselkurse_neu_gueltig_ab"
+						value="#{workflow.controller.wechselkurs.gueltigAb}"
+						required="true" render="wechselkurse_neu_gueltig_ab"
+						label="#{sr:text('label.admin.wechselkurse.waehrung.gueltigAb')}" />
+
+					<sr:floatField id="wechselkurse_neuer_kurs"
+						value="#{workflow.controller.wechselkurs.kurs}" size="10"
+						required="true" maxFractionDigits="5"
+						render="wechselkurse_neuer_kurs"
+						label="#{sr:text('label.admin.wechselkurse.waehrung.kurs')}" />
+
+					<h:panelGrid columns="2">
+						<sr:comboboxField id="wechselkurse_neue_waehrung"
+							value="#{workflow.controller.wechselkurs.waehrung}"
+							required="true" items="#{workflow.controller.waehrungen}"
+							render="wechselkurse_neue_waehrung wechselkurse_neue_waehrung_lang"
+							label="#{sr:text('label.admin.wechselkurse.waehrung')}" />
+						<sr:textField id="wechselkurse_neue_waehrung_lang" size="35"
+							readonly="true"
+							value="#{workflow.controller.wechselkurs.waehrung.text}" />
+					</h:panelGrid>
+
+				</h:panelGrid>
+				<t:div styleClass="_btn">
+					<t:commandButton id="create_action" styleClass="_button btn_new"
+						actionFor="wechselkurse_neuewaehrung_erfassen"
+						value="#{sr:text('label.new')}" disabled="#{workflow.readonly}"
+						action="#{workflow.controller.create}" />
+				</t:div>
+			</t:fieldset>
+		</t:subform>
+
+
+		<!-- **************************** Tabelle mit alle Waehrungskurse **************************** -->
+
+
+		<t:fieldset
+			legend="#{sr:text('label.admin.prozess.uebersichtDerErfasstenWechselkurse')}">
+			<t:div>
+				<sr:dataTable id="data" value="#{workflow.controller.wechselkurse}"
+					var="bean" dataScrollerInfo="true"
+					deleteMessage="#{sr:text('label.admin.wechselkurse.Datensatzloeschen')}">
+					<t:column headerstyle="width:70px;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.GueltigAb')}" />
+						</f:facet>
+						<t:outputText id="wechselkurse_neu_gueltig_ab"
+							value="#{bean.gueltigAb}">
+							<sr:convertDateTime type="date" />
+						</t:outputText>
+					</t:column>
+					<t:column style="text-align:right;" headerstyle="width:70px;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.Kurs')}" />
+						</f:facet>
+						<t:outputText id="wechselkurse_kurs" value="#{bean.kurs}"
+							maxlength="20" size="10" style="text-align:right">
+							<f:convertNumber maxIntegerDigits="3" maxFractionDigits="5"></f:convertNumber>
+						</t:outputText>
+					</t:column>
+					<t:column headerstyle="width:50px;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.Waehrung')}" />
+						</f:facet>
+						<t:outputText id="wechselkurse_waehrung" size="5"
+							value="#{bean.waehrung.isoCode}" />
+					</t:column>
+					<t:column headerstyle="width:150px;">
+						<f:facet name="header">
+							<h:outputText value="" />
+						</f:facet>
+						<t:outputText id="wechselkurse_waehrung_lang" size="35"
+							value="#{bean.waehrung.text}" />
+					</t:column>
+					<t:column style="width:18px;">
+						<f:facet name="header">
+							<h:outputText value="" />
+						</f:facet>
+						<p:commandLink id="remove" rendered="#{!workflow.readonly}"
+							process="@this" onclick="PF('data_confirm_delete').show();">
+							<h:graphicImage value="/weblets/icons/delete.gif"></h:graphicImage>
+							<f:setPropertyActionListener
+								target="#{workflow.controller.value}" value="#{bean}"></f:setPropertyActionListener>
+						</p:commandLink>
+						<h:graphicImage rendered="#{workflow.readonly}"
+							value="/weblets/icons/dis_delete.gif" />
+					</t:column>
+				</sr:dataTable>
+			</t:div>
+		</t:fieldset>
+
+	</ui:define>
+
+	<ui:define name="_saveButton">
+		<t:commandButton styleClass="_button btn_save"
+			value="#{sr:text('label.save')}" actionFor="admin_form"
+			action="#{workflow.controller.save}" />
+	</ui:define>
+
+</ui:composition>
+</html>

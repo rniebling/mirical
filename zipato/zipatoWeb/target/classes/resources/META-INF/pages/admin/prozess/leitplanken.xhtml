@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+
+	<sr:dataTable id="data" value="#{controller.leitplanken}" var="bean">
+
+		<t:column headerstyle="width:18px;">
+			<sr:iconActionOpenClose target="#{controller.leitplanke}"
+				alt="Öffnen/Schließen" title="Leitplanke Öffnen/Schließen"
+				value="#{bean}" render="leitplanke data">
+			</sr:iconActionOpenClose>
+		</t:column>
+
+		<t:column style="vertical-align: middle;">
+			<f:facet name="header">
+				<h:outputText value="Bezeichnung" />
+			</f:facet>
+			<h:outputText value="#{bean.bezeichnung}" />
+		</t:column>
+		<t:column headerstyle="width:18px;" style="vertical-align: middle;">
+			<sr:iconActionRemove>
+				<f:setPropertyActionListener
+					target="#{workflow.controller.leitplanke}" value="#{bean}" />
+			</sr:iconActionRemove>
+		</t:column>
+
+	</sr:dataTable>
+	<t:div styleClass="_btn">
+		<h:commandButton id="add_leitplanke_action"
+			action="#{controller.addLeitpanke}" styleClass="_button btn_new"
+			value="#{sr:text('label.admin.prozess.fall.HINZUFUeGEN')}" />
+	</t:div>
+
+	<t:div id="leitplanke">
+		<t:div rendered="#{controller.leitplanke != null}">
+
+			<t:div styleClass="space" />
+
+			<t:fieldset legend="Leitplanke">
+
+				<h:panelGrid columns="1">
+
+					<sr:textField id="bezeichnung"
+						value="#{controller.leitplanke.bezeichnung}" maxlength="100"
+						size="50" compute="true" required="true" label="Bezeichnung" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+
+					<sr:comboboxField id="prop" render="value" required="true"
+						value="#{controller.leitplanke.praedikat.property}"
+						emptyItem="true" items="#{controller.properties}" label="Istwert" />
+
+					<sr:comboboxField id="bedingung" required="true"
+						value="#{controller.leitplanke.praedikat.typ}"
+						items="#{enumType['de.subito.sunrise.model.prozess.Praedikat']}"
+						label="Operator" />
+
+					<t:div id="value">
+						<c:set var="typ"
+							value="#{controller.getPropertyType(controller.leitplanke.praedikat.property)}" />
+
+						<t:div rendered="#{typ == 'MonetaryAmount'}">
+							<sr:moneyField id="bedingung_amount_value" render="cases2"
+								value="#{controller.leitplanke.praedikat.amountValue}"
+								compute="true" required="true" label="Sollwert" />
+						</t:div>
+						<t:div rendered="#{typ == 'String'}">
+							<sr:textField id="bedingung_value"
+								value="#{controller.leitplanke.praedikat.value}" maxlength="80"
+								size="20" compute="true" required="true" label="Sollwert" />
+						</t:div>
+						<t:div rendered="#{typ == 'Boolean'}">
+							<sr:comboboxField id="bedingung_bool_value" label="Sollwert"
+								required="true" value="#{controller.leitplanke.praedikat.value}">
+								<f:selectItem itemValue="" itemLabel="" />
+								<f:selectItem itemValue="true" itemLabel="Ja" />
+								<f:selectItem itemValue="false" itemLabel="Nein" />
+							</sr:comboboxField>
+						</t:div>
+						<t:div rendered="#{typ == 'Integer'}">
+							<sr:integerField id="bedingung_integer_value" label="Sollwert"
+								required="true" value="#{controller.leitplanke.praedikat.value}"
+								maxlength="10" size="3" compute="true" />
+						</t:div>
+					</t:div>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" width="50%">
+
+					<sr:textAreaField id="meldung" label="Meldung" required="true"
+						value="#{controller.leitplanke.meldung}" rows="3" />
+
+				</h:panelGrid>
+
+			</t:fieldset>
+		</t:div>
+	</t:div>
+</ui:composition>
+
+</html>

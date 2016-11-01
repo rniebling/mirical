@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+
+
+	<!-- c:forEach items="#{phases}" var="phase">
+			<h:panelGrid>
+				<a4j:outputPanel style="#{sr:phaseStyle(phase)};min-width:120px;"
+					styleClass="prozessElement" layout="block">
+					<rich:dragSupport dragType="PHASE" dragValue="#{phase}"
+						grabbingCursors="crosshair" dragIndicator="indicator_baustein">
+						<rich:dndParam name="label" value="#{sr:text(phase.name)}" />
+					</rich:dragSupport>
+					<t:htmlTag value="center">
+						<h:panelGrid columns="2">
+							<t:commandLink action="#{controller['showDetails']}"
+								reRender="teilprozess_details">
+								<f:setPropertyActionListener
+									target="#{controller['prozessPhase']}" value="#{phase}" />
+								<t:outputText value="#{phaseNameService.getPhaseName(phase)}" />
+							</t:commandLink>
+							<t:div>
+								<c:choose>
+									<c:when test="#{phase.entscheidung}">
+										<h:graphicImage alt=""
+											style="margin:0px 0px 0px 5px;padding:0px;"
+											value="/weblets/icons/decision2.gif" />
+									</c:when>
+									<c:when test="#{phase.bpmCall}">
+										<h:graphicImage alt=""
+											style="margin:0px 0px 0px 5px;padding:0px;"
+											value="/weblets/icons/workflow.gif" />
+									</c:when>
+									<c:otherwise>
+										<h:graphicImage alt=""
+											style="margin:0px 0px 0px 5px;padding:0px;"
+											value="/weblets/icons/threadgroup_obj.gif" />
+									</c:otherwise>
+								</c:choose>
+								
+							</t:div>
+						</h:panelGrid>
+					</t:htmlTag>
+				</a4j:outputPanel>
+				<t:div rendered="#{sr:isEntscheidung(phase)}">
+					<c:if test="#{sr:isEntscheidung(phase)}">
+						<t:htmlTag value="table">
+							<f:param name="cellpadding" value="0" />
+							<f:param name="cellspacing" value="0" />
+							<t:htmlTag value="tr">
+								<c:forEach items="#{phase.faelle}" var="fall">
+									<t:htmlTag value="td">
+										<f:param name="valign" value="center" />
+										<f:param name="align" value="top" />
+										<t:htmlTag value="center">
+											<a4j:outputPanel
+												style="width:120px;background-color:#FFF79F;width:120px;"
+												styleClass="prozessElement" layout="block">
+												<t:commandLink action="#{controller['showFall']}">
+													<f:setPropertyActionListener
+														target="#{controller['prozessPhase']}" value="#{phase}" />
+													<f:setPropertyActionListener target="#{controller['fall']}"
+														value="#{fall}" />
+													<t:outputText value="#{fall.bezeichnung}" />
+												</t:commandLink>
+											</a4j:outputPanel>
+											<t:div styleClass="dropProzessZone">
+												<a4j:outputPanel styleClass="dropProzessZoneInner"
+													layout="block">
+													<rich:dropSupport acceptedTypes="PHASE,ADD_PHASE"
+														dropValue="#{fall}" dropListener="#{controller[action]}"
+														reRender="processtree">
+													</rich:dropSupport>
+												</a4j:outputPanel>
+											</t:div>
+											<t:div>
+												<sr:processes phases="#{fall.phases}"
+													controller="#{controller}" action="#{action}" />
+											</t:div>
+										</t:htmlTag>
+									</t:htmlTag>
+								</c:forEach>
+							</t:htmlTag>
+						</t:htmlTag>
+						<t:div>
+							<a4j:outputPanel style="#{sr:phaseStyle(phase)}"
+								styleClass="prozessElement" layout="block">
+							</a4j:outputPanel>
+						</t:div>
+					</c:if>
+				</t:div>
+			</h:panelGrid>
+			<t:div styleClass="dropProzessZone" style="border:0px solid blue;">
+				<a4j:outputPanel styleClass="dropProzessZoneInner"
+					style="border:0px solid green;" layout="block">
+					<rich:dropSupport acceptedTypes="PHASE,ADD_PHASE"
+						dropValue="#{phase}" dropListener="#{controller[action]}"
+						reRender="processtree">
+					</rich:dropSupport>
+				</a4j:outputPanel>
+			</t:div>
+		</c:forEach-->
+
+</ui:component>
+
+</html>

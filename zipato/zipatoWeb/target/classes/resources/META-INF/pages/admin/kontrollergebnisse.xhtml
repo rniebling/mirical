@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="Kontrollergebnisse" />
+	</ui:define>
+
+	<ui:define name="_form">
+		<sr:helpLink
+			ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Kontrollergebniss" />
+
+		<t:fieldset id="liste">
+
+			<sr:dataTable id="data" value="#{controller.kontrollergebnisse}"
+				var="bean" dataScrollerInfo="true" rowIndexVar="rowIndex">
+
+				<t:column headerstyle="width:18px;">
+					<sr:iconActionOpenClose target="#{controller.value}"
+						alt="Öffnen/Schließen" title="Ausnahmegrund Öffnen/Schließen"
+						value="#{bean}" render="erg data">
+					</sr:iconActionOpenClose>
+				</t:column>
+
+				<t:column style="width:300px;">
+					<f:facet name="header">
+						<h:outputText value="Kontrollergebnisse" />
+					</f:facet>
+					<p:commandLink id="opn" process="@this"
+						styleClass="#{bean == controller.value ? 'redFont' : null}"
+						value="#{bean.ergebnis}" update="erg data">
+						<f:setPropertyActionListener target="#{controller.value}"
+							value="#{bean}"></f:setPropertyActionListener>
+					</p:commandLink>
+				</t:column>
+
+				<t:column style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Antragseingang" />
+					</f:facet>
+					<sr:checkboxField id="cbantragseingang"
+						value="#{bean.antragseingang}">
+						<p:ajax event="click" listener="#{controller.save(bean)}" />
+					</sr:checkboxField>
+				</t:column>
+
+				<t:column style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Kreditkontrolle" />
+					</f:facet>
+					<sr:checkboxField id="cbkreditkontrolle"
+						value="#{bean.kreditkontrolle}">
+						<p:ajax event="click" listener="#{controller.save(bean)}" />
+					</sr:checkboxField>
+				</t:column>
+
+				<t:column headerstyle="width:18px;">
+					<t:div rendered="#{rowIndex &gt; 0}">
+						<p:commandLink id="down" disabled="#{workflow.readonly}"
+							process="@this" action="#{controller.moveUp(bean)}"
+							upddate="data">
+							<h:graphicImage alt="^" value="/weblets/icons/nav_up.gif"></h:graphicImage>
+						</p:commandLink>
+					</t:div>
+				</t:column>
+				<t:column headerstyle="width:18px;">
+					<t:div
+						rendered="#{rowIndex &lt; controller.kontrollergebnisse.size() - 1}">
+						<p:commandLink id="up" disabled="#{workflow.readonly}"
+							process="@this" action="#{controller.moveDown(bean)}"
+							update="data">
+							<h:graphicImage alt="v" value="/weblets/icons/nav_down.gif"></h:graphicImage>
+						</p:commandLink>
+					</t:div>
+				</t:column>
+
+				<t:column headerstyle="width:18px;">
+					<sr:iconActionRemove>
+						<f:setPropertyActionListener target="#{controller.valueId}"
+							value="#{bean.id}" />
+					</sr:iconActionRemove>
+				</t:column>
+
+			</sr:dataTable>
+
+			<t:div styleClass="space" />
+
+			<t:div styleClass="_btn">
+				<t:commandButton id="n_p" disabled="#{workflow.readonly}"
+					styleClass="_button btn_new" value="NEU" render="data"
+					action="#{controller.create}">
+				</t:commandButton>
+			</t:div>
+
+
+			<t:div id="erg">
+				<t:div rendered="#{workflow.controller.value != null}">
+
+					<t:div styleClass="space" />
+
+					<h:panelGrid>
+
+						<sr:textField id="beschreibung"
+							value="#{workflow.controller.value.ergebnis}" maxlength="200"
+							size="120" label="Kontrollergebnis" />
+
+					</h:panelGrid>
+
+				</t:div>
+			</t:div>
+
+		</t:fieldset>
+
+	</ui:define>
+</ui:composition>
+
+</html>

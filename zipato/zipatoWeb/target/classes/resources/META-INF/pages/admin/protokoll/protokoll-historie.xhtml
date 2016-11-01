@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#AdminiAllgemein_Protokoll" />
+	<style type="text/css">
+.normalWidth,#commandBar {
+	width: 100em;
+}
+</style>
+	<ui:define name="_saveButton">
+		<h:commandButton id="action_save" styleClass="_button btn_save"
+			value="#{sr:text('label.save')}" actionFor="vorgang_form"
+			action="#{tc.save}">
+			<p:ajax event="complete" update="#{p:component('errorBox')}" />
+		</h:commandButton>
+	</ui:define>
+	<t:fieldset legend="Export">
+		<h:panelGrid columns="2">
+			<sr:textField id="txt_pfad" size="80"
+				value="#{tc.pfadProtokollExport.value}"
+				readonly="#{!tc.pfadEditerbar}" label="Pfad für Protokoll-Export" />
+			<t:div>
+				<t:commandLink id="kontonummer_edit" immediate="true"
+					action="#{tc.changePfadEeditierbar}" render="txt_pfad">
+					<h:graphicImage style="margin-top:3px;"
+						rendered="#{!tc.pfadEditerbar}"
+						value="/weblets/icons/lock_closed.png" alt="Öffnen" title="Öffnen">
+					</h:graphicImage>
+					<h:graphicImage style="margin-top:3px;"
+						rendered="#{tc.pfadEditerbar}"
+						value="/weblets/icons/lock_open.png" alt="Schließen"
+						title="Schließen">
+					</h:graphicImage>
+				</t:commandLink>
+			</t:div>
+		</h:panelGrid>
+	</t:fieldset>
+	<t:div id="data">
+		<sr:dataTable id="datatable" value="#{tc.dataModel}" var="bean"
+			rows="10" sortColumn="#{tc.dataModel.order}"
+			sortAscending="#{tc.dataModel.ascending}" dataScrollerInfo="true">
+			<t:column headerstyle="width:70px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="datum" propertyName="datum"
+						arrow="true">
+						<h:outputText value="Datum" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data[1]}" style="white-space: nowrap;">
+					<sr:convertDateTime type="both" />
+				</h:outputText>
+			</t:column>
+			<t:column headerstyle="width:70px;"
+				sortPropertyName="protokollAktionsart">
+				<f:facet name="header">
+					<t:commandSortHeader id="aktionsart" arrow="true"
+						columnName="protokollAktionsart"
+						propertyName="protokollAktionsart">
+						<h:outputText value="Aktion" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data[2]}">
+				</h:outputText>
+			</t:column>
+			<t:column headerstyle="width:150px;">
+				<f:facet name="header">
+					<h:outputText value="Anzahl Datensätze" />
+				</f:facet>
+				<h:outputText value="#{bean.data[3]}" />
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader id="s_user" arrow="true"
+						columnName="ausfuehrenderUser.nachname,ausfuehrenderUser.vorname"
+						propertyName="ausfuehrenderUser.nachname,ausfuehrenderUser.vorname">
+						<h:outputText value="Benutzer" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data[4]} #{bean.data[5]}"
+					style="white-space: nowrap;" />
+			</t:column>
+			<t:column headerstyle="width:100%;">
+				<f:facet name="header">
+					<h:outputText value="Details" />
+				</f:facet>
+				<h:outputText value="#{bean.data[6]}" />
+			</t:column>
+		</sr:dataTable>
+	</t:div>
+</ui:composition>
+</html>

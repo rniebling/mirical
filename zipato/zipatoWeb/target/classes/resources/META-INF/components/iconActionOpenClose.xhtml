@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<t:div id="load_or_close_#{id}" rendered="#{rendered}">
+		<t:div rendered="#{target != value}">
+			<c:if test="#{openaction == null}">
+				<h:commandLink id="open_#{id}" immediate="true">
+					<f:setPropertyActionListener target="#{target}" value="#{value}" />
+					<p:ajax update="#{render}" />
+					<t:graphicImage alt="#{sr:text('label.icon.open')}"
+						url="/weblets/icons/open.gif">
+						<c:if test="#{title != null}">
+							<f:attribute name="title" value="#{title}" />
+						</c:if>
+						<c:if test="#{alt != null}">
+							<f:attribute name="alt" value="#{alt}" />
+						</c:if>
+					</t:graphicImage>
+				</h:commandLink>
+			</c:if>
+			<c:if test="#{openaction != null}">
+				<h:commandLink id="open_#{id}" immediate="true"
+					action="#{controller[openaction]}">
+					<f:setPropertyActionListener target="#{target}" value="#{value}" />
+					<p:ajax update="#{render}" />
+					<t:graphicImage alt="#{sr:text('label.icon.open')}"
+						url="/weblets/icons/open.gif">
+						<c:if test="#{title != null}">
+							<f:attribute name="title" value="#{title}" />
+						</c:if>
+						<c:if test="#{alt != null}">
+							<f:attribute name="alt" value="#{alt}" />
+						</c:if>
+					</t:graphicImage>
+				</h:commandLink>
+			</c:if>
+		</t:div>
+
+		<t:div rendered="#{target == value}">
+			<c:if test="#{closeaction == null}">
+				<h:commandLink id="close_#{id}" immediate="true">
+					<f:setPropertyActionListener target="#{target}" value="#{null}" />
+					<p:ajax update="#{render}" />
+					<t:graphicImage alt="#{sr:text('label.icon.open')}"
+						url="/weblets/icons/folder.gif">
+						<c:if test="#{title != null}">
+							<f:attribute name="title" value="#{title}" />
+						</c:if>
+						<c:if test="#{alt != null}">
+							<f:attribute name="alt" value="#{alt}" />
+						</c:if>
+					</t:graphicImage>
+				</h:commandLink>
+			</c:if>
+			<c:if test="#{closeaction != null}">
+				<h:commandLink id="close_#{id}" immediate="true"
+					action="#{controller[closeaction]}">
+					<f:setPropertyActionListener target="#{target}" value="#{null}" />
+					<p:ajax update="#{render}" />
+					<t:graphicImage alt="#{sr:text('label.icon.open')}"
+						url="/weblets/icons/folder.gif">
+						<c:if test="#{title != null}">
+							<f:attribute name="title" value="#{title}" />
+						</c:if>
+						<c:if test="#{alt != null}">
+							<f:attribute name="alt" value="#{alt}" />
+						</c:if>
+					</t:graphicImage>
+				</h:commandLink>
+			</c:if>
+		</t:div>
+	</t:div>
+
+</ui:component>
+</html>

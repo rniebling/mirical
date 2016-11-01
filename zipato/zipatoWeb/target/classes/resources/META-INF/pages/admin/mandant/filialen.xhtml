@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Abteilungen_Filial" />
+
+	<t:fieldset legend="#{sr:text('label.mandant.abteilungenfilialen')}">
+		<h:outputText value="Für angemeldete Benutzer greifen Änderungen erst nach einer Neuanmeldung." style="color: red"/>
+	
+		<sr:dataTable value="#{admFilialenController.dataModel}"
+			dataScrollerInfo="true" deleteAction="remove"
+			deleteController="#{admFilialenController}"
+			deleteMessage="Filiale löschen ?" deleteReRender="dataF, akt_filiale"
+			sortColumn="#{admFilialenController.dataModel.order}"
+			sortAscending="#{admFilialenController.dataModel.ascending}"
+			var="bean" id="dataF">
+
+			<t:column id="column_open" headerstyle="width:18px;">
+				<f:facet name="header">
+					<h:outputText value="" />
+				</f:facet>
+				<t:div rendered="#{bean != admFilialenController.value}">
+					<t:commandLink id="filiale_open_action">
+						<h:graphicImage rendered="#{bean != admFilialenController.value}"
+							alt="Öffnen" title="Filiale öffnen" style="border:0px;"
+							value="/weblets/icons/closedFolder.gif" />
+						<f:setPropertyActionListener
+							target="#{admFilialenController.value}" value="#{bean}" />
+					</t:commandLink>
+				</t:div>
+
+				<t:div rendered="#{bean == admFilialenController.value}">
+					<t:commandLink id="filiale_close_action">
+						<h:graphicImage rendered="#{bean == admFilialenController.value}"
+							alt="Schließen" title="Filiale schließen" style="border:0px;"
+							value="/weblets/icons/folder.gif" />
+						<f:setPropertyActionListener
+							target="#{admFilialenController.value}" value="#{null}" />
+					</t:commandLink>
+				</t:div>
+
+			</t:column>
+
+			<t:column id="column_filialennummer" headerstyle="width:120px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="nummer" arrow="true">
+						<h:outputText value="Filial-/Abteilungsnummer" />
+					</t:commandSortHeader>
+				</f:facet>
+				<t:commandLink id="filiale_load_action1"
+					action="#{admFilialenController.open}">
+					<f:setPropertyActionListener
+						target="#{admFilialenController.value}" value="#{bean}" />
+					<h:outputText value="#{bean.nummer}" />
+				</t:commandLink>
+			</t:column>
+
+			<t:column id="column_filialenname" headerstyle="width:275px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="name" arrow="true">
+						<h:outputText value="Filiale/Abteilung" />
+					</t:commandSortHeader>
+				</f:facet>
+				<t:commandLink id="filiale_load_action2"
+					action="#{admFilialenController.open}">
+					<f:setPropertyActionListener
+						target="#{admFilialenController.value}" value="#{bean}" />
+					<h:outputText value="#{bean.name}" />
+				</t:commandLink>
+			</t:column>
+
+			<t:column id="column_adresse">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="adresse" arrow="true">
+						<h:outputText value="Adresse" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.adresseZusammengefasst}">
+				</h:outputText>
+			</t:column>
+
+			<t:column headerstyle="width:18px;">
+				<f:facet name="header">
+					<h:outputText value=" " />
+				</f:facet>
+				<p:commandLink onclick="PF('dataF_confirm_delete').show();"
+					process="@this" id="remove" rendered="#{!workflow.readonly}">
+					<h:graphicImage alt="Löschen" title="Filiale löschen"
+						value="/weblets/icons/delete.gif" />
+					<f:setPropertyActionListener
+						target="#{admFilialenController.value}" value="#{bean}" />
+				</p:commandLink>
+				<h:graphicImage alt="Löschen" title="Filiale löschen"
+					rendered="#{workflow.readonly}"
+					value="/weblets/icons/dis_delete.gif" />
+			</t:column>
+
+		</sr:dataTable>
+
+		<h:panelGrid>
+			<t:div styleClass="_btn">
+				<t:commandButton id="filiale_create_action"
+					disabled="#{workflow.value.id == null or workflow.readonly}"
+					styleClass="_button btn_new" value="#{sr:text('label.new')}"
+					action="#{admFilialenController.create}">
+				</t:commandButton>
+			</t:div>
+		</h:panelGrid>
+
+		<t:div styleClass="space" />
+
+		<t:div id="akt_filiale">
+			<t:div rendered="#{admFilialenController.value != null}">
+
+				<h:panelGrid columns="3">
+
+
+					<sr:textField id="nummer"
+						value="#{admFilialenController.value.nummer}" maxlength="10"
+						size="20" compute="true" label="Filial-/Abteilungsnummer" />
+
+					<sr:textField id="filial_name" maxlength="80"
+						value="#{admFilialenController.value.name}" size="60"
+						compute="true" label="Filiale/Abteilung" />
+
+					<sr:textField id="filial_kostenstelle" maxlength="15"
+						value="#{admFilialenController.value.kostenstelle}" size="10"
+						compute="true" label="Kostenstelle" />
+
+					<sr:textField id="strasse"
+						value="#{admFilialenController.value.adresse.strasse}"
+						maxlength="80" size="40" compute="true"
+						label="#{sr:text('label.strasse')}" />
+
+					<sr:plzOrt id="plzort"
+						value="#{admFilialenController.value.adresse}"
+						labelPlz="Postleitzahl" labelOrt="Ort" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+
+					<sr:comboboxField id="vertriebsdirektor"
+						value="#{admFilialenController.value.vertriebsdirektor}"
+						items="#{userItemGenerator.all}" emptyItem="true"
+						label="Vertriebsdirektor (VD)">
+					</sr:comboboxField>
+
+				</h:panelGrid>
+
+			</t:div>
+
+		</t:div>
+
+	</t:fieldset>
+
+
+</ui:composition>
+
+</html>

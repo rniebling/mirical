@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+	<ui:define name="_form">
+		<sr:helpLink
+			ref="Administration/Administration Allgemein.htm#Administration_Dialog_Kapazitaetssteueru" />
+
+		<h:panelGrid columns="2">
+
+			<t:fieldset
+				legend="#{sr:text('label.admin.kapazitaetssteuerung.SkillBisFaktoren')}">
+				<t:dataTable id="dataBauteile" value="#{workflow.controller.skills}"
+					styleClass="dataTable" rowClasses="even,odd" var="skill">
+
+					<t:column headerstyle="width:200px;">
+						<f:facet name="header">
+							<t:outputText
+								value="#{sr:text('label.admin.kapazitaetssteuerung.Skill')}" />
+						</f:facet>
+						<t:outputText value="#{enumText[skill]}" />
+					</t:column>
+					<t:column headerstyle="width:60px;">
+						<f:facet name="header">
+							<t:outputText
+								value="#{sr:text('label.admin.kapazitaetssteuerung.Faktor')}" />
+						</f:facet>
+						<sr:floatField id="factor" compute="true"
+							value="#{workflow.controller.skill.defaultValue}" size="5" />
+					</t:column>
+				</t:dataTable>
+			</t:fieldset>
+
+			<sr:integerField id="effProdMinProMak" compute="true"
+				value="#{parameterHolder['effProdMinProMak'].integerValue}"
+				label="#{sr:text('label.admin.kapazitaetssteuerung.EffProduktivzeitpro10MAKProTaginmin')}" />
+
+			<sr:checkboxField id="showMinuteColumn" compute="true"
+				value="#{parameterHolder['showMinuteColumn'].booleanValue}"
+				label="#{sr:text('label.admin.kapazitaetssteuerung.MinutenbasierteSpaltenAnzeigen')}" />
+
+
+
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

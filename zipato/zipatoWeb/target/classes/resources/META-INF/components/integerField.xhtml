@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{size == null}">
+		<c:set var="size" value="10" />
+	</c:if>
+
+	<c:if test="#{maxlength == null}">
+		<c:set var="maxlength" value="#{size}" />
+	</c:if>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<c:if test="#{render != null }">
+		<c:set var="update"
+			value="#{id} #{render} #{p:component('errorBox')}" />
+	</c:if>
+	<c:if test="#{render == null }">
+		<c:set var="update" value="#{id} #{p:component('errorBox')}" />
+	</c:if>
+
+	<c:if test="#{internalAjax == null}">
+		<c:set var="internalAjax" value="true" />
+	</c:if>
+
+	<t:div styleClass="fieldBox" style="#{style}" rendered="#{rendered}">
+		<t:inputText id="#{id}" value="#{value}" maxlength="#{maxlength}"
+			styleClass="#{component.valid ? '' : 'inputTextError'}"
+			style="text-align:right;#{inputStyle}" title="#{title}"
+			readonly="#{disabled or readonly or workflow.readonly}"
+			size="#{size}" required="#{required and workflow.required}">
+			<f:convertNumber maxFractionDigits="0" maxIntegerDigits="10"
+				integerOnly="true" groupingUsed="#{grouping}"></f:convertNumber>
+			<sr:dbref />
+			<c:if test="#{internalAjax}">
+				<p:ajax event="blur" listener="#{workflow.compute}" focus="#{focus}"
+					update="#{update}" />
+			</c:if>
+			<ui:insert />
+		</t:inputText>
+		<c:if test="#{label != null }">
+			<h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+				<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+					style="#{labelStyle}" />
+				<t:div>
+					<c:if test="#{link != null and icon != null}">
+						<h:outputLink value="#{link}" target="_blank">
+							<t:graphicImage alt="" url="#{icon}" />
+						</h:outputLink>
+					</c:if>
+				</t:div>
+			</h:panelGrid>
+		</c:if>
+	</t:div>
+
+</ui:component>
+</html>

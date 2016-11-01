@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title value="Batch-Jobs" />
+	</ui:define>
+
+	<ui:define name="_poll">
+		<h:form id="_pf">
+			<t:div id="_pc">
+				<p:poll id="ping" interval="3" process="@this"
+					update="mainForm:vorgang_form:data" />
+			</t:div>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<t:div rendered="#{moduleManager.isEnabled('INKASSO')}">
+			<sr:helpLink id="ink"
+				ref="Mahn/Administration Mahn/Adm_ADM_BatchJobs.htm#ADM_BatchJobs_Übersicht" />
+		</t:div>
+
+		<t:div rendered="#{!moduleManager.isEnabled('INKASSO') and !moduleManager.isEnabled('SFDK')}">
+			<sr:helpLink id="rest"
+				ref="Administration/Administration Batch-Job.htm#Administration_Dialog_Batch_Jobs" />
+		</t:div>
+		
+		<t:div rendered="#{!moduleManager.isEnabled('INKASSO') and moduleManager.isEnabled('SFDK')}">
+			<sr:helpLink id="sfdk"
+				ref="SFDK/Administration SFDK/Adm_SFDK_Batch-Jobs.htm#Adm_SFDK_BatchJobs_BatchJob" />
+		</t:div>
+
+		<sr:dataTable id="data" value="#{controller.dataModel}" var="job"
+			dataScrollerInfo="true" sortColumn="#{controller.dataModel.order}"
+			sortAscending="#{controller.dataModel.ascending}">
+			<t:column headerstyle="width:18px;">
+				<h:commandLink id="opn_job0" action="#{controller.open}">
+					<f:setPropertyActionListener target="#{controller.value}"
+						value="#{job}" />
+					<t:graphicImage alt="Start" url="/weblets/icons/closedFolder.gif" />
+				</h:commandLink>
+			</t:column>
+			<t:column headerstyle="width:18px;" style="text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="Status" />
+				</f:facet>
+				<h:graphicImage rendered="#{job.aktiviert}" alt="Geplant"
+					title="Geplant" url="/weblets/icons/date_obj.gif" />
+				<h:graphicImage rendered="#{!job.aktiviert}" alt="Manuell"
+					title="Manuell" url="/weblets/icons/m.gif" />
+			</t:column>
+			<t:column headerstyle="width:18px;" id="jobButtons"
+				rendered="#{!controller.readonly and controller.berechtigt}">
+				<h:commandLink id="start" action="#{controller.start(job.name)}"
+					title="Job starten" rendered="#{!controller.isRunning(job.name)}">
+					<h:graphicImage alt="Start" url="/weblets/icons/start.gif" />
+				</h:commandLink>
+				<h:commandLink id="stop" action="#{controller.stop(job.name)}"
+					title="Job stoppen" rendered="#{controller.isRunning(job.name)}">
+					<h:graphicImage alt="Running" url="/weblets/icons/stop.gif" />
+				</h:commandLink>
+			</t:column>
+			<t:column headerstyle="width:120px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="lastStartTime" arrow="true">
+						<h:outputText value="Letzter Start" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{job.lastStartTime}">
+					<sr:convertDateTime type="both" />
+				</h:outputText>
+			</t:column>
+			<t:column headerstyle="width:150px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="name" arrow="true">
+						<h:outputText value="Job" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:commandLink id="opn_job1" action="#{controller.open}">
+					<f:setPropertyActionListener target="#{controller.value}"
+						value="#{job}" />
+					<h:outputText value="#{job.name}" />
+				</h:commandLink>
+			</t:column>
+			<t:column>
+				<f:facet name="header">
+					<t:commandSortHeader columnName="kommentar" arrow="true">
+						<h:outputText value="Kommentar" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{job.kommentar}" />
+			</t:column>
+			<t:column headerstyle="width:100px;">
+				<f:facet name="header">
+					<h:outputText value="Zeitplan" />
+				</f:facet>
+				<h:outputText rendered="#{job.aktiviert}"
+					value="#{job.cronExpression}" />
+			</t:column>
+			<t:column headerstyle="width:18px;">
+				<p:commandLink id="remove" rendered="#{!workflow.readonly}"
+					process="@this" onclick="PF('data_confirm_delete').show();">
+					<h:graphicImage value="/weblets/icons/delete.gif" alt="Löschen"></h:graphicImage>
+					<f:setPropertyActionListener target="#{controller.value}"
+						value="#{job}"></f:setPropertyActionListener>
+				</p:commandLink>
+				<h:graphicImage rendered="#{workflow.readonly}"
+					value="/weblets/icons/dis_delete.gif" alt="Löschen" />
+			</t:column>
+		</sr:dataTable>
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="create_action" styleClass="_button btn_new"
+				value="#{sr:text('label.new')}"
+				disabled="#{controller.readonly or workflow.readonly}"
+				action="#{workflow.controller.create}" />
+		</t:div>
+
+	</ui:define>
+
+	<ui:define name="_saveButton" />
+
+</ui:composition>
+</html>

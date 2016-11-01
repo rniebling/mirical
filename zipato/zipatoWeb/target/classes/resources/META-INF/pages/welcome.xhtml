@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="vorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.welcome')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<h:panelGroup styleClass="messageBox"
+			rendered="#{welcome.messageAvailable}">
+			<t:div styleClass="Error">
+				<h:outputText value="#{welcome.messageText}" />
+			</t:div>
+		</h:panelGroup>
+
+		<h:panelGroup styleClass="messageBox" rendered="#{licenceInfo.absent}">
+			<t:div styleClass="Error">
+				<h:outputText value="#{sr:text('label.licence.absent')}" />
+			</t:div>
+		</h:panelGroup>
+
+		<h:panelGroup styleClass="messageBox"
+			rendered="#{licenceInfo.expired}">
+			<t:div styleClass="Error">
+				<h:outputFormat value="#{sr:text('label.licence.expired')}">
+					<f:param value="#{licenceInfo.validToString}" />
+				</h:outputFormat>
+			</t:div>
+		</h:panelGroup>
+
+		<h:panelGroup styleClass="messageBox"
+			rendered="#{licenceInfo.expiringSoon}">
+			<t:div styleClass="Warning">
+				<h:outputFormat value="#{sr:text('label.licence.expiringSoon')}">
+					<f:param value="#{licenceInfo.validToString}" />
+				</h:outputFormat>
+			</t:div>
+		</h:panelGroup>
+
+		<h:panelGrid>
+			<h:outputFormat rendered="#{userPrefs.lastLogin != null}"
+				value="#{sr:text('label.ihreLetzteAnmeldungWarAm')}">
+				<f:param value="#{userPrefs.lastLogin}" />
+				<sr:convertDateTime type="both" />
+			</h:outputFormat>
+
+			<c:choose>
+				<c:when test="#{userPrefs.fehlerhafteLogins == 1}">
+					<t:div styleClass="warning">
+						<t:outputText value="#{sr:text('label.fehlerhafterLogin')}" />
+					</t:div>
+				</c:when>
+				<c:when test="#{userPrefs.fehlerhafteLogins &gt; 1}">
+					<t:div styleClass="warning">
+						<h:outputFormat value="#{sr:text('label.fehlerhafteLogins')}">
+							<f:param value="#{userPrefs.fehlerhafteLogins}" />
+						</h:outputFormat>
+					</t:div>
+				</c:when>
+			</c:choose>
+
+		</h:panelGrid>
+
+		<ui:include src="inc-favorites.xhtml" />
+		<ui:include src="inc-begruessungstext.xhtml" />
+
+	</ui:define>
+
+	<ui:define name="_commandButtons" />
+
+</ui:composition>
+
+</html>

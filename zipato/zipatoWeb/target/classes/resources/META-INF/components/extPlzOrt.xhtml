@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<t:div id="#{id}">
+
+		<c:if test="#{plzLength == null}">
+			<c:set var="plzLength" value="10" />
+		</c:if>
+
+		<c:if test="#{ortSize == null}">
+			<c:set var="ortSize" value="30" />
+		</c:if>
+
+		<c:if test="#{valueChangeListener == null}">
+			<c:set var="valueChangeListener" value="#{workflowState}" />
+		</c:if>
+
+		<c:if test="#{germany == null}">
+			<c:set var="germany" value="true" />
+		</c:if>
+
+		<h:panelGrid columns="2">
+
+			<t:div id="#{id}_div_plz" styleClass="fieldBox">
+
+				<sr:autoComplete id="#{id}_plz" value="#{plzOrtBean.plzOrt}"
+					rendered="#{germany}"
+					readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+					completeMethod="#{plzOrtBean.getOrtZuPlz}" var="vorschlag"
+					itemLabel="#{value.plz}" itemValue="#{vorschlag}"
+					minQueryLength="3" maxlength="#{plzLength}" size="6"
+					label="#{labelPlz}"
+					inputStyleClass="inputText #{component.valid ? '' : 'inputTextError'}"
+					valueChangeListener="#{valueChangeListener['processValueChange']}">
+					<p:column>
+						<h:outputText value="#{vorschlag}" />
+					</p:column>
+					<p:ajax event="itemSelect"
+						update="#{id}_plz #{id}_div_ort #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="change"
+						update="#{id}_plz #{id}_div_ort #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="keyup" update="#{p:component('errorBox')}" />
+					<f:validator validatorId="plzOrtNotNullValidator" />
+					<f:validator validatorId="deutschePlzValidator" />
+					<f:attribute value="#{value}" name="adresse" />
+				</sr:autoComplete>
+
+				<c:if test="#{labelPlz != null and germany}">
+					<sr:outputLabel for="#{id}_plz" value="#{labelPlz}" />
+				</c:if>
+
+				<sr:autoComplete id="#{id}_plz_not_germany" cache="true"
+					value="#{plzOrtBean.plzOrt}" rendered="#{!germany}"
+					readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+					completeMethod="#{plzOrtBean.getOrtZuPlz}" var="vorschlag"
+					itemLabel="#{value.plz}" itemValue="#{vorschlag}"
+					minQueryLength="3" maxlength="#{plzLength}" size="15"
+					label="#{labelPlz}"
+					inputStyleClass="inputText #{component.valid ? '' : 'inputTextError'}"
+					valueChangeListener="#{valueChangeListener['processValueChange']}">
+					<p:column>
+						<h:outputText value="#{vorschlag}" />
+					</p:column>
+					<p:ajax event="itemSelect"
+						update="#{id}_plz_not_germany #{id}_div_ort #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="change"
+						update="#{id}_plz_not_germany #{id}_div_ort #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<f:validator validatorId="plzOrtNotNullValidator" />
+					<f:attribute value="#{value}" name="adresse" />
+				</sr:autoComplete>
+
+				<c:if test="#{labelPlz != null and !germany}">
+					<sr:outputLabel for="#{id}_plz_not_germany" value="#{labelPlz}" />
+				</c:if>
+
+			</t:div>
+
+			<t:div id="#{id}_div_ort" styleClass="fieldBox">
+
+				<sr:autoComplete id="#{id}_ort" value="#{plzOrtBean.plzOrt}"
+					readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+					completeMethod="#{plzOrtBean.getPlzZuOrt}" var="vorschlag"
+					itemLabel="#{value.ort}" itemValue="#{vorschlag}"
+					minQueryLength="2" size="#{ortSize}" maxlength="80"
+					label="#{labelOrt}"
+					inputStyleClass="inputText #{component.valid ? '' : 'inputTextError'}"
+					valueChangeListener="#{valueChangeListener['processValueChange']}">
+					<p:column>
+						<h:outputText value="#{vorschlag}" />
+					</p:column>
+					<p:ajax event="itemSelect"
+						update="#{id}_ort #{id}_div_plz #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="change"
+						update="#{id}_ort #{id}_div_plz #{render} #{p:component('errorBox')}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="keyup" update="#{p:component('errorBox')}" />
+					<f:validator validatorId="plzOrtNotNullValidator" />
+					<f:attribute value="#{value}" name="adresse" />
+				</sr:autoComplete>
+
+				<c:if test="#{labelOrt != null}">
+					<sr:outputLabel for="#{id}_ort" value="#{labelOrt}" />
+				</c:if>
+
+			</t:div>
+
+		</h:panelGrid>
+
+	</t:div>
+
+</ui:component>
+
+</html>

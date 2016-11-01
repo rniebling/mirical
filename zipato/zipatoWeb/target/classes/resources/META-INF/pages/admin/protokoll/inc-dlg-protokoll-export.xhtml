@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<p:dialog modal="true" widgetVar="mpl_dlg_export"
+		styleClass="dojoDialog" hidth="500" meight="100"
+		header="Erzeugen der CSV-Datei für Export">
+
+		<f:facet name="controls">
+			<h:graphicImage id="close_dlg_export" alt="Schliessen"
+				value="/weblets/icons/close.gif"
+				onclick="PF('mpl_dlg_export').hide();"
+				style="cursor:pointer;border:1px solid #fff;">
+				<p:ajax event="click" listener="#{tc.refreshExpportFile}"
+					update="div_buttons,fld_csvExportFiles" />
+			</h:graphicImage>
+		</f:facet>
+
+		<t:div id="progressBar_export" rendered="#{tc.inProgressExport}">
+
+			<p:progressBar value="#{tc.progress}" id="progressPanel_export"
+				ajax="true" global="false" widgetVar="exportProgressBar"
+				style="display:block;width:450px;align:left;text-align:left;"
+				labelTemplate="{value}%">
+			</p:progressBar>
+
+			<h:panelGrid id="pgd_content" columns="1">
+				<h:outputText id="txt_beschr1" rendered="#{tc.inProgressExport}"
+					value="Sie können den Vorgang durch Klicken auf Button Abrechen stoppen" />
+				<h:outputText id="txt_beschr2" rendered="#{!tc.inProgressExport}"
+					value="Die Erzeugung der CSV-Datei ist beendet. Bitte schließen Sie das Fenster." />
+				<t:div id="pnl_export" style="margin-left:1em;" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+
+				<t:div styleClass="_btn">
+					<p:commandButton id="cancel_export" value="ABBRECHEN"
+						disabled="#{!tc.inProgressExport}" styleClass="_button btn_stop"
+						update="#{p:component('div_buttons')} fld_csvExportFiles"
+						process="@this" onclick="PF('mpl_dlg_export').hide();">
+						<p:ajax event="click" listener="#{tc.actionAbbrechen}"
+							update="div_buttons,progressPanel_export,fld_csvExportFiles">
+						</p:ajax>
+					</p:commandButton>
+					<p:commandButton id="cmd_close_export" value="SCHLIESSEN"
+						action="#{tc.refreshExpportFile}"
+						update="#{p:component('div_buttons')} #{p:component('fld_csvExportFiles')}"
+						onclick="PF('mpl_dlg_export').hide();"
+						styleClass="_button btn_abort" forceId="true" process="@this">
+					</p:commandButton>
+				</t:div>
+
+			</h:panelGrid>
+
+		</t:div>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

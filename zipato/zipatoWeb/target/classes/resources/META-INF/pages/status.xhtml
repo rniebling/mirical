@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="_content">
+
+
+
+		<t:div id="contentBox" forceId="true" style="width:600px;margin:20px;">
+			<t:div styleClass="contentBoxInner">
+
+				<t:panelTabbedPane id="tabs" serverSideTabSwitch="true">
+					<t:panelTab id="sys_tab" label="System">
+
+						<h:panelGrid>
+							<h:panelGrid columns="2" styleClass="dataTable"
+								rowClasses="odd,even" columnClasses="headerInfo">
+
+								<t:div style="width:150px;">
+									<h:outputText value="Name" />
+								</t:div>
+								<t:div style="width:250px;">
+									<h:outputText value="#{statusController.osBean.name}" />
+								</t:div>
+								<h:outputText value="Arch" />
+								<h:outputText value="#{statusController.osBean.arch}" />
+								<h:outputText value="Version" />
+								<h:outputText value="#{statusController.osBean.version}" />
+								<h:outputText value="CPU's" />
+								<h:outputText
+									value="#{statusController.osBean.availableProcessors}" />
+								<h:outputText value="Mittlere Last" />
+								<h:outputText
+									value="#{statusController.osBean.systemLoadAverage}" />
+								<h:outputText value="Aktive Sitzungen" />
+								<h:outputText value="#{applicationStateInfo.sessionCount}" />
+								<h:outputText value="Angemeldete Benutzer" />
+								<h:outputText
+									value="#{applicationStateInfo.usersLoggedIn.size()}" />
+
+							</h:panelGrid>
+						</h:panelGrid>
+					</t:panelTab>
+					<t:panelTab id="mem_tab" label="Speicher">
+						<h:panelGrid>
+							<s:graphicImageDynamic id="mem"
+								imageRendererClass="#{statusController.imageRenderer}"></s:graphicImageDynamic>
+
+						</h:panelGrid>
+					</t:panelTab>
+				</t:panelTabbedPane>
+
+
+				<h:panelGrid columns="2">
+					<h:commandLink action="login" title="Zur Anmeldung der Anwendung">
+						<h:graphicImage alt="Login"
+							value="/weblets/icons/start_application.gif" />
+					</h:commandLink>
+					<h:commandLink action="dbtools/start" title="DBTools öffnen">
+						<h:graphicImage alt="DBTools" value="/weblets/icons/database.gif" />
+					</h:commandLink>
+				</h:panelGrid>
+
+			</t:div>
+		</t:div>
+
+		<p:poll id="pingx" interval="1" update="mem" />
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

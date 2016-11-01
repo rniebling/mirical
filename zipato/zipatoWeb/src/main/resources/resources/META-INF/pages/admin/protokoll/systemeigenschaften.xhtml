@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Systemeigenschafte" />
+	<style type="text/css">
+.normalWidth,#commandBar {
+	width: 100em;
+}
+</style>
+	<sr:dataTable id="system_prop"
+		value="#{controller.systemeigenschaften}" dataScrollerInfo="true"
+		var="eintrag">
+
+		<t:column id="co_property">
+			<f:facet name="header">
+				<h:outputText value="Name" />
+			</f:facet>
+			<h:outputText value="#{eintrag[0]}" />
+		</t:column>
+		<t:column id="column_wert" style="max-width:400px;">
+			<f:facet name="header">
+				<h:outputText value="Wert" />
+			</f:facet>
+			<h:outputText value="#{eintrag[1]}" />
+		</t:column>
+	</sr:dataTable>
+
+</ui:composition>
+</html>

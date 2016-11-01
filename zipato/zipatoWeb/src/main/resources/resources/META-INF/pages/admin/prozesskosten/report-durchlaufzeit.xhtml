@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/admin/adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title
+			value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.StandardreportDurchlaufzeiten')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:panelTabbedPane>
+
+			<t:panelTab id="konfig"
+				label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Konfiguration')}">
+
+				<h:panelGrid columns="3">
+
+					<sr:comboboxField id="mandantauswahl"
+						value="#{workflow.controller.konfig.mandant}"
+						items="#{workflow.controller.mandantenListe}" required="true"
+						label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Mandantenauswahl')}" />
+
+					<sr:comboboxField id="prozessauswahl"
+						value="#{workflow.controller.konfig.prozess}"
+						items="#{workflow.controller.prozessListe}"
+						label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Prozessauswahl')}" />
+
+					<t:div />
+
+					<sr:dateField id="zeitraumVon"
+						value="#{workflow.controller.konfig.zeitraumVon}"
+						label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Zeitraumvon')}" />
+
+					<sr:dateField id="zeitraumBis"
+						value="#{workflow.controller.konfig.zeitraumBis}"
+						label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Zeitraumbis')}" />
+
+					<sr:checkboxField id="detaillierung"
+						value="#{workflow.controller.konfig.detailliert}"
+						label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Detaillierung')}"
+						compute="true" />
+
+					<t:commandButton id="start_action" styleClass="_button btn_new"
+						value="#{sr:text('label.start')}"
+						action="#{workflow.controller.start}"
+						render="konfig  report  ergebnis  scroller" />
+
+				</h:panelGrid>
+
+			</t:panelTab>
+
+			<!-- ************************* Report ****************************************************************** -->
+
+			<t:panelTab id="report"
+				label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Report')}">
+
+				<t:fieldset
+					legend="#{sr:text('label.admin.prozesskosten.reportergebnis')}">
+
+					<h:panelGrid columns="1">
+
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.AnzahlausgewerteteVorgaenge')}#{workflow.controller.prozesskostenErgebnis.vorgangAnzahl}" />
+
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.SollDurchlaufzeit')}#{workflow.controller.prozesskostenErgebnis.durchlaufzeitSoll}#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Minuten')}" />
+
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.DurchschnittlicheDurchlaufzeit')}#{workflow.controller.prozesskostenErgebnis.durchlaufzeitIstAvgAsString}" />
+
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.MinimaleDurchlaufzeit')}#{workflow.controller.prozesskostenErgebnis.durchlaufzeitIstMinAsString}" />
+
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.MaximaleDurchlaufzeit')}#{workflow.controller.prozesskostenErgebnis.durchlaufzeitIstMaxAsString}" />
+
+					</h:panelGrid>
+
+				</t:fieldset>
+
+
+				<t:fieldset
+					legend="#{sr:text('label.admin.prozesskosten.kriterien')}">
+
+					<h:panelGrid columns="2">
+
+						<sr:comboboxField id="mandantauswahl_report"
+							value="#{workflow.controller.konfig.mandant}"
+							items="#{prozesskostenController.mandantenListe}"
+							label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Mandantenauswahl')}"
+							readonly="true" />
+
+						<sr:comboboxField id="prozessauswahl_report"
+							value="#{workflow.controller.konfig.prozess}"
+							items="#{prozesskostenController.prozessListe}"
+							label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Prozessauswahl')}"
+							readonly="true" />
+
+						<sr:dateField id="zeitraumVon_report"
+							value="#{workflow.controller.konfig.zeitraumVon}"
+							label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Zeitraumvon')}"
+							readonly="true" />
+
+						<sr:dateField id="zeitraumBis_report"
+							value="#{workflow.controller.konfig.zeitraumBis}"
+							label="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Zeitraumbis')}"
+							readonly="true" />
+
+					</h:panelGrid>
+
+				</t:fieldset>
+
+				<t:fieldset
+					legend="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Detailliert')}"
+					rendered="#{! empty pc.rgebnis.durchlaufzeitDetailListe}">
+
+					<sr:dataScroller for="ergebnis" id="scroller" />
+					<t:dataTable value="#{pc.rgebnis.durchlaufzeitDetailListe}"
+						var="detail" styleClass="dataTable" rowClasses="even,odd"
+						cellpadding="0" cellspacing="1" preserveDataModel="false"
+						id="ergebnis" rows="10">
+
+						<t:column style="width:80px;">
+							<f:facet name="header">
+								<h:outputText
+									value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.VorgangsBisNr')}" />
+							</f:facet>
+							<h:outputText value="#{detail.vorgangNummer}" />
+						</t:column>
+
+						<t:column style="width:200px;">
+							<f:facet name="header">
+								<h:outputText
+									value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Vorgangsbezeichnung')}" />
+							</f:facet>
+							<h:outputText value="#{detail.bezeichnung}" />
+						</t:column>
+
+						<t:column style="width:80px;">
+							<f:facet name="header">
+								<h:outputText
+									value="#{sr:text('label.admin.prozesskosten.reportdurchlaufzeit.Durchlaufzeit')}" />
+							</f:facet>
+							<h:outputText value="#{detail.durchlaufzeitAsString}" />
+						</t:column>
+
+					</t:dataTable>
+
+				</t:fieldset>
+
+				<t:div styleClass="_btn">
+					<h:commandButton id="print_action" styleClass="_button btn_print"
+						value="#{sr:text('label.print')}" disabled="#{workflow.readonly}"
+						action="#{workflow.controller.printReport}" />
+				</t:div>
+
+				<h:panelGrid rendered="#{downloadFile.bytes != null}"
+					id="druckergebnis">
+					<t:div>
+						<p>
+							<t:outputText
+								value="#{sr:text('label.admin.prozesskosten.dokumenteVorbereitet')}" />
+						</p>
+					</t:div>
+
+					<t:div>
+						<p>
+							<h:outputLink
+								value="#{environmentInfo.requestContextPath}/download/durchlaufzeit.pdf">
+								<t:outputText
+									value="#{sr:text('label.admin.prozesskosten.dokumenteAnzeigen')}" />
+							</h:outputLink>
+						</p>
+					</t:div>
+				</h:panelGrid>
+
+			</t:panelTab>
+
+		</sr:panelTabbedPane>
+
+	</ui:define>
+
+</ui:composition>
+</html>

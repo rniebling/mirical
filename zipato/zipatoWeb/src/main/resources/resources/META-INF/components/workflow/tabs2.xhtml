@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function loadLazy() {
+
+			var tabView = PF('tabs');
+		
+			for (i = 1; i < tabView.panelContainer.children().length; i++) {
+				var b = tabView.panelContainer.children().eq(i), e = tabView.cfg.dynamic
+						&& !tabView.isLoaded(b);
+				if (e) {
+					load(b);
+				}
+			}
+		};
+
+		function load(tab) {
+			var tabView = PF('tabs'), c = tab.index(), b = {
+				source : tabView.id,
+				process : tabView.id,
+				update : tabView.id,
+				params : [ {
+					name : tabView.id + "_contentLoad",
+					value : true
+				}, {
+					name : tabView.id + "_newTab",
+					value : tab.attr("id")
+				}, {
+					name : tabView.id + "_tabindex",
+					value : c
+				} ],
+				onsuccess : function(h, f, g) {
+					PrimeFaces.ajax.Response.handle(h, f, g, {
+						widget : tabView,
+						handle : function(i) {
+							tab.html(i);
+							if (tabView.cfg.cache) {
+								tabView.markAsLoaded(tab)
+							}
+						}
+					});
+					return true
+				}
+			};
+			PrimeFaces.ajax.Request.handle(b)
+		};
+
+		$(function() {
+			loadLazy();
+		});
+		/* ]]> */
+	</script>
+
+
+	<p:tabView id="tabs" widgetVar="tabs" dynamic="true" cache="true"
+		binding="#{workflow.tabbedPane2}">
+		<p:ajax event="tabChange" listener="#{workflowState.processTabChange}" />
+		<ui:insert />
+		<c:forEach items="#{workflow.actualPhase.tabs}" var="tab">
+			<c:if test="#{tab.visible}">
+				<c:set var="tabLabel"
+					value="label.#{sr:toLabel(workflow.actualPhase.page)}.#{sr:toLabel(tab.page)}" />
+				<p:tab id="#{sr:toId(tab.page)}"
+					styleClass="#{sr:isElTrue(tab.marked)} ? 'tabMarked' : 'tabContent'"
+					title="#{tab.label == null ? sr:text(tabLabel) : sr:eval(tab.label)}"
+					rendered="#{sr:isElTrue(tab.rendered)}">
+					<ui:include src="/pages/#{base}/#{tab.page}.xhtml" />
+				</p:tab>
+			</c:if>
+		</c:forEach>
+	</p:tabView>
+
+</ui:component>
+
+</html>

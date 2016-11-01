@@ -1,0 +1,241 @@
+/* TYPOGRAPHY */
+BODY,P,DIV,LABEL,TD {
+	font-size: 12px;
+}
+
+BODY,INPUT,TD,TABLE,P,H1,H2,H3,H4,A,DIV,SPAN,LI,UL {
+	font-family: Arial, sans-serif;
+	color: #505050;
+}
+
+IMG {
+	border: 0;
+}
+
+/* LINKS */
+A,A:link,A:active {
+	color: #568762;
+	text-decoration: none;
+	white-space: normal;
+}
+
+A:visited {
+	color: #568762;
+	background-color: transparent;
+}
+
+A:hover {
+	color: #e70036;
+	text-decoration: none !important;
+}
+
+/* HEADINGS */
+h1,h2,h3,h4,h5,h6 {
+	font-family: arial, sans-serif;
+	font-weight: bold;
+	color: #505050;
+}
+
+h1 {
+	font-size: 2.2em;
+	letter-spacing: 0px;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	color: #505050;
+}
+
+h2 {
+	font-size: 1.4em;
+	line-height: 1.5em;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+}
+
+h3 {
+	font-size: 1.3em;
+	line-height: 1.3em;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+}
+
+h4 {
+	font-size: 1.2em;
+	line-height: 1.3em;
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+h5 {
+	font-size: 1.1em;
+	line-height: 1.3em;
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+h6 {
+	font-size: 1em;
+	line-height: 1.3em;
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+/* END HEADINGS */ /* TEXT */
+p {
+	font-size: 12px;
+	margin: 0 0 1.5em 0;
+	padding: 0;
+}
+
+blockquote {
+	border-left: 10px solid #ddd;
+	margin-left: 10px;
+}
+
+pre {
+	font-family: monospace;
+	font-size: 12px;
+}
+
+strong,b {
+	font-weight: bold;
+}
+
+em,i {
+	font-style: italic;
+}
+
+code {
+	font-family: monospace;
+	font-size: 12px;
+	white-space: pre;
+}
+
+dl {
+	margin: 0 0 1.5em 0;
+	padding: 0;
+	line-height: 1.4em;
+}
+
+dl dt {
+	font-weight: bold;
+	margin: 0.25em 0 0.25em 0;
+	padding: 0;
+}
+
+dl dd {
+	margin: 0 0 0 30px;
+	padding: 0;
+}
+
+/* END LISTS */
+HR { /*display: none;*/
+	
+}
+
+DIV.hr {
+	height: 1px;
+	margin: 1.5em 10px;
+	border-bottom: 1px solid #919191;
+}
+
+P.tam {
+	padding-left: 2px;
+	padding-right: 20px;
+	padding-top: 0px;
+	padding-bottom: 4px;
+	margin: 0px;
+}
+
+TD P.tam {
+	padding-right: 2px;
+}
+
+LABEL {
+	font-size: 12px;
+	/*font-style: italic;*/
+	color: #505050;
+	font-family: Arial, sans-serif;
+}
+
+.label {
+	margin-right: 2px;
+}
+
+A * LABEL {
+	color: #568762;
+	text-decoration: underline;
+}
+
+A * LABEL:hover {
+	color: #e70036;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+DIV.titleText {
+	font-size: 1.2em;
+}
+
+.infoMessage {
+	font-size: larger;
+}
+
+.redFont {
+	color: #e70036;
+}
+
+.greenFont {
+	color: #568762;
+}
+
+.indigoFont {
+	color: #4b0082;
+}
+
+.blueFont {
+	color: #0000ff;
+}
+
+.lightblueFont {
+	color: #51a8ff;
+}
+
+.orangeFont {
+	color: #ffa500;
+}
+
+.blackFont {
+	color: #000000;
+}
+
+.greyFont {
+	color: #999999;
+}
+
+.yellowFont {
+	color: #ffcc00;
+}
+
+.positiveAmount {
+	color: #568762;
+	text-align: right;
+}
+
+.positiveAmountStrong {
+	color: #568762;
+	font-weight: bold;
+	text-align: right;
+}
+
+.notPositiveAmount {
+	color: #000000;
+	text-align: right;
+}
+
+.notPositiveAmountStrong {
+	color: #000000;
+	font-weight: bold;
+	text-align: right;
+}
+
+/* END TYPOGRAPHY */

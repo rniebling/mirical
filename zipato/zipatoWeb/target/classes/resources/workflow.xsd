@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.subito.de/sunrise-workflow"
+	xmlns:sunrise="http://www.subito.de/sunrise-workflow"
+	elementFormDefault="qualified" version="1.0">
+	<!-- Elements -->
+	<element name="application" type="sunrise:applicationType" />
+	<element name="phase" type="sunrise:phaseType" />
+	<element name="tab" type="sunrise:tabType" />
+	<!-- Types -->
+	<complexType name="tabType">
+		<attribute name="page" type="string">
+			<annotation>
+				<documentation>Die JSF View-Id der zugehörigen Seite.
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="rendered" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, ob der Tab angezeigt wird
+					oder nicht.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="controller" type="string">
+			<annotation>
+				<documentation>Der zuständige Page-Controller der diese Phase
+					bearbeitet.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="label" type="string">
+			<annotation>
+				<documentation>Die Tab-Überschrift</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+	<complexType name="applicationType">
+		<sequence>
+			<element ref="sunrise:phase" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+	<complexType name="phaseType">
+		<sequence>
+			<element ref="sunrise:tab" minOccurs="0" maxOccurs="unbounded" />
+			<element ref="sunrise:phase" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="id" type="string">
+			<annotation>
+				<documentation>Eine eindeutige Id.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="name" type="string" use="required">
+			<annotation>
+				<documentation>Der Name dieser Phase.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="pos" type="integer" use="optional">
+			<annotation>
+				<documentation>Die Position dieser Phase.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="page" type="string">
+			<annotation>
+				<documentation>Die JSF View-Id der zugehörigen Seite.
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="expand" type="boolean">
+			<annotation>
+				<documentation>Soll die Phase immer offen sein.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="disableInKisok" type="boolean">
+		</attribute>
+		<attribute name="module" type="string">
+			<annotation>
+				<documentation>Das Anwendungsmodul.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="controller" type="string">
+			<annotation>
+				<documentation>Der zuständige Page-Controller der diese Phase
+					bearbeitet.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="role" type="string">
+			<annotation>
+				<documentation>Durch '|' separierte Liste von berechtigten Rollen.
+				</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="bean" type="string">
+			<annotation>
+				<documentation>Die Bean Klasse der Phase.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="private" type="boolean">
+			<annotation>
+				<documentation>Wenn 'true' wird die Phase nur angezeigt, wenn sie
+					oder eine Unterphase aktiv ist.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="continue" type="boolean">
+			<annotation>
+				<documentation>Nicht mehr benutzen.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="singlePhase" type="boolean">
+			<annotation>
+				<documentation>Wenn 'true' wird bei 'Next' oder 'Previous' die
+					Elternphase zurückgegeben.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="condition" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, ob die Phase angezeigt wird
+					oder nicht.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="readonly" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, ob die View dieser Phase
+					editiert werden darf oder nicht.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="validate" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, welches Objekt validiert
+					wird.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="validator" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, welcher Validator benutzt
+					wird.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="evaluate" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, welches Objekt berechnet
+					wird.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="evaluator" type="string">
+			<annotation>
+				<documentation>EL Expression die angibt, welcher Evaluator benutzt
+					wird.</documentation>
+			</annotation>
+		</attribute>
+		<attribute name="save-transaction-id" type="string">
+			<annotation>
+				<documentation>Bei einem Phasenwechsel, in den unterhalb liegenden
+					Phasen, wird bei gleicher ID gespeichert.</documentation>
+			</annotation>
+		</attribute>
+	</complexType>
+</schema>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div id="errorBox">
+		<ui:insert name="_ampel" />
+		<t:div styleClass="Warning"
+			rendered="${securityBean.loggedIn and workflowState.locked}">
+			<h:graphicImage alt="Warning"
+				style="vertical-align:middle;padding-right:4px;"
+				url="/weblets/icons/message_warning.gif" />
+			<c:set var="whoLocksMe"
+				value="#{lockManager.whoLocksMe(workflow.lockBean)}" />
+			<h:outputFormat rendered="#{whoLocksMe != null}"
+				value="#{sr:text('label.value.locked')}">
+				<f:param value="#{whoLocksMe.username}" />
+				<f:param value="#{whoLocksMe.vorname}" />
+				<f:param value="#{whoLocksMe.nachname}" />
+			</h:outputFormat>
+			<h:outputText rendered="#{whoLocksMe == null}"
+				value="#{sr:text('label.value.locked2')}" />
+		</t:div>
+		<t:div styleClass="#{facesContext.maximumSeverity}"
+			rendered="#{! empty facesContext.maximumSeverity}">
+			<t:messages showDetail="true" showSummary="false" escape="false"
+				replaceIdWithLabel="true" errorClass="error" infoClass="Info"
+				warnClass="Warning" />
+		</t:div>
+	</t:div>
+
+</ui:composition>
+</html>

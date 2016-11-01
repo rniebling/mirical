@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Rollenzuordnung" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink
+			ref="Administration/Administration Benutzerverwaltung.htm#Rollenzuordnung" />
+	</t:div>
+
+	<sr:comboboxField id="role_sachbearbeitung"
+		label="Rolle für Sachbearbeitung" value="#{tc.rolleSachbearbeitung}"
+		items="#{rolleItems.items}" converter="#{rolleItems.converter}"
+		emptyItem="true" />
+
+	<sr:comboboxField id="role_beratung" label="Rolle für Beratung"
+		rendered="#{!sr:module('Inkasso')}" value="#{tc.rolleBeratung}"
+		items="#{rolleItems.items}" converter="#{rolleItems.converter}"
+		emptyItem="true" />
+
+	<sr:comboboxField id="role_kompetenztraeger"
+		label="Rolle für Kompetenzträger" rendered="#{sr:module('SFDK')}"
+		value="#{tc.rolleKompetenztraeger}" items="#{rolleItems.items}"
+		converter="#{rolleItems.converter}" emptyItem="true" />
+		
+	<sr:comboboxField id="role_kompetenztraeger_serv"
+		label="Rolle für Kompetenzträger (Servicing)" rendered="#{sr:module('SFDK-BAG')}"
+		value="#{tc.rolleKompetenztraegerServicing}" items="#{rolleItems.items}"
+		converter="#{rolleItems.converter}" emptyItem="true" />
+
+</ui:composition>
+
+</html>

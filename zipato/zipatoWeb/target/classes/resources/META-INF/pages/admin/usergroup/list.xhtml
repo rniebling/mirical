@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Gruppenübersicht" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink
+			ref="Administration/Administration Benutzerverwaltung.htm#Gruppenübersicht" />
+	</t:div>
+
+	<sr:dataTable id="data" value="#{pc.dataModel}" var="bean"
+		dataScroller="true" dataScrollerInfo="true"
+		sortColumn="#{pc.dataModel.order}"
+		sortAscending="#{pc.dataModel.ascending}">
+		<t:column headerstyle="width:18px;">
+			<f:facet name="header">
+				<h:outputText value="" />
+			</f:facet>
+			<h:commandLink id="vorgang_load_action" action="#{pc.open}">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{bean}" />
+				<t:graphicImage alt="Öffnen" url="/weblets/icons/open.gif" />
+			</h:commandLink>
+		</t:column>
+		<t:column style="width:150px;">
+			<f:facet name="header">
+				<t:commandSortHeader columnName="name" arrow="true">
+					<h:outputText value="Name" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:commandLink id="vorgang_load_action2" action="#{pc.open}">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{bean}" />
+				<h:outputText value="#{bean.name}" />
+			</h:commandLink>
+		</t:column>
+
+		<t:column>
+			<f:facet name="header">
+				<t:commandSortHeader columnName="beschreibung" arrow="true">
+					<h:outputText value="Beschreibung" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:outputText value="#{bean.beschreibung}" />
+		</t:column>
+
+		<t:column headerstyle="width:30px" style="text-align:center;">
+			<sr:iconActionRemove id="del">
+				<f:setPropertyActionListener target="#{pc.value}" value="#{bean}" />
+			</sr:iconActionRemove>
+		</t:column>
+	</sr:dataTable>
+	<t:div styleClass="_btn">
+		<h:commandButton id="create_action" styleClass="_button btn_new"
+			value="#{sr:text('label.new')}" disabled="#{workflow.readonly}"
+			action="#{pc.create}" />
+	</t:div>
+
+</ui:composition>
+</html>

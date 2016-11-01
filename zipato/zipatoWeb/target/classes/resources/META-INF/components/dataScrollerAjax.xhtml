@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+	<rich:datascroller id="dataScroller_#{for}" for="#{for}"
+		pageCountVar="pageCount" pageIndexVar="pageIndex" render="#{reRender}"
+		styleClass="scroller" paginator="true" maxPages="10"
+		renderIfSinglePage="false" fastControls="hide" immediate="true">
+		<f:facet name="first">
+			<t:graphicImage alt="|&lt;" url="/weblets/icons/nav_first.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.first')}">
+				<c:if test="#{resetValue}">
+					<p:ajax event="click" listener="#{pc.setValue(null)}" />
+				</c:if>
+			</t:graphicImage>
+		</f:facet>
+		<f:facet name="first_disabled">
+			<t:graphicImage alt="|&lt;" url="/weblets/icons/nav_first.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.first')}" />
+		</f:facet>
+		<f:facet name="last">
+			<t:graphicImage alt="&gt;|" url="/weblets/icons/nav_last.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.last')}">
+				<c:if test="#{resetValue}">
+					<p:ajax event="click" listener="#{pc.setValue(null)}" />
+				</c:if>
+			</t:graphicImage>
+		</f:facet>
+		<f:facet name="last_disabled">
+			<t:graphicImage alt="&gt;|" url="/weblets/icons/nav_last.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.last')}" />
+		</f:facet>
+		<f:facet name="previous">
+			<t:graphicImage alt="&lt;" url="/weblets/icons/nav_backward.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.backward')}">
+				<c:if test="#{resetValue}">
+					<p:ajax event="click" listener="#{pc.setValue(null)}" />
+				</c:if>
+			</t:graphicImage>
+		</f:facet>
+		<f:facet name="previous_disabled">
+			<t:graphicImage alt="&lt;" url="/weblets/icons/nav_backward.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.backward')}" />
+		</f:facet>
+		<f:facet name="next">
+			<t:graphicImage alt="&gt;" url="/weblets/icons/nav_forward.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.forward')}">
+				<c:if test="#{resetValue}">
+					<p:ajax event="click" listener="#{pc.setValue(null)}" />
+				</c:if>
+			</t:graphicImage>
+		</f:facet>
+		<f:facet name="next_disabled">
+			<t:graphicImage alt="&gt;" url="/weblets/icons/nav_forward.gif"
+				styleClass="pagerIcon" title="#{sr:text('label.pager.forward')}" />
+		</f:facet>
+	</rich:datascroller>
+
+</ui:component>
+</html>

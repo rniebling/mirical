@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Allgemein" />
+	<t:div id="outer_div">
+
+		<t:panelGrid columns="2">
+
+			<t:div>
+				<sr:dataTable id="data" var="bean" rows="15"
+					value="#{workflow.controller.orgEinheiten}"
+					deleteMessage="Organisationseinheit löschen?"
+					deleteAction="removeOrganisationsEinheit"
+					deleteReRender="outer_div">
+
+
+					<t:column headerstyle="width:50px;" style="text-align:left;">
+						<f:facet name="header">
+							<h:outputText value="Organisationseinheit" />
+						</f:facet>
+						<sr:textField value="#{bean.oeNr}" id="oeNr" maxlength="11" />
+					</t:column>
+
+					<t:column headerstyle="width:200px;" style="text-align:left;">
+						<f:facet name="header">
+							<h:outputText value="Bezeichnung" />
+						</f:facet>
+						<sr:textField value="#{bean.oeText}" />
+					</t:column>
+
+					<t:column headerstyle="width:18px;">
+						<sr:iconActionRemove tableId="data">
+							<f:setPropertyActionListener
+								target="#{controller.organisationsEinheit}" value="#{bean}" />
+						</sr:iconActionRemove>
+					</t:column>
+
+				</sr:dataTable>
+
+
+				<t:div styleClass="_btn">
+					<t:commandButton id="create_oeeinheit" styleClass="_button btn_new"
+						value="NEU"
+						action="#{workflow.controller.createOrganisationsEinheit}"
+						render="data" />
+				</t:div>
+
+				<t:div styleClass="space-wide" />
+
+				<h:panelGrid columns="2">
+					<h:outputText style="text-decoration:underline;" value="Hinweis: " />
+					<h:outputText>
+							Bitte verwenden Sie bei Bedarf # als Platzhalter am Ende Ihrer Eingabe.
+							Im Rahmen der Auswertung wird der Platzhalter als Variable berücksichtigt.
+						</h:outputText>
+				</h:panelGrid>
+			</t:div>
+
+		</t:panelGrid>
+	</t:div>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:panelTab id="konfig"
+		label="#{sr:text('label.admin.prozesskosten.konfiguration')}">
+
+		<sr:helpLink
+			ref="Administration/Administration Auswertungen.htm#AdminiProzess_Konfig_Eingang" />
+
+		<h:panelGrid columns="3">
+
+			<h:outputText value="#{sr:text('label.admin.externe-prozesse.oe')}" />
+
+			<t:div style="width:50px;" />
+
+			<h:outputText
+				value="#{sr:text('label.admin.prozesskosten.prozessauswahl')}" />
+
+			<h:outputText style="font-style:italic;"
+				value="#{sr:text('label.admin.prozesskosten.mehrfachauswahl')}" />
+
+			<t:div style="width:50px;" />
+
+			<h:outputText style="font-style:italic;"
+				value="#{sr:text('label.admin.prozesskosten.mehrfachauswahl')}" />
+
+			<t:selectManyListbox id="organisationsEinheiten"
+				value="#{pc.konfig.organisationsEinheiten}" style="height:180px;"
+				converter="organisationsEinheitConverter">
+				<f:selectItems value="#{pc.organisationsEinheitenListe}" />
+			</t:selectManyListbox>
+
+			<t:div style="width:50px;" />
+
+			<t:selectManyListbox id="prozesse" value="#{pc.konfig.prozesse}"
+				style="height:180px;" converter="prozessConverter">
+				<f:selectItems value="#{pc.externProzessListe}" />
+			</t:selectManyListbox>
+
+		</h:panelGrid>
+
+		<t:div styleClass="space" />
+
+		<h:panelGrid columns="3">
+
+			<sr:dateField id="zeitraumVon" value="#{pc.konfig.zeitraumVon}"
+				compute="true" label="#{sr:text('label.core.zeitraumVon')}" />
+
+			<t:div styleClass="space" />
+
+			<sr:dateField id="zeitraumBis" value="#{pc.konfig.zeitraumBis}"
+				compute="true" label="#{sr:text('label.core.zeitraumBis')}" />
+
+		</h:panelGrid>
+
+		<t:div styleClass="space" />
+
+		<sr:textAreaField id="anmerkungen"
+			label="#{sr:text('label.admin.prozesskosten.anmerkungen')}"
+			value="#{pc.konfig.anmerkungen}" rows="5" />
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="start_action" styleClass="_button btn_new"
+				value="#{sr:text('label.start')}" disabled="#{workflow.readonly}"
+				action="#{pc.start}" render="ergebnisse kriterien druckergebnis" />
+		</t:div>
+
+	</t:panelTab>
+
+</ui:composition>
+</html>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<h:panelGrid columns="3">
+
+		<h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+			<sr:dateField id="datumVon" label="Datum von"
+				value="#{tc.dataModel.searchObject.von}" readonly="never">
+				<p:ajax event="blur" listener="#{tc.refresh}" update="data" />
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:dateField>
+
+			<sr:dateField id="datumBis" label="Datum bis"
+				value="#{tc.dataModel.searchObject.bis}" readonly="never">
+				<p:ajax event="blur" listener="#{tc.refresh}" update="data" />
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:dateField>
+		</h:panelGrid>
+
+		<sr:textField id="referenz"
+			value="#{tc.dataModel.searchObject.referenz}" label="Referenz"
+			readonly="never">
+			<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+		</sr:textField>
+
+		<sr:comboboxField id="user" label="Benutzer"
+			value="#{tc.dataModel.searchObject.benutzer}"
+			items="#{userItemGenerator.all}" emptyItem="true" readonly="never">
+			<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+		</sr:comboboxField>
+
+		<sr:textField id="inhalt" value="#{tc.dataModel.searchObject.inhalt}"
+			label="Inhalt" readonly="never">
+			<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+		</sr:textField>
+
+		<sr:comboboxField id="tabelle" label="Tabelle" emptyItem="true"
+			value="#{tc.dataModel.searchObject.tabelle}" items="#{tc.tabellen}"
+			readonly="never">
+			<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+		</sr:comboboxField>
+
+		<sr:comboboxField id="spalte" label="Spalte" emptyItem="true"
+			items="#{tc.spalten}" value="#{tc.dataModel.searchObject.spalte}"
+			readonly="never">
+			<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+		</sr:comboboxField>
+
+		<c:if test="#{!tc.pruefung}">
+			<sr:comboboxField id="cbLimit"
+				value="#{tc.dataModel.searchObject.pruefmodus}"
+				items="#{tc.pruefmodusItems}" label="Prüfmodus" emptyItem="true"
+				readonly="never">
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:comboboxField>
+
+			<sr:comboboxField id="pruefer" label="Prüfer"
+				value="#{tc.dataModel.searchObject.pruefer}"
+				items="#{userItemGenerator.all}" emptyItem="true" readonly="never">
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:comboboxField>
+		</c:if>
+
+	</h:panelGrid>
+
+	<t:div id="data">
+		<sr:dataTable id="datatable" value="#{tc.dataModel}"
+			dataScrollerInfo="true" var="bean">
+			<t:column width="20px">
+				<t:graphicImage title="#{tc.modusText(bean[10])}"
+					url="#{tc.modusIcon(bean[10])}" alt="#{tc.modusText(bean[10])}" />
+			</t:column>
+
+			<t:column width="20px">
+				<t:graphicImage title="#{tc.aktionText(bean[4])}"
+					url="#{tc.aktionIcon(bean[4])}" alt="tc.aktionText(bean[4])" />
+			</t:column>
+
+			<c:if test="#{tc.pruefung}">
+				<t:column width="20px"
+					style="text-align:center; background-color: 0x00ff00; ">
+					<f:facet name="header">
+						<t:graphicImage title="Genehmigen" url="/weblets/icons/accept.gif"
+							alt="Genehmigen" />
+					</f:facet>
+					<sr:checkboxField id="chk_genehmigen"
+						readonly="#{tc.getModusBean(bean[9]).abgelehnt}"
+						value="#{tc.getModusBean(bean[9]).genehmigt}">
+						<p:ajax event="click" update="datatable" />
+					</sr:checkboxField>
+				</t:column>
+
+				<t:column width="20px"
+					style="text-align:center; background-color: 0xff0000; ">
+					<f:facet name="header">
+						<t:graphicImage title="Ablehnen" url="/weblets/icons/conflict.gif"
+							alt="Ablehnen" />
+					</f:facet>
+					<sr:checkboxField id="chk_ablehnen"
+						readonly="#{tc.getModusBean(bean[9]).genehmigt}"
+						value="#{tc.getModusBean(bean[9]).abgelehnt}">
+						<p:ajax event="click" update="datatable" />
+					</sr:checkboxField>
+				</t:column>
+			</c:if>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Wann" />
+				</f:facet>
+				<h:outputText value="#{bean[5]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Kontext" />
+				</f:facet>
+				<h:outputText value="#{bean[11]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Tabelle" />
+				</f:facet>
+				<h:outputText value="#{bean[3]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Spalte" />
+				</f:facet>
+				<h:outputText value="#{bean[0]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Alter Wert" />
+				</f:facet>
+				<h:outputText value="#{bean[1]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Neuer Wert" />
+				</f:facet>
+				<h:outputText value="#{bean[2]}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Benutzer" />
+				</f:facet>
+				<h:outputText value="#{tc.getUsername(bean[13],bean[14],bean[15])}" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="Referenz" />
+				</f:facet>
+				<h:outputText value="#{bean[16]}" />
+			</t:column>
+		</sr:dataTable>
+		<t:div id="btns" styleClass="_btn">
+			<t:commandButton id="btn_csvexport" styleClass="_button btn_export"
+				value="CSV EXPORT" rendered="#{tc.csvexportRendered}"
+				disabled="#{!tc.csvexportEnabled}" action="#{tc.csvexport}">
+			</t:commandButton>
+		</t:div>
+	</t:div>
+</ui:composition>
+</html>

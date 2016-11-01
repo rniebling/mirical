@@ -1,0 +1,153 @@
+/* A CSS Framework by Mike Stenhouse of Content with Style */
+/* SITE SPECIFIC LAYOUT */
+BODY {
+	margin: 0;
+	padding: 0px;
+	background-color: #fff;
+	text-align: left;
+	background: white url(images/hintergrund.gif) top left repeat-x;
+}
+
+.quickMenu {
+	width: 17.7em;
+	background-color: #fff;
+	padding: 0px;
+	margin: 10px 5px 0px 5px;
+}
+
+.loginBox {
+	padding: 10px;
+}
+
+.loginBoxWidth {
+	width: 52ex;
+}
+
+.commandBar {
+	background: white;
+	display: block;
+	float: left;
+}
+
+#commandBar INPUT[type=submit] {
+	margin: 0px 4px 4px 4px;
+}
+
+DIV#page {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+/* HEADER */
+TABLE#header {
+	margin: 0;
+	padding: 0;
+	height: 55px;
+	text-align: left;
+	background-color: white;
+	background: white url(images/header.gif) top left no-repeat;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.contentBoxInner {
+	display: block;
+	padding: 5px;
+	background-color: white;
+}
+
+DIV#contentBox {
+	display: block;
+	background-color: white;
+}
+
+.contentBoxHeight {
+	
+}
+
+.bottomBar {
+	background-color: #C3DFC9;
+	height: 30px;
+}
+
+.bottomBar INPUT {
+	margin-bottom: 2px !important;
+}
+
+TD.header-col {
+	vertical-align: top;
+	height: 60px;
+}
+
+.header-col-title {
+	padding-left: 80px;
+	text-align: left;	
+	vertical-align: middle;
+	font-size: 1.8em;
+}
+
+TD#header-col-a {
+	width: 140px;
+}
+
+DIV#branding {
+	display: none;
+}
+
+/* MAIN */
+div#main {
+	padding: 0px;
+	padding-right: 5px;
+	padding-left: 5px;
+	display: table-cell;
+	margin: 0;
+}
+
+#local,#local_bb {
+	width: 19em;
+	display: table-cell;
+	margin: 0px;
+}
+
+#commandBar {
+	padding-left: 5px;
+	height: 35px;
+}
+
+.buttonBar {
+	display: block;
+	text-align: right;
+	width: 100%;
+}
+
+div#main form ul li {
+	list-style-type: none;
+	margin-left: 0;
+}
+
+/* END MAIN */ /* SUB */
+div#sub h2 {
+	margin-bottom: 5px;
+}
+
+div#sub ul {
+	margin: 0;
+}
+
+div#sub ul li {
+	list-style-type: none;
+	margin-left: -30px;
+	padding-bottom: 10px;
+}
+
+div#sub p.line {
+	border-top: 1px dotted #919191;
+	margin: 15px 0;
+}
+
+DIV#footer-build {
+	display: none;
+}
+
+/* END LAYOUT */

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<style type="text/css">
+button.ui-datepicker-close {
+	display: none;
+}
+
+th.ui-datepicker-week-end, td.ui-datepicker-week-end {
+	background: #e6e6e6;
+}
+​
+</style>
+
+		<script type="text/javascript">
+		$(document).ready(
+				function() {
+					if(#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}){
+						$('.ui-datepicker-trigger').hide();
+					}
+					$('.dateTimeField').datetimepicker(
+							{
+								prevText : 'zurück',
+								prevStatus : '',
+								prevJumpText : '&#x3c;&#x3c;',
+								prevJumpStatus : '',
+								nextText : 'vor',
+								nextStatus : '',
+								nextJumpText : '&#x3e;&#x3e;',
+								nextJumpStatus : '',
+								currentText : 'Heute',
+								currentStatus : '',
+								todayText : 'Heute',
+								todayStatus : '',
+								clearText : '-',
+								clearStatus : '',
+								closeText : 'Schließen',
+								closeStatus : '',
+								monthNames : [ 'Januar', 'Februar', 'März',
+										'April', 'Mai', 'Juni', 'Juli',
+										'August', 'September', 'Oktober',
+										'November', 'Dezember' ],
+								monthNamesShort : [ 'Jan', 'Feb', 'Mär', 'Apr',
+										'Mai', 'Jun', 'Jul', 'Aug', 'Sep',
+										'Okt', 'Nov', 'Dez' ],
+								dayNames : [ 'Sonntag', 'Montag', 'Dienstag',
+										'Mittwoch', 'Donnerstag', 'Freitag',
+										'Samstag' ],
+								dayNamesShort : [ 'So', 'Mo', 'Di', 'Mi', 'Do',
+										'Fr', 'Sa' ],
+								dayNamesMin : [ 'So', 'Mo', 'Di', 'Mi', 'Do',
+										'Fr', 'Sa' ],
+								timeText : 'Zeit',
+								hourText : 'Stunde',
+								minuteText : 'Minute',
+								showMonthAfterYear : false,
+								showOn : 'button',
+								showButtonPanel : 'true',
+								changeYear : 'true',
+								changeMonth : 'true',
+								controlType : 'select',
+								dateFormat: 'dd.mm.yy',
+								timeFormat: 'HH:mm',
+								firstDay : 1,
+								onSelect : function(dateText, inst) {
+									$('#' + inst.id).val(dateText);
+									inst.inline = true;
+								},
+								onClose : function(dateText, inst) {
+									$('#' + inst.id).val(dateText);
+									refreshComponents();
+									inst.inline = false;
+								}
+							});
+				});
+	</script>
+
+	<c:set var="_ro"
+		value="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}" />
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<t:div styleClass="fieldBox calendarField" style="#{style}"
+		rendered="#{rendered}">
+		<c:if test="#{_ro}">
+			<t:inputText id="#{id}" value="#{value}" styleClass="dateTimeField"
+				readonly="true" size="15">
+				<sr:convertDateTime type="both" timeStyle="short" />
+				<!-- <sr:error/> -->
+			</t:inputText>
+		</c:if>
+
+		<c:if test="#{!_ro}">
+
+			<c:if test="#{render != null}">
+				<c:set var="update" value="#{render} #{p:component('errorBox')}" />
+			</c:if>
+			<c:if test="#{render == null}">
+				<c:set var="update" value="#{p:component('errorBox')}" />
+			</c:if>
+
+			<c:if test="#{internalAjax == null}">
+				<c:set var="internalAjax" value="true" />
+			</c:if>
+
+			<p:remoteCommand name="close"
+				update="#{render} #{p:component('errorBox')}" />
+
+			<p:inputText id="#{id}" widgetVar="#{id}" styleClass="dateTimeField"
+				rendered="#{rendered}" value="#{value}"
+				required="#{required and workflow.required}">
+				<c:if test="#{internalAjax}">
+					<p:ajax event="change" listener="#{workflow.compute}"
+						update="#{update}" />
+				</c:if>
+				<sr:convertDateTime type="both"
+					pattern="#{sr:text('component.dateField.popupDateTimeFormat')}" />
+			</p:inputText>
+			<c:if test="#{internalAjax}">
+				<p:remoteCommand name="refreshComponents" update="#{update}"
+					actionListener="#{workflow.compute}" />
+			</c:if>
+
+		</c:if>
+		<c:if test="#{label != null }">
+			<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+				style="#{labelStyle}" />
+		</c:if>
+	</t:div>
+
+</ui:component>
+</html>

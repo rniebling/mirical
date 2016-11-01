@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Protokoll">
+		<style type="text/css">
+.normalWidth,#commandBar {
+	width: 100em;
+}
+</style>
+
+		<h:panelGrid columns="2">
+
+			<t:fieldset legend="Status" style="width:10.5em;">
+
+				<sr:checkboxField id="nichtPruefpflichtig"
+					label="Nicht prüfpflichtig"
+					value="#{eventController.dataModel.searchObject.statusNichtPruefpflichtig}">
+					<p:ajax event="click" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:checkboxField>
+
+				<t:div styleClass="space-small" />
+
+				<sr:checkboxField id="geprueft" label="Geprüft"
+					value="#{eventController.dataModel.searchObject.statusGeprueft}">
+					<p:ajax event="click" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:checkboxField>
+
+
+				<t:div styleClass="space-small" />
+
+				<sr:checkboxField id="zupruefen" label="Noch zu prüfen"
+					value="#{eventController.dataModel.searchObject.statusZuPruefen}">
+					<p:ajax event="click" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:checkboxField>
+
+			</t:fieldset>
+
+
+
+			<h:panelGrid columns="3">
+
+				<t:div styleClass="space-small" />
+
+				<t:div />
+
+				<t:div />
+
+				<sr:comboboxField id="user" label="Benutzer"
+					value="#{eventController.dataModel.searchObject.benutzer}"
+					items="#{userItemGenerator.all}" emptyItem="true">
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:comboboxField>
+
+				<sr:dateField id="datumVon" label="Datum von"
+					value="#{eventController.dataModel.searchObject.datumVon}">
+					<p:ajax event="blur" listener="#{eventController.refresh}"
+						update="data" />
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:dateField>
+
+				<sr:dateField id="datumBis" label="Datum bis"
+					value="#{eventController.dataModel.searchObject.datumBis}">
+					<p:ajax event="blur" listener="#{eventController.refresh}"
+						update="data" />
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:dateField>
+
+				<sr:comboboxField id="aktion" label="Aktion" emptyItem="true"
+					items="#{eventController.aktionen}"
+					value="#{eventController.dataModel.searchObject.aktion}">
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:comboboxField>
+
+				<sr:comboboxField id="modul" label="Modul" emptyItem="true"
+					value="#{eventController.dataModel.searchObject.modul}">
+					<f:selectItem itemValue="Core" itemLabel="Core" />
+					<f:selectItem itemValue="Forderungsmanagement"
+						itemLabel="Forderungsmanagement" />
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:comboboxField>
+
+				<sr:comboboxField id="dialog" label="Dialog" emptyItem="true"
+					items="#{eventController.dialoge}"
+					value="#{eventController.dataModel.searchObject.dialog}">
+					<p:ajax event="change" listener="#{eventController.refresh}"
+						update="data" />
+				</sr:comboboxField>
+
+			</h:panelGrid>
+
+		</h:panelGrid>
+
+	</sr:helpLink>
+
+	<t:div id="data">
+		<sr:dataTable id="datatable" value="#{eventController.dataModel}"
+			dataScrollerInfo="true"
+			sortColumn="#{eventController.dataModel.searchObject.sort}"
+			sortAscending="#{eventController.dataModel.searchObject.ascending}"
+			var="bean" rows="10">
+
+			<t:column headerstyle="width:18px;" style="text-align:center;">
+				<f:facet name="header">
+					<t:div>
+						<h:commandLink disabled="#{workflow.readonly}"
+							action="#{eventController.dataModel.selectAll}">
+							<h:graphicImage alt="Alle Selektieren"
+								value="/weblets/icons/selector.gif" />
+						</h:commandLink>
+
+						<h:commandLink disabled="#{workflow.readonly}"
+							action="#{eventController.dataModel.deselectAll}">
+							<h:graphicImage alt="Keine Selektieren"
+								value="/weblets/icons/unselector.gif" />
+						</h:commandLink>
+					</t:div>
+				</f:facet>
+				<sr:checkboxField id="btn_exp" value="#{bean.selected}"
+					render=":mainForm:vorgang_form:pruefen:button_export" />
+			</t:column>
+
+			<t:column style="width:20px;text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="Status" />
+				</f:facet>
+				<h:graphicImage alt="geprüft"
+					rendered="#{bean.data[1] == 'GEPRUEFT'}" title="Geprüft"
+					value="/weblets/icons/status_green.gif" />
+				<h:graphicImage alt="zu prüfen"
+					rendered="#{bean.data[1] == 'ZU_PRUEFEN'}" title="Zu prüfen"
+					value="/weblets/icons/status_red.gif" />
+				<h:graphicImage alt="nicht prüfpflichtig"
+					rendered="#{bean.data[1] == 'NICHT_PRUEFPFLICHTIG'        || bean.data[1] == null}"
+					title="nicht prüfpflichtig" value="/weblets/icons/status_none.gif" />
+			</t:column>
+
+			<t:column width="120px">
+				<f:facet name="header">
+					<h:outputText value="#{sr:text('label.admin.prozess.Zeit')}" />
+				</f:facet>
+				<h:outputText value="#{bean.data[2]}">
+					<sr:convertDateTime type="both" />
+				</h:outputText>
+			</t:column>
+
+			<t:column width="100px">
+				<f:facet name="header">
+					<h:outputText value="Benutzer" />
+				</f:facet>
+				<h:outputText value="#{bean.data[3]}" />
+			</t:column>
+
+			<!-- 
+				<t:column width="50px">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.admin.prozess.Level')}" />
+					</f:facet>
+					<h:outputText value="#{event.level}" />
+				</t:column>  -->
+
+			<t:column>
+				<f:facet name="header">
+					<h:outputText value="#{sr:text('label.admin.prozess.Aktion')}" />
+				</f:facet>
+				<h:outputText value="#{bean.data[4]}" />
+			</t:column>
+
+			<t:column width="100px">
+				<f:facet name="header">
+					<h:outputText value="Referenzwert" />
+				</f:facet>
+				<h:outputText value="#{bean.data[5]}" />
+			</t:column>
+
+			<t:column width="80px">
+				<f:facet name="header">
+					<h:outputText value="Modul" />
+				</f:facet>
+				<h:outputText value="#{bean.data[6]}" />
+			</t:column>
+
+			<t:column width="80px">
+				<f:facet name="header">
+					<h:outputText value="Dialog" />
+				</f:facet>
+				<h:outputText value="#{bean.data[7]}" />
+			</t:column>
+
+			<t:column style="width:20px;text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="" />
+				</f:facet>
+
+				<h:commandLink disabled="#{workflow.readonly}"
+					action="#{eventController.aktionPruefen(bean.data[0])}">
+					<h:graphicImage alt="auf geprüft setzen"
+						rendered="#{bean.data[1] == 'ZU_PRUEFEN'}"
+						title="auf geprüft setzen" value="/weblets/icons/accept.gif" />
+				</h:commandLink>
+
+			</t:column>
+
+			<!--  
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.admin.prozess.Nachricht')}" />
+					</f:facet>
+					<h:outputText value="#{event.message}" />
+				</t:column>  -->
+
+
+		</sr:dataTable>
+	</t:div>
+
+	<t:div styleClass="_btn">
+		<t:commandButton id="button_export" value="EXPORT CSV"
+			action="#{eventController.export}" styleClass="_button btn_export"
+			disabled="#{empty eventController.dataModel.selectedIds}" />
+	</t:div>
+
+</ui:composition>
+</html>

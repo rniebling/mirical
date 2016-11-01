@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<info>
+	<element name='phase'>
+		<attribute name='id' property='phaseId' />
+		<element name='phase' property='phases'
+			class='de.subito.sunrise.webapp.workflow.model.WorkflowPhaseImpl' />
+		<element name='tab' property='tabs'
+			class='de.subito.sunrise.webapp.workflow.model.TabImpl' />
+		<addDefaults />
+	</element>
+</info>

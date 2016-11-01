@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="vorgang.xhtml">
+	<ui:define name="_form">
+
+		<sr:helpLink ref="" />
+
+		<h:panelGrid columns="1">
+			<t:fieldset legend="#{sr:text('label.handover.handover')}">
+				<h:panelGrid columns="1">
+
+					<sr:textField id="rolle" size="20"
+						value="#{workflow.actualPhase.nextRole.name}" readonly="true"
+						label="#{sr:text('label.handover.nextRole')}" />
+
+					<sr:comboboxField id="sachbearbeiter"
+						value="#{workflow.controller.nextSachbearbeiter}" emptyItem="true"
+						rendered="#{workflow.actualPhase.processPhase.personenbezogeneZuordnung}"
+						items="#{workflow.controller.sachbearbeiterHandover}"
+						compute="true" label="#{sr:text('label.handover.nextSpecialist')}" />
+
+
+					<t:div styleClass="_btn" style="width:300px; text-align:right">
+						<t:commandButton value="#{sr:text('label.handover.HANDOVER')}"
+							styleClass="_button btn_next"
+							action="#{workflow.controller.handover}" />
+					</t:div>
+				</h:panelGrid>
+			</t:fieldset>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>
+</html>

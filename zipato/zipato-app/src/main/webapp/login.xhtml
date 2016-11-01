@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition template="/META-INF/templates/customerTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:param name="title" value="#{msgs.title_main} - #{msgs.title_edit_dish}"/>
+    <ui:define name="content">
+        <h2><h:outputText value="LOGIN"/></h2>
+        <h:messages showDetail="true" showSummary="false"/>
+        <h:form id="form">
+            <h:panelGrid id="grid" columns="2">
+                <h:outputLabel for="name" value="Benutzername:"/>
+                <h:inputText id="name" value="#{sessionBean.user}" size="30"/>
+                 <h:outputLabel for="passwort" value="Passwort:"/>
+                <h:inputSecret redisplay="false" id="passwort" value="#{sessionBean.passwort}" size="30"/>
+            </h:panelGrid>
+            <h:commandButton id="login" action="#{sessionBean.login}" value="einloggen"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

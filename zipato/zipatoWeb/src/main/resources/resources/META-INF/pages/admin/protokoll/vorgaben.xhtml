@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Vorgaben" />
+	<style type="text/css">
+.normalWidth,#commandBar {
+	width: 100em;
+}
+</style>
+	<sr:dataTable value="#{systemEventVorgabenController.events}" id="data"
+		sortColumn="#{systemEventVorgabenController.sort}"
+		sortAscending="#{systemEventVorgabenController.ascending}" var="event"
+		dataScrollerInfo="true">
+
+		<t:column width="80px" style="text-align:center;">
+			<f:facet name="header">
+				<h:outputText value="Protokollieren" />
+			</f:facet>
+			<sr:checkboxField id="protokollieren" value="#{event.protokollieren}"
+				render="data" readonly="#{event.pruefen or workflow.readonly}" />
+		</t:column>
+
+		<t:column width="80px" style="text-align:center;">
+			<f:facet name="header">
+				<h:outputText value="Prüfen" />
+			</f:facet>
+			<sr:checkboxField id="pruefen" value="#{event.pruefen}"
+				readonly="#{!event.protokollieren or workflow.readonly}"
+				render="data" />
+		</t:column>
+
+		<t:column>
+			<f:facet name="header">
+				<h:outputText value="Modul" />
+			</f:facet>
+			<h:outputText
+				value="#{systemEventVorgabenController.getModuleText(event.modul)}" />
+		</t:column>
+
+		<t:column>
+			<f:facet name="header">
+				<h:outputText value="Dialog" />
+			</f:facet>
+			<h:outputText
+				value="#{systemEventVorgabenController.getDialogText(event.dialog)}" />
+		</t:column>
+
+		<t:column>
+			<f:facet name="header">
+				<h:outputText value="Aktion" />
+
+			</f:facet>
+			<h:outputText
+				value="#{systemEventVorgabenController.getActionText(event.aktion)}" />
+		</t:column>
+
+	</sr:dataTable>
+
+</ui:composition>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="adminVorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.prozess.Lizenzen')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Allgemein.htm#AdminiAllgemein_Lizenzen" />
+
+		<t:fieldset legend="#{sr:text('label.admin.modul.Module')}">
+
+			<h:panelGrid columns="4">
+				<c:forEach items="#{workflow.controller.getModuleList()}"
+					var="module">
+					<c:set var="labeltext" value="label.admin.modul.#{module}" />
+					<sr:textField id="#{module}"
+						value="#{moduleController[module].licenseKey}" size="20"
+						label="#{sr:text(labeltext)}" />
+				</c:forEach>
+			</h:panelGrid>
+
+		</t:fieldset>
+
+	</ui:define>
+	<ui:define name="_saveButton">
+		<t:commandButton styleClass="_button btn_save" actionFor="admin_form"
+			value="#{sr:text('label.save')}" action="#{moduleController.save}" />
+	</ui:define>
+</ui:composition>
+</html>

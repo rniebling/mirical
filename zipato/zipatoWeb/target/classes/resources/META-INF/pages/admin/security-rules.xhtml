@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+
+
+	<ui:define name="_title">
+		<sr:title value="Passwortregeln" />
+	</ui:define>
+
+
+	<ui:define name="_form">
+		<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+			<sr:helpLink id="ink"
+				ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Passwortregeln" />
+		</t:div>
+
+		<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+			<sr:helpLink
+				ref="Administration/Administration Benutzerverwaltung.htm#Passwortregeln" />
+		</t:div>
+
+		<h:panelGrid columns="2">
+			<sr:integerField id="pw_lng_min"
+				value="#{parameterHolder['security.password.length.min'].integerValue}"
+				size="3" label="Mindestlänge" />
+			<sr:integerField id="pw_lng_max"
+				value="#{parameterHolder['security.password.length.max'].integerValue}"
+				size="3" label="Maximallänge" />
+		</h:panelGrid>
+
+		<h:panelGrid>
+			<sr:integerField id="pw_vd_d"
+				value="#{parameterHolder['security.password.valid.days'].integerValue}"
+				size="3" label="Gültigkeit in Tagen" />
+		</h:panelGrid>
+
+		<h:panelGrid>
+			<sr:integerField id="pw_his"
+				value="#{parameterHolder['security.password.history'].integerValue}"
+				size="3" label="Historie in Generationen" />
+		</h:panelGrid>
+
+		<h:panelGrid cellspacing="0" cellpadding="0">
+			<t:fieldset legend="Zusammensetzung nach Kategorien"
+				style="width:520px;">
+				<h:panelGrid columns="4" style="width:100%;">
+
+					<sr:integerField id="pw_cat_upper"
+						value="#{parameterHolder['security.password.cat.upper'].integerValue}"
+						size="3" label="Großbuchstaben" />
+
+					<sr:integerField id="pw_cat_lower"
+						value="#{parameterHolder['security.password.cat.lower'].integerValue}"
+						size="3" label="Kleinbuchstaben" />
+
+					<sr:integerField id="pw_cat_special"
+						value="#{parameterHolder['security.password.cat.special'].integerValue}"
+						size="3" label="Sonderzeichen" />
+
+					<sr:integerField id="pw_cat_digit"
+						value="#{parameterHolder['security.password.cat.digit'].integerValue}"
+						size="3" label="Ziffern" />
+
+				</h:panelGrid>
+			</t:fieldset>
+		</h:panelGrid>
+
+		<t:div styleClass="space" />
+
+		<h:panelGrid cellspacing="0" cellpadding="0">
+			<t:fieldset legend="Passwortregeln anwenden" style="width:520px;">
+				<h:panelGrid>
+					<h:outputText>
+						Um die aktuellen Passwortregeln anzuwenden, können Sie hier alle Passwörter auf ungültig setzen.
+					</h:outputText>
+					<t:div styleClass="space" />
+					<t:div styleClass="_btn">
+						<sr:mdCommandButton id="rpa" value="AUSFÜHREN"
+							buttonStyleClass="btn_login" disabled="#{workflow.readonly}"
+							backingbean="#{pc}" action="resetPasswords"
+							mbtitle="Passwörter ungültig setzen?"
+							mbmessage='Achtung: Alle Passwörter werden ungültig gesetzt. Die Benutzer müssen sich dann bei der nächsten Anmeldung ein neues Passwort vergeben. (Ihr eigenes Passwort wird nicht verändert)' />
+
+					</t:div>
+					<t:div styleClass="space" />
+				</h:panelGrid>
+			</t:fieldset>
+		</h:panelGrid>
+
+		<t:div styleClass="space-wide" />
+
+		<h:panelGrid columns="2">
+			<h:outputText>
+				<p style="text-decoration: underline;">Hinweis:</p>
+			</h:outputText>
+			<h:outputText>
+				<p style="margin-left: 4px;">
+					Die Anzahl der fehlerhaften Anmeldungen wird protokolliert und
+					führt zu einer temporären Sperre des jeweiligen Zugangs.<br /> (x
+					Fehlversuche => Zugang wird für 2 * x Sekunden gesperrt)
+				</p>
+			</h:outputText>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>
+
+</html>

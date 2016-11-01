@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Mandant" />
+
+	<h:panelGrid columns="3">
+		<sr:textField id="kurzname" value="#{pc.value.kurzname}"
+			maxlength="20" size="15"
+			label="#{sr:text('label.admin.mandant.kurzname')}" required="true" />
+
+		<sr:textField id="name" value="#{pc.value.name}" maxlength="200"
+			size="80" label="#{sr:text('label.admin.mandant.name')}"
+			required="true" />
+
+		<t:div>
+			<sr:comboboxField id="rf"
+				rendered="#{!sr:module('Einfache-Administration')}"
+				value="#{pc.value.rechtsform}"
+				items="#{enumTypeUncapitalize['de.subito.sunrise.model.RechtsformMandant']}"
+				label="#{sr:text('label.admin.mandant.rechtsform')}"
+				disabled="#{pc.value.gesetzlicheVertreter != null and pc.value.gesetzlicheVertreter.size() &gt; 0}">
+				<p:ajax event="change" listener="#{workflow.compute}"
+					update="daten_gvs" />
+			</sr:comboboxField>
+		</t:div>
+
+	</h:panelGrid>
+
+	<h:panelGrid rendered="#{!sr:module('Einfache-Administration')}">
+		<sr:textField id="mandant_strasse" value="#{pc.value.adresse.strasse}"
+			maxlength="40" size="40"
+			label="#{sr:text('label.admin.mandant.strasse')}" />
+
+		<sr:plzOrt id="mpo" value="#{pc.value.adresse}" ortSize="40"
+			labelPlz="#{sr:text('label.admin.mandant.plz')}"
+			labelOrt="#{sr:text('label.admin.mandant.ort')}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="2"
+		rendered="#{!sr:module('Einfache-Administration')}">
+
+		<sr:textField id="mandant_plz_postfach"
+			value="#{pc.value.plzPostfach}" size="6" maxlength="5"
+			label="#{sr:text('label.admin.mandant.plzPostfach')}" />
+
+		<sr:textField id="mandant_postfach" value="#{pc.value.postfach}"
+			size="10" label="#{sr:text('label.admin.mandant.postfach')}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="3">
+		<t:div>
+			<h:panelGrid columns="2" cellspacing="0" cellpadding="0"
+				rendered="#{!sr:module('Einfache-Administration')}">
+				<sr:textField id="mandant_telefon" value="#{pc.value.telefon}"
+					size="20" maxlength="25"
+					label="#{sr:text('label.admin.mandant.telefon')}" />
+				<sr:textField id="mandant_telefax" value="#{pc.value.telefax}"
+					size="20" maxlength="25"
+					label="#{sr:text('label.admin.mandant.telefax')}" />
+			</h:panelGrid>
+		</t:div>
+
+		<sr:textField id="mandant_email" value="#{pc.value.email}" size="30"
+			maxlength="40" rendered="#{!sr:module('Einfache-Administration')}"
+			label="#{sr:text('label.admin.mandant.email')}" />
+
+		<t:div>
+			<sr:textField id="mandant_internetadr"
+				rendered="#{!sr:module('Einfache-Administration')}"
+				value="#{pc.value.internetAdresse}" size="30" maxlength="200"
+				label="#{sr:text('label.internetadresse')}" />
+		</t:div>
+	</h:panelGrid>
+
+	<t:div rendered="#{!sr:module('Inkasso')}">
+		<h:panelGrid columns="3">
+			<h:panelGrid columns="3" cellspacing="0" cellpadding="0">
+				<sr:textField id="mandant_blz" value="#{pc.value.bankleitzahl}"
+					size="8" maxlength="8" required="true"
+					label="#{sr:text('label.admin.mandant.blz')}" />
+
+				<t:div>
+					<sr:textField id="mandant_pruefziffernverfahren"
+						value="#{pc.value.pruefziffernverfahren}" size="2" maxlength="2"
+						rendered="#{!sr:module('Einfache-Administration')}"
+						label="#{sr:text('label.admin.mandant.pruefziffernverfahren')}" />
+				</t:div>
+			</h:panelGrid>
+
+			<sr:textField id="mandant_bic" value="#{pc.value.bic}" maxlength="11"
+				size="14" label="#{sr:text('label.admin.mandant.bic')}"
+				required="true" />
+		</h:panelGrid>
+	</t:div>
+
+
+	<h:panelGrid columns="4"
+		rendered="#{!sr:module('Einfache-Administration')}">
+		<sr:textField id="mandant_ustid" value="#{pc.value.umsatzsteuerId}"
+			size="30" maxlength="30"
+			label="#{sr:text('label.admin.mandant.umsatzsteuerid')}" />
+
+		<t:div>
+			<sr:checkboxField id="vost" value="#{pc.value.vorsteuerabzug}"
+				rendered="#{sr:module('Inkasso')}"
+				label="Mandant ist vorsteuerabzugsberechtigt" />
+		</t:div>
+
+		<t:div>
+			<sr:textField id="sepaGlaeubigerId"
+				value="#{pc.value.sepaGlaeubigerId}" maxlength="35" size="30"
+				rendered="#{sr:module('FMM-Lastschriften') or sr:module('Online-Konsumentenkredit') }"
+				label="#{sr:text('label.admin.mandant.sepaGlaeubigerId')}" />
+		</t:div>
+
+		<t:div>
+			<sr:textField id="mandant_institutsnummer"
+				rendered="#{moduleManager.isEnabled('Sparkasse')}"
+				value="#{pc.institutsnummer}" size="3" maxlength="3"
+				label="Institutsnummer" />
+		</t:div>
+	</h:panelGrid>
+
+	<t:div styleClass="space"
+		rendered="#{!sr:module('Einfache-Administration')}" />
+
+	<t:div id="daten_gvs"
+		rendered="#{!sr:module('Einfache-Administration')}">
+
+		<t:div id="div_tabgvs" rendered="#{pc.value.rechtsform!= null}">
+
+			<t:fieldset legend="Gesetzliche Vertreter des Mandanten">
+
+				<t:div rendered="#{sr:module('SFDK')}">
+					<sr:textField id="dokvertretung" value="#{pc.value.dokVertretung}"
+						size="140" maxlength="100"
+						label="#{sr:text('label.admin.mandant.dokvertretung')}" />
+
+					<t:div styleClass="space" />
+				</t:div>
+
+				<sr:dataTable id="dtnp" value="#{pc.value.gesetzlicheVertreter}"
+					dataScrollerInfo="true" var="bean"
+					deleteMessage="Gesetzlicher Vertreter löschen?"
+					deleteReRender="aktgvDet,rf"
+					deleteAction="removeGesetzlicherVertreter">
+
+					<t:column headerstyle="width:18px;">
+						<sr:iconActionOpenClose target="#{pc.aktGesetzlicherVertreter}"
+							value="#{bean}" render="#{p:component('aktgvDet')} dtnp" />
+					</t:column>
+
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.vertretungsverhaeltnis')}" />
+						</f:facet>
+
+						<t:commandLink>
+							<h:outputText value="#{enumText[bean.gesetzlicheVertreterTyp]}" />
+							<f:setPropertyActionListener
+								target="#{pc.aktGesetzlicherVertreter}" value="#{bean}" />
+						</t:commandLink>
+					</t:column>
+
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.namebezeichnung')}" />
+						</f:facet>
+						<t:commandLink>
+							<h:outputText value="#{bean.name}" />
+							<f:setPropertyActionListener
+								target="#{pc.aktGesetzlicherVertreter}" value="#{bean}" />
+						</t:commandLink>
+					</t:column>
+
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.strasse')}" />
+						</f:facet>
+						<h:outputText value="#{bean.adresse.strasse}" />
+					</t:column>
+
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.plz')}" />
+						</f:facet>
+						<h:outputText value="#{bean.adresse.plz}" />
+					</t:column>
+
+					<t:column>
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.ort')}" />
+						</f:facet>
+						<h:outputText value="#{bean.adresse.ort}" />
+					</t:column>
+
+					<t:column headerstyle="width:18px;">
+						<sr:iconActionRemove tableId="dtnp">
+							<f:setPropertyActionListener
+								target="#{pc.aktGesetzlicherVertreterLoesch}" value="#{bean}" />
+						</sr:iconActionRemove>
+					</t:column>
+
+				</sr:dataTable>
+				<t:div styleClass="_btn">
+					<t:commandButton styleClass="_button btn_new"
+						value="#{sr:text('label.add')}" disabled="#{workflow.readonly}"
+						action="#{pc.addNewGesetzlicherVertreter}" />
+				</t:div>
+
+			</t:fieldset>
+		</t:div>
+
+		<t:div id="aktgvDet">
+			<t:div
+				rendered="#{pc.aktGesetzlicherVertreter != null and !sr:module('Einfache-Administration')}">
+
+				<h:panelGrid columns="3" cellspacing="0" cellpadding="0">
+
+					<sr:comboboxField id="aktgv_typ" required="true"
+						value="#{pc.aktGesetzlicherVertreter.gesetzlicheVertreterTyp}"
+						items="#{enumType[pc.gvTypFilter]}"
+						label="#{sr:text('label.vertretungsverhaeltnis')}" render="dtnp" />
+
+					<sr:textField id="aktgv_name" required="true"
+						value="#{pc.aktGesetzlicherVertreter.name}" maxlength="80"
+						size="46" label="#{sr:text('label.namebezeichnung')}"
+						render="dtnp" />
+
+					<t:div />
+
+					<sr:textField id="aktgv_str"
+						value="#{pc.aktGesetzlicherVertreter.adresse.strasse}"
+						maxlength="80" size="46"
+						label="#{sr:text('label.admin.mandant.strasse')}" render="dtnp" />
+
+					<sr:plzOrt id="aktgv_plzort"
+						value="#{pc.aktGesetzlicherVertreter.adresse}"
+						labelPlz="#{sr:text('label.plz')}"
+						labelOrt="#{sr:text('label.ort')}" render="dtnp" />
+
+					<t:div />
+				</h:panelGrid>
+
+				<h:panelGrid cellspacing="0" cellpadding="0">
+					<sr:comboboxField id="aktgv_land"
+						value="#{pc.aktGesetzlicherVertreter.adresse.land}"
+						items="#{enumTypeSorted['de.subito.sunrise.model.Laendercode']}"
+						label="#{sr:text('label.land')}" render="dtnp" />
+				</h:panelGrid>
+			</t:div>
+		</t:div>
+
+	</t:div>
+</ui:composition>
+</html>

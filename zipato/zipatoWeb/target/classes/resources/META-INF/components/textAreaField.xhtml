@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+	<c:if test="#{charCounter == null}">
+		<c:set var="charCounter" value="false" />
+	</c:if>
+
+	<t:div styleClass="fieldBox" id="#{id}" rendered="#{rendered}">
+		<t:inputTextarea id="input_#{id}" value="#{value}"
+			charCounter="#{charCounter}" maxlength="#{maxlength}"
+			readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+			rows="#{rows}" cols="#{cols}"
+			styleClass="form-control #{component.valid ? '' : 'inputTextError'}"
+			style="#{inputStyle}" label="#{label}"
+			required="#{required and workflow.required}">
+			<sr:dbref />
+
+			<c:if test="#{maxlength != null}">
+				<f:validateLength maximum="#{maxlength}" />
+			</c:if>
+
+			<p:ajax event="blur" listener="#{workflow.compute}"
+				update="#{render}" />
+
+			<c:if test="#{charCounter == 'true'}">
+				<c:set var="outputLabel" value="label_#{id}" />
+
+				<p:ajax event="keyup" ignoreDupResponses="true" delay="200"
+					update="#{outputLabel}" />
+				<p:ajax event="change" ignoreDupResponses="true" delay="200"
+					update="#{outputLabel}" />
+			</c:if>
+		</t:inputTextarea>
+
+		<c:if test="#{charCounter != 'true' and label != null }">
+			<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+				style="#{labelStyle}" />
+		</c:if>
+		<c:if test="#{charCounter == 'true'}">
+			<t:div id="#{outputLabel}">
+				<sr:outputLabel for="#{id}"
+					value="#{textAreaUtils.getLabel(id,label,maxlength)}"
+					required="#{required}"
+					style="#{textAreaUtils.getLabelStyle(id,maxlength,labelStyle)}" />
+			</t:div>
+		</c:if>
+	</t:div>
+
+</ui:component>
+</html>

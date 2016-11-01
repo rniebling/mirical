@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<h:head>
+
+
+	<title><h:outputText value="#{app.title}" /></title>
+
+	<meta name="robots" content="noindex" />
+	<!-- HTTP 1.1 -->
+	<meta http-equiv="Cache-Control"
+		content="no-cache, no-store, must-revalidate" />
+	<!-- HTTP 1.0 -->
+	<meta http-equiv="Pragma" content="no-cache" />
+	<!-- Prevents caching at the Proxy Server -->
+	<meta http-equiv="Expires" content="0" />
+	<!-- Content type and Charset-->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- Other meta data-->
+	<ui:insert name="_meta" />
+
+	<link rel="shortcut icon"
+		href="#{environmentInfo.requestContextPath}/images/favicon.ico" />
+
+
+	<ui:insert name="_htmlHeader" />
+
+	<f:facet name="last">
+		<!-- Stylesheet  -->
+		<link rel="stylesheet" type="text/css"
+			href="#{environmentInfo.requestContextPath}/weblets/css/bootstrap.css" />
+
+		<h:outputText value="&lt;!--[if lt IE 9]&gt;" escape="false" />
+		<script
+			src="#{environmentInfo.requestContextPath}/weblets/css/html5shiv.min.js"></script>
+		<script
+			src="#{environmentInfo.requestContextPath}/weblets/css/respond.min.js"></script>
+		<h:outputText value="&lt;![endif]--&gt;" escape="false" />
+
+		<link rel="stylesheet" type="text/css"
+			href="#{environmentInfo.requestContextPath}/weblets/css/base.css" />
+
+
+		<c:if test="#{userPrefs.resolution == 'HIGH'}">
+			<link rel="stylesheet" type="text/css"
+				href="#{environmentInfo.requestContextPath}/weblets/css/high.css" />
+		</c:if>
+
+		<c:if test="#{userPrefs.resolution == 'WIDE'}">
+			<link rel="stylesheet" type="text/css"
+				href="#{environmentInfo.requestContextPath}/weblets/css/wide.css" />
+		</c:if>
+			
+		<link rel="stylesheet" type="text/css"  media="print"
+			href="#{environmentInfo.requestContextPath}/weblets/css/print.css" />
+
+		<c:if test="#{securityBean.loggedIn and userPrefs.fullscreen}">
+			<link rel="stylesheet" type="text/css"
+				href="#{environmentInfo.requestContextPath}/weblets/css/fullscreen.css" />
+		</c:if>
+
+		<link rel="stylesheet" type="text/css"
+			href="#{environmentInfo.requestContextPath}/weblets/skin/style.css" />
+
+		<h:outputText
+			value="&lt;!--[if IE 6]&gt;&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;#{request.contextPath}/weblets/skin/style-ie6.css&quot; /&gt;&lt;![endif]--&gt;"
+			escape="false" />
+
+		<!-- Javascript -->
+		<script src="#{request.contextPath}/weblets/js/ieUserAgent.js"
+			type="text/javascript"></script>
+
+		<script src="#{request.contextPath}/weblets/js/utils.js"
+			type="text/javascript"></script>
+
+		<script src="#{request.contextPath}/weblets/js/primefacesConfig.js"
+			type="text/javascript"></script>
+
+	</f:facet>
+
+</h:head>
+
+<h:body>
+
+	<script type="text/javascript">
+		if (ieUserAgent.version == "8") {
+			var link = document.createElement("link");
+			link.setAttribute("rel", "stylesheet");
+			link.setAttribute("type", "text/css");
+			link.setAttribute("href",
+					"#{request.contextPath}/weblets/skin/style-ie8.css");
+			document.getElementsByTagName("head")[0].appendChild(link);
+		}
+	</script>
+
+	<ui:insert name="_fullscreen" />
+
+	<t:div id="page" styleClass=" #{containerClass}" forceId="true">
+		<ui:insert name="_header">
+			<div id="header">
+
+				<div id="logo-panel"></div>
+
+				<div id="app-title">
+					<c:if test="#{securityBean.loggedIn}">
+						<h:outputText value="#{parameterHolder['anwendungstitel'].value}" />
+					</c:if>
+				</div>
+
+				<div id="logout-panel">
+					<ui:insert name="_logout">
+						<ui:include src="/logout.xhtml" />
+					</ui:insert>
+				</div>
+			</div>
+
+		</ui:insert>
+
+		<t:div id="content" forceId="true">
+
+			<h:form id="mainForm" enctype="multipart/form-data"
+				autocomplete="#{autocomplete}">
+				<ui:insert name="_content">
+					<table>
+						<tr>
+							<td id="c_left" class=""><c:if
+									test="#{!userPrefs.fullscreen}">
+									<ui:insert name="_local">
+										<c:if test="#{securityBean.loggedIn}">
+											<t:div id="subnavigation_outer" forceId="true">
+												<t:div id="subnavigation">
+													<t:div styleClass="rich-tree"
+														binding="#{menuBuilder.withHome}" />
+												</t:div>
+
+											</t:div>
+											<ui:insert name="_navBottom" />
+											<p class="text-center version">
+												<h:outputText value="v#{pom.version}" />
+												<h:outputText rendered="#{! empty pom.buildNumber}"
+													value="##{pom.buildNumber}" />
+											</p>
+										</c:if>
+									</ui:insert>
+								</c:if></td>
+
+							<td id="c_main" class="">
+								<div class="buttonBar">
+									<ui:insert name="_buttonBar" />
+								</div>
+								<div>
+									<t:div id="main" forceId="true">
+										<ui:insert name="_main" />
+									</t:div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</ui:insert>
+			</h:form>
+
+		</t:div>
+		<!-- end content -->
+
+		<div id="footer">
+			<ui:insert name="_footer">
+
+				<ui:include src="/footer.xhtml" />
+			</ui:insert>
+		</div>
+
+	</t:div>
+	<!-- end page -->
+
+	<!-- After Rendering Javascript -->
+	<script src="#{request.contextPath}/weblets/js/keyMapping.js"
+		type="text/javascript"></script>
+
+	<ui:insert name="_poll">
+		<h:form id="_pf">
+			<t:div id="_pc">
+				<p:poll id="ping" interval="60" update="_pf" />
+			</t:div>
+		</h:form>
+	</ui:insert>
+
+</h:body>
+
+</html>

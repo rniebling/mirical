@@ -1,0 +1,278 @@
+FORM {
+	font-size: 1em;
+	padding: 0px;
+	margin: 0px;
+}
+
+FORM UL {
+	list-style: none;
+	width: 100%;
+	padding: 0px;
+}
+
+FORM LI {
+	margin: 0;
+	padding: 1px 1px 2px 2px;
+}
+
+FORM LI.focused {
+	background-color: #fff7c0 !important;
+}
+
+FORM LI P {
+	clear: both;
+	font-size: 9px;
+	line-height: 13px;
+	color: #444;
+}
+
+FORM [id] LI {
+	display: block;
+}
+
+FORM LI DIV {
+	display: inline-block;
+}
+
+.rich-progress-bar-block {
+	margin: 5px;
+}
+
+.rich-progress-bar-padding {
+	padding: 2px 4px;
+}
+
+.pb-akte-red .rich-progress-bar-completed {
+	background-color: crimson !important;
+	background-image: none !important;
+}
+
+.pb-akte-yellow .rich-progress-bar-completed {
+	background-color: gold !important;
+	background-image: none !important;
+}
+
+.pb-akte-green .rich-progress-bar-completed {
+	background-color: limegreen !important;
+	background-image: none !important;
+}
+
+/* ----- Info, Warning, Errors ----- */
+DIV.Info, DIV.info {
+	border: 1px solid #0b5b27;
+	padding: 2px 4px;
+	margin: 5px 0px 5px 0px;
+	background-color: #aee8b8;
+	color: #0b5b27;
+	-moz-border-radius: 3px; 
+	border-radius: 3px; 
+}
+
+DIV.Warning, DIV.warning, DIV.Warn, DIV.warn {
+	border: 1px solid #feb500;
+	padding: 2px 4px;
+	margin: 5px 0px 5px 0px;
+	background-color: #fff0cc;
+	color: #AF5A15;
+	-moz-border-radius: 3px; 
+	border-radius: 3px; 
+}
+
+DIV.Error {
+	border: 1px solid #e70036;
+	padding: 2px 4px;
+	margin: 5px 0px 5px 0px;
+	background-color: #f4dccc;
+	font-weight: bold;
+	color: #e70036;
+	-moz-border-radius: 3px; 
+	border-radius: 3px; 
+}
+
+DIV.Error LI {
+	color: #e70036;
+}
+
+DIV.Info LI, DIV.Info A {
+	color: #0b5b27;
+}
+
+DIV.Warning LI, DIV.Warning A, DIV.Warn LI, DIV.Warn A {
+	color: #AF5A15;
+}
+
+DIV.Error UL, DIV.Error LI, DIV.Warning UL, DIV.Warning LI, DIV.Warn UL, DIV.Warn LI, DIV.Info UL, DIV.Info LI {
+	padding: 0px;
+	margin: 0px;
+}
+
+.inputTextError,TEXTAREA.error {
+	border: 1px solid #e70036 !important;
+	/*background: #fff;*/
+}
+
+/* ----- REQUIRED ----- */
+.req {
+	font-size: 1em !important;
+	color: #e70036;
+	font-weight: normal;
+	font-family: monospace;
+}
+
+/* ----- Fieldsets ----- */
+FIELDSET {
+	margin: 0px;
+	margin-bottom: 3px;
+	margin-right: 3px;
+	padding: 3px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border: 1px solid #919191;
+	background-color: #fff;
+}
+
+/* Firefox and others, don't apply to IE or it will put a border under each input element */
+LI>FIELDSET,FORM>FIELDSET {
+	border: 1px solid #919191;
+}
+
+LEGEND {
+	margin: 0;
+	color: #505050;
+	font-family: Arial, sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+#formProperties FIELDSET DIV {
+	margin-bottom: 7px;
+}
+
+fieldset P {
+	margin: 10px;
+}
+
+INPUT,TEXTAREA {
+	color: #505050;
+	border: 1px solid #919191;
+	background: #ffffff;
+}
+
+INPUT[type=radio] {
+	border: 0px;
+}
+
+INPUT[type=text],INPUT[type=password],.inputText {
+	border: 1px solid #919191;
+	border-style: solid;
+	border-color: #919191;
+	border-width: 1px;
+	padding: 2px;
+	margin: 1px;
+	margin-bottom: 0px;
+	background: #fff url(images/input-bg.gif) 0 0 repeat-x;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+}
+
+TABLE.dataTable INPUT {
+	margin: 1px;
+}
+
+SELECT {
+	border: 1px solid #919191;
+	color: #505050;
+	padding: 1px;
+	margin: 1px;
+	background: url(images/input-bg.gif) 0 0 repeat-x;
+	background-color: #fff;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+}
+
+SELECT.inputText {
+	border: 1px solid #919191;
+	color: #505050;
+	padding: 1px;
+	margin: 1px;
+	background: url(images/input-bg.gif) 0 0 repeat-x;
+	background-color: #fff;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+}
+
+.inputText SELECT {
+	border: 1px solid #919191;
+	color: #505050;
+	padding: 1px;
+	margin: 1px;
+	background: url(images/input-bg.gif) 0 0 repeat-x;
+	background-color: #fff;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+}
+
+._button {
+	background: #ffffff;
+	color: #505050;
+	font-weight: bold;
+	font-size: 0.85em;
+	font-variant: small-caps;
+	margin-right: 4px;
+	border: 1px solid #919191;
+	font-family: Trebuchet MS;
+	width: 18.5ex;
+}
+
+._btn>INPUT:HOVER {
+	border: 1px solid #e70036;
+	cursor: pointer;
+}
+
+INPUT[type=submit][disabled]._button,INPUT[type=reset][disabled]._button,INPUT[type=button][disabled]._button
+	{
+	color: #919191;
+}
+
+INPUT[type=submit][disabled]._button:HOVER,INPUT[type=reset][disabled]._button:HOVER,INPUT[type=button][disabled]._button:HOVER
+	{
+	border: 1px solid #919191;
+	cursor: default;
+}
+
+INPUT[readonly],SELECT[readonly] {
+	background: #dddddd;
+	background-color: #dddddd;
+}
+
+.readonly {
+	background: #dddddd;
+	background-color: #dddddd;
+}
+
+IMG.icon {
+	border-right: 1px solid #919191;
+	border-top: 1px solid #919191;
+	border-bottom: 1px solid #919191;
+}
+
+INPUT[type=checkbox],.checkbox {
+	padding: 0px;
+	margin: 1px;
+	margin-right: 4px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	border: 0px;
+}
+
+.fieldBox {
+	margin-right: 3px;
+}
+
+.checkbox {
+	margin-right: 3px;
+}
+
+.checkbox label {
+	margin: 1px;	
+}

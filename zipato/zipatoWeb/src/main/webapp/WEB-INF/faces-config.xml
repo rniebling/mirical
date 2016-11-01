@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+	version="1.2">
+	
+	<render-kit>
+		<render-kit-id>HTML_BASIC</render-kit-id>
+		<renderer>
+			<component-family>javax.faces.Command</component-family>
+			<renderer-type>javax.faces.Button</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.HtmlButtonRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Command</component-family>
+			<renderer-type>org.apache.myfaces.Button</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.ext.HtmlButtonRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Command</component-family>
+			<renderer-type>javax.faces.Link</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.HtmlLinkRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Command</component-family>
+			<renderer-type>org.apache.myfaces.Link</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.ext.HtmlLinkRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Panel</component-family>
+			<renderer-type>org.apache.myfaces.TabbedPane</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.HtmlTabbedPaneRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Data</component-family>
+            <renderer-type>org.apache.myfaces.Table</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.HtmlTableRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>javax.faces.Form</component-family>
+			<renderer-type>javax.faces.Form</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.HtmlFormRenderer</renderer-class>
+		</renderer>
+		<renderer>
+			<component-family>org.apache.myfaces.SubForm</component-family>
+			<renderer-type>org.apache.myfaces.SubForm</renderer-type>
+			<renderer-class>de.subito.sunrise.webapp.renderer.SubFormRenderer</renderer-class>
+		</renderer>
+		<renderer>
+            <component-family>javax.faces.Messages</component-family>
+            <renderer-type>org.apache.myfaces.Messages</renderer-type>
+            <renderer-class>de.subito.sunrise.webapp.renderer.ext.HtmlMessagesRenderer</renderer-class>
+        </renderer>
+	</render-kit>
+</faces-config>

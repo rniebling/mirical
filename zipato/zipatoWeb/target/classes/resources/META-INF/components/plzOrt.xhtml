@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{plzLength == null}">
+		<c:set var="plzLength" value="10" />
+	</c:if>
+
+	<c:if test="#{ortSize == null}">
+		<c:set var="ortSize" value="30" />
+	</c:if>
+
+	<c:if test="#{valueChangeListener == null}">
+		<c:set var="valueChangeListener" value="#{workflowState}" />
+	</c:if>
+
+	<c:if test="#{noSearch == null}">
+		<c:set var="noSearch" value="false" />
+	</c:if>
+
+	<c:if test="#{required == null}">
+		<c:set var="required" value="false" />
+	</c:if>
+
+	<!--
+	Bietet die Möglichkeit zur kurzfristigen Deaktivierung der Suche im PlzOrt-Feld ohne die Komponente aus den
+	Oberflächendateien ausbauen zu müssen. Kann nach erfolgter Reparatur der PlzOrt-Komponente wieder entfernt werden.
+	  -->
+	<t:div rendered="#{noSearch}" id="#{id}_noSearch">
+		<h:panelGrid columns="2" id="#{id}_noSearchGrid">
+			<sr:textField value="#{value.plz}" id="#{id}_noSearchPlz" size="6"
+				label="#{labelPlz}" />
+			<sr:textField value="#{value.ort}" id="#{id}_noSearchOrt"
+				label="#{labelOrt}" />
+		</h:panelGrid>
+	</t:div>
+
+	<t:div rendered="#{!noSearch}">
+
+		<h:panelGrid columns="2">
+
+			<t:div id="#{id}_div_plz" styleClass="fieldBox">
+
+				<p:autoComplete id="#{id}_ac_plz" value="#{plzOrtBean.plzOrt}"
+					readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+					completeMethod="#{plzOrtBean.getOrtZuPlz}" var="vorschlag"
+					itemLabel="#{value.plz}" itemValue="#{vorschlag}"
+					minQueryLength="3" maxlength="#{plzLength}" size="6"
+					valueChangeListener="#{valueChangeListener['processValueChange']}"
+					label="#{labelPlz}"
+					inputStyleClass="inputText #{component.valid ? '' : 'inputTextError'}"
+					required="#{required and workflow.required}">
+					<p:column>
+						<h:outputText value="#{vorschlag}" />
+					</p:column>
+					<p:ajax event="itemSelect"
+						update="#{id}_ac_plz #{id}_div_ort #{render}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="change"
+						update="#{id}_ac_plz #{id}_div_ort #{render}"
+						listener="#{plzOrtBean.handleChange}" />
+					<f:attribute value="#{value}" name="adresse" />
+				</p:autoComplete>
+
+				<c:if test="#{labelPlz != null}">
+					<sr:outputLabel for="#{id}_ac_plz" value="#{labelPlz}"
+						required="#{required}" />
+				</c:if>
+
+			</t:div>
+
+			<t:div id="#{id}_div_ort" styleClass="fieldBox">
+
+				<p:autoComplete id="#{id}_ac_ort" value="#{plzOrtBean.plzOrt}"
+					readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+					completeMethod="#{plzOrtBean.getPlzZuOrt}" var="vorschlag"
+					itemLabel="#{value.ort}" label="#{labelOrt}"
+					itemValue="#{vorschlag}" minQueryLength="2" size="#{ortSize}"
+					maxlength="80"
+					inputStyleClass="inputText #{component.valid ? '' : 'inputTextError'}"
+					valueChangeListener="#{valueChangeListener['processValueChange']}"
+					required="#{required and workflow.required}">
+					<p:column>
+						<h:outputText value="#{vorschlag}" />
+					</p:column>
+					<p:ajax event="itemSelect"
+						update="#{id}_ac_ort #{id}_div_plz #{render}"
+						listener="#{plzOrtBean.handleChange}" />
+					<p:ajax event="change"
+						update="#{id}_ac_ort #{id}_div_plz #{render}"
+						listener="#{plzOrtBean.handleChange}" />
+					<f:attribute value="#{value}" name="adresse" />
+				</p:autoComplete>
+				<c:if test="#{labelOrt != null}">
+					<sr:outputLabel for="#{id}_ac_ort" value="#{labelOrt}"
+						required="#{required}" />
+				</c:if>
+
+			</t:div>
+
+		</h:panelGrid>
+
+	</t:div>
+
+</ui:component>
+</html>

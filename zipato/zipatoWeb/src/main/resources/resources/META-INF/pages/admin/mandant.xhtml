@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title
+			value="#{sr:text('label.admin.mandant.Mandant')}#{workflow.value.kurzname}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:panelTabbedPane id="mandant_tabs">
+			<t:panelTab id="mandant_allgemein"
+				label="#{sr:text('label.admin.mandant.Mandant2')}">
+				<ui:include src="mandant/allgemein.xhtml" />
+			</t:panelTab>
+			<t:panelTab id="mandant_filialen"
+				label="#{sr:text('label.mandant.abteilungenfilialen')}">
+				<ui:include src="mandant/filialen.xhtml" />
+			</t:panelTab>
+			<t:panelTab id="mandant_bv"
+				label="#{sr:text('label.bankverbindung')}">
+				<ui:include src="mandant/bankverbindung.xhtml" />
+			</t:panelTab>
+			<c:if test="#{!sr:module('Einfache-Administration')}">
+				<t:panelTab id="mandant_bmp" label="Grafiken">
+					<ui:include src="mandant/logo.xhtml" />
+				</t:panelTab>
+			</c:if>
+			<c:if test="#{sr:module('Online-Konsumentenkredit')}">
+				<t:panelTab id="mandant_kv"
+					label="#{sr:text('label.kontoverwaltung')}">
+					<ui:include src="mandant/uebersicht.xhtml" />
+				</t:panelTab>
+			</c:if>
+
+		</sr:panelTabbedPane>
+
+	</ui:define>
+
+</ui:composition>
+</html>

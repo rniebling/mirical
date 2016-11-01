@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<t:panelGroup id="#{id}group" cellpadding="0" cellspacing="0">
+		<c:if test="#{rendered == null}">
+			<c:set var="rendered" value="true" />
+		</c:if>
+
+		<c:if test="#{cancellabel == null}">
+			<c:set var="cancellabel" value="#{sr:text('label.abbrechen')}" />
+		</c:if>
+
+		<c:if test="#{rows == null}">
+			<c:set var="rows" value="#{userPrefs.listSize}" />
+		</c:if>
+
+		<c:if test="#{styleClass == null}">
+			<c:set var="styleClass" value="dataTable" />
+		</c:if>
+		<c:if test="#{rowClasses == null}">
+			<c:set var="rowClasses" value="odd,even" />
+		</c:if>
+		<c:if test="#{deleteController == null}">
+			<c:set var="deleteController" value="#{workflow.controller}" />
+		</c:if>
+		<c:if test="#{deleteAction == null}">
+			<c:set var="deleteAction" value="remove" />
+		</c:if>
+		<c:if test="#{deleteMessage == null}">
+			<c:set var="deleteMessage"
+				value="#{sr:text('message.delete.record')}" />
+		</c:if>
+		<c:if test="#{renderedIfEmpty == null}">
+			<c:set var="renderedIfEmpty" value="true" />
+		</c:if>
+
+		<p:dataTable id="#{id}" value="#{value}" rows="#{rows}"
+			styleClass="#{styleClass}" style="#{style}"
+			rowStyleClass="#{rowClass}" var="#{var}" paginator="true"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+			>
+			<c:if test="#{sr:isDateModel(value)}">
+				<f:attribute name="first" value="#{value.first}" />
+				<f:attribute name="binding" value="#{value.boundTable}" />
+			</c:if>
+			<c:if test="#{rowKey  != null}">
+				<f:attribute name="rowKey" value="#{rowKey}" />
+			</c:if>
+
+			<sr:setValue methodName="setVar" value="#{var}" />
+
+			<ui:insert />
+		</p:dataTable>
+
+
+		<c:if test="#{dataScrollerInfo == 'true'}">
+			<sr:dataScrollerInfo for="#{id}" />
+		</c:if>
+
+		<p:dialog modal="true" dynamic="true" appendTo="@(body)"
+			widgetVar="#{id}_confirm_delete" width="300" styleClass="dojoDialog"
+			visible="false" minHeight="100">
+			<h:panelGrid columns="1">
+				<h:outputText value="#{deleteMessage}" />
+
+				<h:panelGrid columns="2">
+					<t:div styleClass="_btn">
+						<p:commandButton id="#{id}_ok1" value="#{sr:text('label.ok')}"
+							action="#{deleteController[deleteAction]}"
+							styleClass="_button btn_save" process="@this"
+							oncomplete="PF('#{id}_confirm_delete').hide();"
+							update="#{id}group #{deleteReRender}">
+						</p:commandButton>
+					</t:div>
+
+					<t:div styleClass="_btn">
+						<p:commandButton id="#{id}_cancel1" value="#{cancellabel}"
+							styleClass="_button btn_abort" process="@this"
+							onclick="PF('#{id}_confirm_delete').hide();">
+						</p:commandButton>
+					</t:div>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:dialog>
+	</t:panelGroup>
+</ui:component>
+</html>

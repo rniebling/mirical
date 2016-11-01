@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Bitmaps" />
+
+	<t:fieldset id="logoPreview" legend="Firmenlogo"
+		rendered="#{controller.value.logo != null}">
+
+		<h:panelGrid columns="2">
+
+			<p:graphicImage id="imageDisplayBig" value="#{imageRenderer.image}"
+				width="300">
+				<f:param name="imageId" value="#{controller.value.logo.id}" />
+			</p:graphicImage>
+
+			<sr:mdCommandLink id="del" url="/weblets/icons/delete.gif"
+				disabled="#{workflow.readonly}" backingbean="#{controller}"
+				action="removeLogo" mbtitle="Logo löschen?"
+				mbmessage="Logo löschen?">
+			</sr:mdCommandLink>
+
+		</h:panelGrid>
+	</t:fieldset>
+
+	<t:fieldset legend="Logo hochladen">
+		<t:div rendered="#{!workflow.readonly}">
+			<p:fileUpload id="uploadFile" styleClass="fileUploadInput"
+				fileUploadListener="#{pc.upload}" label="Datei auswählen"
+				uploadLabel="Hochladen" cancelLabel="Abbrechen" mode="advanced"
+				dragDropSupport="true" fileLimit="1" update="uploadFile logoPreview #{p:component('errorBox')}"
+				disabled="#{workflow.readonly}"
+				fileLimitMessage="Die maximale Anzahl zulässiger Dateien wurde überschritten." />
+		</t:div>
+	</t:fieldset>
+
+
+</ui:composition>
+
+</html>

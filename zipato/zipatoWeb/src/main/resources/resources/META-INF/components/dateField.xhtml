@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+	<c:set var="_ro"
+		value="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}" />
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<t:div styleClass="fieldBox calendarField" style="#{style}"
+		rendered="#{rendered}">
+		<c:if test="#{_ro}">
+			<t:inputText id="#{id}" value="#{value}" styleClass="dateField"
+				readonly="true" size="9">
+				<sr:convertDateTime type="date" />
+				<!-- <sr:error/> -->
+			</t:inputText>
+		</c:if>
+
+		<c:if test="#{!_ro}">
+
+			<c:if test="#{direction == null}">
+				<c:set var="direction" value="auto" />
+			</c:if>
+			
+			<c:if test="#{jointPoint == null}">
+				<c:set var="jointPoint" value="bottom-left" />
+			</c:if>
+
+			<c:if test="#{render != null}">
+				<c:set var="update" value="#{id}, #{render}" />
+			</c:if>
+			
+			<c:if test="#{render == null}">
+				<c:set var="update" value="#{id}" />
+			</c:if>
+			
+			<c:if test="#{internalAjax == null}">
+				<c:set var="internalAjax" value="true" />
+			</c:if>
+
+			<p:calendar id="#{id}" value="#{value}" size="9" showOn="button"
+				navigator="true" showButtonPanel="true" styleClass="dateField"
+				pattern="#{sr:text('component.dateField.popupDateFormat')}"
+				locale="#{workflow.locale}" firstWeekDay="0"
+				required="#{required and workflow.required}">
+				<c:if test="#{binding != null}">
+					<f:attribute name="binding" value="#{workflow.controller[binding]}" />
+				</c:if>
+				<sr:dbref />
+				<!-- <sr:error/> -->
+				<ui:insert />
+				<c:if test="#{internalAjax}">
+					<p:ajax event="change" listener="#{workflow.compute}"
+						update="#{update} #{p:component('errorBox')}" />
+					<p:ajax event="dateSelect" listener="#{workflow.compute}"
+						update="#{update} #{p:component('errorBox')}" />
+				</c:if>
+				<sr:convertDateTime type="date"
+					pattern="#{sr:text('component.dateField.popupDateFormat')}" />
+			</p:calendar>
+		</c:if>
+		<c:if test="#{label != null }">
+			<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+				style="#{labelStyle}" />
+		</c:if>
+	</t:div>
+
+</ui:component>
+</html>

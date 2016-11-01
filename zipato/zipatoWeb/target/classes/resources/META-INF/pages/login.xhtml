@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="template.xhtml">
+
+	<ui:define name="_content">
+
+		<div id="login-panel">
+
+			<c:if test="${!securityBean.loggedIn}">
+
+				<sr:title value="#{sr:text('label.login.anmeldung')}"
+					styleClass="loginBox" />
+				<t:div styleClass="contentBoxInner loginBox">
+
+
+					<h:panelGrid columns="1" style="width:100%;">
+
+						<h:panelGroup styleClass="messageBox"
+							rendered="#{! empty facesContext.maximumSeverity}">
+							<t:div styleClass="#{facesContext.maximumSeverity}">
+								<t:messages showDetail="true" showSummary="false"
+									replaceIdWithLabel="true" errorClass="Error" infoClass="Info" />
+							</t:div>
+						</h:panelGroup>
+						<h:panelGroup styleClass="messageBox"
+							rendered="#{securityBean.lastError != null}">
+							<t:div styleClass="error">
+								<h:outputText value="#{sr:text(securityBean.lastError)}" />
+							</t:div>
+						</h:panelGroup>
+
+						<t:div>
+							<t:inputText id="login_username" styleClass="inputText"
+								style="width:120px;" value="#{securityBean.username}"
+								maxlength="80" size="20" required="true">
+								<sr:error />
+							</t:inputText>
+							<sr:outputLabel for="login_username"
+								value="#{sr:text('label.login.username')}" required="true" />
+						</t:div>
+						<t:div>
+							<t:inputSecret id="login_password" styleClass="inputText"
+								style="width:120px;" value="#{securityBean.password}"
+								maxlength="80" size="20" redisplay="true">
+								<sr:error />
+							</t:inputSecret>
+							<sr:outputLabel for="login_password"
+								value="#{sr:text('label.login.password')}" />
+						</t:div>
+
+						<t:div rendered="#{moduleManager.isEnabled('RememberMe')}">
+							<input type="checkbox" name="_spring_security_remember_me" />
+							<h:outputText value="Ich möchte eingeloggt bleiben." />
+						</t:div>
+
+						<t:div rendered="#{dataSourceController.showDataSources}">
+							<t:selectOneMenu id="select_dataSource" styleClass="inputText"
+								value="#{dataSourceController.dataSource}">
+								<f:selectItems value="#{dataSourceController.dataSources}" />
+								<sr:error />
+							</t:selectOneMenu>
+							<sr:outputLabel for="select_dataSource"
+								value="#{sr:text('label.login.dataSource')}" required="true" />
+						</t:div>
+
+						<h:panelGrid columns="2" columnClasses="versionColumn"
+							style="width:100%;">
+
+							<t:div>
+								<small><h:outputText
+										value="#{sr:text('label.supportedBrowsers')}" /><br /> <h:outputText
+										value="Internet Explorer &gt;= 9.0" /><br /> <h:outputText
+										value="Firefox &gt;= 38.2.1" /> </small>
+							</t:div>
+
+							<t:div style="text-align:right;">
+								<t:div styleClass="_btn">
+									<h:commandButton id="login" action="#{securityBean.login}"
+										styleClass="_button btn_login" processIds="*"
+										value="#{sr:text('label.login.login')}" />
+								</t:div>
+							</t:div>
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+				</t:div>
+				<noscript>
+					<div
+						style="margin-top: 10px; padding: 10px; width: 100ex; background-color: white; border: 1px solid red;">
+						Es wurde festgestellt, dass bei Ihren Browser <b>JavaScript</b>
+						nicht aktiviert ist.<br /> Damit Sie diese Anwendung nutzen
+						können, müssen Sie JavaScript aktivieren.<br />
+					</div>
+				</noscript>
+			</c:if>
+
+		</div>
+
+		<c:if test="${securityBean.loggedIn}">
+
+			<sr:title value="#{sr:text('label.bitteWaehlenSieEinenVorgangAus')}" />
+
+			<t:div id="contentBox" forceId="true"
+				styleClass="#{fullscreen?'':'contentBoxHeight'}">
+				<t:div styleClass="contentBoxInner">
+
+					<ui:include src="/pages/inc-favorites.xhtml" />
+					<ui:include src="inc-begruessungstext.xhtml" />
+				</t:div>
+			</t:div>
+
+		</c:if>
+
+	</ui:define>
+</ui:composition>
+
+</html>

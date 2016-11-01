@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<style type="text/css">
+			<!--
+			BODY, P, TD {
+				font-family: Arial, sans-serif;
+				font-size:12px;
+			}
+			H1,H2,H3,H4 {
+				font-family: Arial, sans-serif;
+			}
+			-->
+		</style>
+	</head>
+<body>
+<h3>Es wurde ein Problem festgestellt.</h3>
+<p>&nbsp;</p>
+<h4 style="color:red;">${message}</h4>
+<p>&nbsp;</p>
+<table style="border:1px solid silver;">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>Server</h4></td></tr>
+<tr><td width="120px">Name:		</td><td width="600px">${localName}</td></tr>
+<tr><td>IP:			</td><td>${localAddr}</td></tr>
+<tr><td>Port:		</td><td>${localPort}</td></tr>
+<tr><td>Request:	</td><td>${requestUri}</td></tr>
+</table>
+<p>&nbsp;</p>
+<table style="border:1px solid silver;">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>Client</h4></td></tr>
+<tr><td width="120px">Name:		</td><td width="600px">${remoteName}</td></tr>
+<tr><td>IP:			</td><td>${remoteAddr}</td></tr>
+<tr><td>Port:		</td><td>${remotePort}</td></tr>
+<tr><td>User-Agent:	</td><td>${userAgent}</td></tr>
+<tr><td>Connection:	</td><td>${connection}</td></tr>
+<tr><td>Cookies:	</td><td>${cookies}</td></tr>
+<tr><td>Referer:	</td><td>${referer}</td></tr>
+<tr><td>User:		</td><td>${username}</td></tr>
+</table>
+<p>&nbsp;</p>
+<table style="border:1px solid silver;">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>FactoryBanking</h4></td></tr>
+<tr><td width="120px">Version:	</td><td width="600px">${pomVersion} ${pomBuildNumber}</td></tr>
+<tr><td>Data Source:</td><td>${dataSource}</td></tr>
+<tr><td>JDBC Driver:</td><td>${jdbcDriver}</td></tr>
+<tr><td>JDBC URL:	</td><td>${jdbcUrl}</td></tr>
+<tr><td>JDBC User:	</td><td>${jdbcUser}</td></tr>
+</table>
+<p>&nbsp;</p>
+
+<table style="border:1px solid silver;" width="100%">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>Stacktrace</h4></td></tr>
+<tr><td width="120px">Message: </td><td width="600px">${exception.message}</td></tr>
+<tr><td colspan="2"><pre>${stackTrace}</pre></td></tr>
+</table>
+<p>&nbsp;</p>
+
+<table style="border:1px solid silver;">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>System Properties</h4></td></tr>
+#foreach( ${key} in ${systemProperties.keySet()} )
+    <tr><td>${key}:	</td><td>${systemProperties.get(${key})}</td></tr>
+#end
+</table>
+<p>&nbsp;</p>
+
+<table style="border:1px solid silver;">
+<tr><td colspan="2" bgcolor="#A6CBAF"><h4>System Environment</h4></td></tr>
+#foreach( ${key} in ${env.keySet()} )
+    <tr><td>${key}:	</td><td>${env.get(${key})}</td></tr>
+#end
+</table>
+<p>&nbsp;</p>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div styleClass="space" />
+
+	<p:dataGrid id="favs" value="#{favoritesController.checkedFavorites}"
+		var="aktWrap" columns="5" styleClass="favGrid" emptyMessage="Es wurden noch keine Favoriten festgelegt.">
+
+		<t:div rendered="#{favoritesController.visible(aktWrap.template)}">
+			<p:panel styleClass="favItem">
+				<h:panelGrid style="width:100%" columnClasses="center">
+					<h:commandLink
+						action="#{favoritesController.gotoFav(aktWrap.template)}">
+						<f:ajax />
+						<c:set var="resourceName" value="#{aktWrap.template.icon}" />
+						<h:graphicImage alt="Template icon"
+							value="#{aktWrap.template.icon}" />
+					</h:commandLink>
+					<t:div>
+						<h:commandLink styleClass="title" width="100px;"
+							action="#{favoritesController.gotoFav(aktWrap.template)}">
+							<h:outputText value="#{aktWrap.title}" escape="false" />
+						</h:commandLink>
+						<h:outputText styleClass="redFont"
+							rendered="#{favoritesController.countable(aktWrap.template)}"
+							value=" [#{favoritesController.count(aktWrap.template)}]" />
+					</t:div>
+
+				</h:panelGrid>
+			</p:panel>
+
+		</t:div>
+
+	</p:dataGrid>
+
+</ui:composition>
+</html>

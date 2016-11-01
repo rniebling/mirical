@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="Pausenbegründungen" />
+	</ui:define>
+
+	<ui:define name="_form">
+		<sr:helpLink ref="" />
+
+		<sr:checkboxField id="pausenAktiviert"
+			value="#{parameterHolder['ctrl.parameter.pausenAktiviert'].booleanValue}"
+			label="Pausen-Funktion aktivieren">
+			<p:ajax event="click" listener="#{parameterHolder.save}" />
+		</sr:checkboxField>
+
+		<t:div styleClass="space-wide" />
+
+		<t:fieldset id="liste">
+
+			<sr:dataTable id="data" var="bean" style="width:400px;"
+				deleteMessage="Begründung löschen ?" deleteReRender="data,edit"
+				value="#{controller.dataModel}">
+
+				<t:column headerstyle="width:18px;">
+					<sr:iconActionOpenClose target="#{controller.value}"
+						alt="Öffnen/Schließen" title="Begründung Öffnen/Schließen"
+						value="#{bean}" render="data edit">
+					</sr:iconActionOpenClose>
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Begründung" />
+					</f:facet>
+					<h:outputText value="#{bean.begruendung}" />
+				</t:column>
+
+				<t:column headerstyle="width:18px;" style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="" />
+					</f:facet>
+					<p:commandLink id="removeBegLink" disabled="#{workflow.readonly}"
+						process="@this" onclick="PF('data_confirm_delete').show();">
+						<h:graphicImage alt="Löschen" value="/weblets/icons/delete.gif"></h:graphicImage>
+						<f:setPropertyActionListener target="#{controller.value}"
+							value="#{bean}"></f:setPropertyActionListener>
+					</p:commandLink>
+				</t:column>
+
+			</sr:dataTable>
+
+			<t:div styleClass="_btn">
+				<t:commandButton id="beg_neu_action" styleClass="_button btn_new"
+					value="NEU" action="#{controller.create}" render="data edit" />
+			</t:div>
+
+		</t:fieldset>
+
+		<t:div styleClass="space" />
+
+		<t:div id="edit">
+			<t:div rendered="#{controller.value != null}">
+				<h:panelGrid>
+					<sr:textField id="begruendung"
+						value="#{controller.value.begruendung}" maxlength="200" size="120"
+						label="Begründung" />
+				</h:panelGrid>
+			</t:div>
+		</t:div>
+
+	</ui:define>
+</ui:composition>
+
+</html>

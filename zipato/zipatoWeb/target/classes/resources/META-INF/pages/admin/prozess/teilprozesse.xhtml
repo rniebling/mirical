@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Teilprozesse" />
+
+	<rich:dragIndicator xmlns:rich="http://richfaces.org/rich"
+		id="ind_baustein">
+		<f:facet name="single">
+			<h:panelGrid columns="2">
+				<p:outputPanel styleClass="prozessElement"
+					style="{style};min-width: 185px;" layout="block">
+
+					<h:panelGrid  columns="2"
+						columnClasses="left,right" style="width:100%;">
+						<h:outputText value="{label}" />
+							{icon}
+						</h:panelGrid>
+
+				</p:outputPanel>
+					{marker}
+				</h:panelGrid>
+		</f:facet>
+	</rich:dragIndicator>
+
+	<h:panelGrid columns="3" style="width:100%;"
+		columnClasses="prozessphases,none,prozesstree">
+		<h:panelGrid cellspacing="0" cellpadding="0">
+
+			<rich:panel xmlns:rich="http://richfaces.org/rich"
+				style="width:185px" styleClass="odd">
+				<f:facet name="header">
+					<t:outputText
+						value="#{sr:text('label.admin.prozess.teilprozesse.Teilprozesse')}" />
+				</f:facet>
+				<rich:dropSupport id="remove" acceptedTypes="PHASE"
+					dropValue="phase" dropListener="#{workflow.controller.removePhase}"
+					render="processtree">
+				</rich:dropSupport>
+
+				<t:dataTable id="src" value="#{workflow.controller.defPhases}"
+					var="phase" style="width:100%" cellspacing="0" cellpadding="0">
+					<t:column>
+						<p:outputPanel styleClass="prozessElement"
+							style="#{sr:workflowPhaseStyle(phase)}" layout="block">
+
+							<h:panelGrid  columns="2"
+								columnClasses="left,right" style="width:100%;">
+								<t:outputText value="#{phase.name}" />
+								<h:graphicImage alt=""
+									style="margin:0px 0px 0px 5px;padding:0px;"
+									value="/weblets/icons/threadgroup_obj.gif" />
+							</h:panelGrid>
+
+							<rich:dragSupport 
+								dragType="ADD_PHASE" dragValue="#{phase}"
+								grabbingCursors="crosshair" dragIndicator="ind_baustein">
+								<rich:dndParam name="label" value="#{phase.name}" />
+								<rich:dndParam name="icon">
+									<h:graphicImage alt=""
+										style="margin:0px 0px 0px 5px;padding:0px;"
+										value="/weblets/icons/threadgroup_obj.gif" />
+								</rich:dndParam>
+								<rich:dndParam name="style" value="background-color: white" />
+							</rich:dragSupport>
+						</p:outputPanel>
+					</t:column>
+				</t:dataTable>
+
+			</rich:panel>
+
+			<t:div styleClass="space" />
+
+			<rich:panel xmlns:rich="http://richfaces.org/rich"
+				style="width:185px" styleClass="odd">
+				<f:facet name="header">
+					<t:outputText
+						value="#{sr:text('label.admin.prozess.teilprozesse.Sonstiges')}" />
+				</f:facet>
+
+				<p:outputPanel styleClass="prozessElement"
+					style="background-color:#AFD1FD;" layout="block">
+					<t:htmlTag  value="center">
+						<h:panelGrid columns="2" columnClasses="left,right"
+							style="width:100%;">
+							<h:outputText
+								value="#{sr:text('label.admin.teilprozess.entscheidung')}" />
+							<h:graphicImage alt=""
+								style="margin:0px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/decision2.gif" />
+						</h:panelGrid>
+					</t:htmlTag>
+					<rich:dragSupport 
+						dragType="ADD_PHASE" ignoreDupResponses="true"
+						dragValue="#{controller.createDecision()}"
+						grabbingCursors="crosshair" dragIndicator="ind_baustein">
+						<rich:dndParam name="label"
+							value="#{sr:text('label.admin.teilprozess.entscheidung')}" />
+						<rich:dndParam name="icon">
+							<h:graphicImage alt=""
+								style="margin:0px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/decision2.gif" />
+						</rich:dndParam>
+						<rich:dndParam name="style" value="background-color: #AFD1FD" />
+					</rich:dragSupport>
+				</p:outputPanel>
+
+				<p:outputPanel styleClass="prozessElement"
+					style="margin:1px;background-color:#FFBFBF;" layout="block">
+					<t:htmlTag  value="center">
+						<h:panelGrid columns="2" columnClasses="left,right"
+							style="width:100%;">
+							<t:outputText
+								value="#{sr:text('label.admin.teilprozess.rollenwechsel')}" />
+							<h:graphicImage alt=""
+								style="margin:1px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/role_obj.gif" />
+						</h:panelGrid>
+					</t:htmlTag>
+					<rich:dragSupport 
+						dragType="ADD_PHASE"
+						dragValue="#{workflow.controller.createRole()}"
+						grabbingCursors="crosshair" dragIndicator="ind_baustein">
+						<rich:dndParam name="label"
+							value="#{sr:text('label.admin.teilprozess.rollenwechsel')}" />
+						<rich:dndParam name="icon">
+							<h:graphicImage alt=""
+								style="margin:0px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/role_obj.gif" />
+						</rich:dndParam>
+						<rich:dndParam name="style" value="background-color: #FFBFBF" />
+					</rich:dragSupport>
+				</p:outputPanel>
+
+				<p:outputPanel styleClass="prozessElement"
+					style="margin:1px;background-color:#EFBF86;" layout="block">
+					<t:htmlTag  value="center">
+						<h:panelGrid columns="2" columnClasses="left,right"
+							style="width:100%;">
+							<t:outputText
+								value="#{sr:text('label.admin.teilprozess.referenz')}" />
+							<h:graphicImage alt=""
+								style="margin:1px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/workflow.gif" />
+						</h:panelGrid>
+					</t:htmlTag>
+					<rich:dragSupport 
+						dragType="ADD_PHASE" dragValue="#{controller.createReferenz()}"
+						grabbingCursors="crosshair" dragIndicator="ind_baustein">
+						<rich:dndParam name="label"
+							value="#{sr:text('label.admin.teilprozess.referenz')}" />
+						<rich:dndParam name="icon">
+							<h:graphicImage alt=""
+								style="margin:0px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/workflow.gif" />
+						</rich:dndParam>
+						<rich:dndParam name="style" value="background-color: #EFBF86" />
+					</rich:dragSupport>
+				</p:outputPanel>
+
+				<p:outputPanel styleClass="prozessElement"
+					style="margin:1px;background-color:#CCFF99;" layout="block">
+					<t:htmlTag  value="center">
+						<h:panelGrid columns="2" columnClasses="left,right"
+							style="width:100%;">
+							<t:outputText value="SLA" />
+							<h:graphicImage alt=""
+								style="margin:1px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/time_obj.gif" />
+						</h:panelGrid>
+					</t:htmlTag>
+					<rich:dragSupport 
+						dragType="ADD_PHASE" dragValue="#{controller.createSla()}"
+						grabbingCursors="crosshair" dragIndicator="ind_baustein">
+						<rich:dndParam name="label" value="SLA" />
+						<rich:dndParam name="icon">
+							<h:graphicImage alt=""
+								style="margin:0px 0px 0px 5px;padding:0px;"
+								value="/weblets/icons/time_obj.gif" />
+						</rich:dndParam>
+						<rich:dndParam name="style" value="background-color: #CCFF99" />
+					</rich:dragSupport>
+				</p:outputPanel>
+
+			</rich:panel>
+
+		</h:panelGrid>
+
+		<t:div styleClass="space-small" />
+
+		<h:panelGrid id="processtree" style="width:100%;" cellspacing="0"
+			cellpadding="0">
+			<rich:panel xmlns:rich="http://richfaces.org/rich"
+				style="width:100%;" styleClass="odd">
+				<t:htmlTag value="center">
+					<p:outputPanel styleClass="prozessElement"
+						style="background-color:#A6CBAF;width:80px;" layout="block">
+						<t:outputText 
+							value="#{sr:text('label.admin.prozess.teilprozesse.Start')}"></t:outputText>
+						<h:graphicImage  alt=""
+							style="margin:0px 0px 0px 5px;padding:0px;"
+							value="/weblets/icons/start.gif"></h:graphicImage>
+					</p:outputPanel>
+					<t:div styleClass="dropProzessZone">
+						<p:outputPanel styleClass="dropProzessZoneInner" layout="block">
+							<rich:dropSupport  id="add"
+								acceptedTypes="PHASE,ADD_PHASE"
+								dropListener="#{workflow.controller.addPhase}"
+								render="processtree"></rich:dropSupport>
+
+							<!-- Context-Menu -->
+							<rich:contextMenu 
+								event="contextmenu">
+								<rich:menuGroup value="Einfügen" icon="/weblets/icons/add.gif">
+									<c:forEach items="#{workflow.controller.defPhases}" var="dp">
+										<rich:menuItem value="#{dp.name}"
+											icon="/weblets/icons/threadgroup_obj.gif"
+											action="#{pc.addPhase(null, dp, false)}" />
+									</c:forEach>
+									<rich:menuSeparator />
+									<rich:menuItem value="Entscheidung"
+										icon="/weblets/icons/decision2.gif"
+										action="#{pc.addDecision(null, false)}" />
+									<rich:menuItem value="Rollenwechsel"
+										icon="/weblets/icons/role_obj.gif"
+										action="#{pc.addRole(null, false)}" />
+									<rich:menuItem value="Prozessaufruf"
+										icon="/weblets/icons/workflow.gif"
+										action="#{pc.addReferenz(null, false)}" />
+									<rich:menuItem value="SLA" icon="/weblets/icons/time_obj.gif"
+										action="#{pc.addSla(null, false)}" />
+								</rich:menuGroup>
+							</rich:contextMenu>
+						</p:outputPanel>
+					</t:div>
+
+					<ui:include src="inc-process-phase.xhtml">
+						<ui:param name="phase" value="#{controller.value.startPhase}" />
+					</ui:include>
+
+					<p:outputPanel styleClass="prozessElement"
+						style="background-color:#DFB5DE;width:80px;" layout="block">
+						<t:outputText 
+							value="#{sr:text('label.admin.prozess.teilprozesse.Ende')}"></t:outputText>
+						<h:graphicImage  alt=""
+							style="margin:0px 0px 0px 5px;padding:0px;"
+							value="/weblets/icons/stop.gif"></h:graphicImage>
+					</p:outputPanel>
+				</t:htmlTag>
+			</rich:panel>
+		</h:panelGrid>
+	</h:panelGrid>
+
+</ui:composition>
+
+</html>

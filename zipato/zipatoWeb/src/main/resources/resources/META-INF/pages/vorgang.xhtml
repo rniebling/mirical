@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="#{workflow.template}">
+
+	<ui:define name="_buttonBar">
+
+
+		<t:div styleClass="commandBar">
+			<ui:insert name="_commandBar" />
+		</t:div>
+		<t:div styleClass="commandBar" style="float:right;">
+			<ui:insert name="_commandButtons">
+
+				<t:div styleClass="_btn">
+
+					<ui:insert name="_cbtn_pre" />
+
+					<ui:insert name="_backButton">
+						<t:commandButton id="action_back" styleClass="_button btn_back"
+							disabled="#{workflow.btnBackDisabled}"
+							value="#{sr:text('label.back')}" action="#{workflow.back}" />
+					</ui:insert>
+
+					<ui:insert name="_saveButton">
+
+						<!-- 							<a4j:jsFunction name="hotkeySave" action="#{workflow.save}" -->
+						<!-- 								render="main" /> -->
+
+						<p:hotkey bind="ctrl+shift+s" actionListener="#{workflow.save}"
+							update="main" />
+						<c:if test="#{!workflow.readonly}">
+							<p:hotkey bind="ctrl+shift+s" actionListener="#{workflow.save}"
+								update="main" />
+						</c:if>
+						<t:commandButton id="action_save" binding="#{workflow.saveButton}"
+							styleClass="_button btn_save" value="#{sr:text('label.save')}"
+							action="#{workflow.save}" actionFor="vorgang_form"
+							disabled="#{workflow.readonly}" />
+					</ui:insert>
+					<ui:insert name="_closeButton">
+						<t:commandButton id="action_close"
+							styleClass="_button btn_overview"
+							disabled="#{workflow.btnCloseDisabled}"
+							value="#{sr:text('label.close')}" action="#{workflow.close}" />
+					</ui:insert>
+					<ui:insert name="_nextButton">
+						<t:commandButton id="action_next" styleClass="_button btn_next"
+							binding="#{workflow.nextButton}" value="#{sr:text('label.next')}"
+							action="#{workflow.next}" actionFor="vorgang_form" />
+					</ui:insert>
+
+					<ui:insert name="_cbtn_post" />
+				</t:div>
+
+			</ui:insert>
+		</t:div>
+	</ui:define>
+
+	<ui:define name="_main">
+
+		<t:subform id="vorgang_form">
+
+			<c:choose>
+				<c:when test="#{workflow.allowed}">
+					<ui:insert name="_title" />
+
+					<t:div id="contentBox" forceId="true"
+						styleClass="#{fullscreen? 'contentBox' : 'contentBoxHeight'}">
+						<t:div styleClass="contentBoxInner">
+							<ui:include src="inc-errorbox.xhtml" />
+							<h:panelGroup>
+								<!-- 								<a4j:status id="commonstatus" -->
+								<!-- 									onstart="document.body.style.cursor = 'wait';" -->
+								<!-- 									onstop="document.body.style.cursor = 'default';" /> -->
+								<ui:insert name="_form" />
+							</h:panelGroup>
+
+						</t:div>
+						<ui:insert name="_bottomBar" />
+					</t:div>
+				</c:when>
+				<c:otherwise>
+					<c:choose>
+						<c:when test="#{empty facesContext.maximumSeverity}">
+							<sr:title value="Unzulässige Navigation!" />
+						</c:when>
+						<c:otherwise>
+							<sr:title value="Achtung!"
+								rendered="#{! empty facesContext.maximumSeverity}" />
+						</c:otherwise>
+					</c:choose>
+					<t:div id="contentBox" forceId="true">
+						<t:div styleClass="contentBoxInner">
+							<ui:include src="inc-errorbox.xhtml" />
+							<t:div styleClass="space" />
+							<t:htmlTag value="p"
+								rendered="#{empty facesContext.maximumSeverity}">
+								<h:outputText value="Klicken Sie " />
+								<h:commandLink id="home" action="#{workflow.home}" value="hier" />
+								<h:outputText
+									value=", um wieder auf eine zulässige Seite zu kommen." />
+							</t:htmlTag>
+							<t:htmlTag value="p"
+								rendered="#{empty facesContext.maximumSeverity}">
+								<h:outputText style="font-weight:bold;" value="Tipp: " />
+								<h:outputText
+									value="#{sr:text('hinweis.vorgang.doppelKlicksVermeiden')}" />
+							</t:htmlTag>
+						</t:div>
+					</t:div>
+				</c:otherwise>
+
+			</c:choose>
+
+		</t:subform>
+	</ui:define>
+</ui:composition>
+</html>

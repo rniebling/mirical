@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.protokoll.dbprotokoll')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<c:set var="tc" value="#{controller}" />
+
+		<h:panelGrid columns="4">
+
+
+			<sr:dateField id="datumVon" label="Datum von"
+				value="#{tc.dataModel.searchObject.von}">
+				<p:ajax event="blur" listener="#{tc.refresh}" update="data" />
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:dateField>
+
+			<sr:dateField id="datumBis" label="Datum bis"
+				value="#{tc.dataModel.searchObject.bis}">
+				<p:ajax event="blur" listener="#{tc.refresh}" update="data" />
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:dateField>
+
+			<sr:comboboxField id="user" label="Benutzer"
+				value="#{tc.dataModel.searchObject.benutzer}"
+				items="#{userItemGenerator.all}" emptyItem="true">
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:comboboxField>
+
+			<sr:comboboxField id="aktion" label="Aktion" emptyItem="true"
+				items="#{tc.aktionen}" value="#{tc.dataModel.searchObject.aktion}">
+				<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+			</sr:comboboxField>
+
+			<t:div />
+			<t:div />
+			<sr:comboboxField id="tabelle" label="Tabelle" emptyItem="true"
+				value="#{tc.dataModel.searchObject.tabelle}" items="#{tc.tabellen}">
+				<p:ajax event="change" listener="#{tc.refresh}" update="data,spt" />
+			</sr:comboboxField>
+
+			<t:div id="spt">
+				<c:if test="#{tc.dataModel.searchObject.tabelle != null}">
+					<sr:comboboxField id="spalte" label="Spalte" emptyItem="true"
+						items="#{tc.spalten}" value="#{tc.dataModel.searchObject.spalte}">
+						<p:ajax event="change" listener="#{tc.refresh}" update="data" />
+					</sr:comboboxField>
+				</c:if>
+			</t:div>
+		</h:panelGrid>
+
+		<t:div id="data">
+			<sr:dataTable id="datatable" value="#{tc.dataModel}"
+				dataScrollerInfo="true" var="bean">
+				<t:column width="20px">
+					<t:graphicImage title="#{tc.modusText(bean[11])}"
+						url="#{tc.modusIcon(bean[11])}" alt="#{tc.modusText(bean[11])}" />
+				</t:column>
+				<t:column width="20px">
+					<t:graphicImage title="#{tc.aktionText(bean[4])}"
+						url="#{tc.aktionIcon(bean[4])}" alt="tc.aktionText(bean[4])" />
+				</t:column>
+				<t:column width="20px"
+					style="text-align:center; background-color: 0x00ff00; ">
+					<f:facet name="header">
+						<t:graphicImage title="Genehmigen" url="/weblets/icons/accept.gif"
+							alt="Genehmigen" />
+					</f:facet>
+					<sr:checkboxField id="chk_genehmigen"
+						readonly="#{tc.getModusBean(bean[10]).abgelehnt}"
+						value="#{tc.getModusBean(bean[10]).genehmigt}">
+						<p:ajax event="click" update="datatable" />
+					</sr:checkboxField>
+				</t:column>
+				<t:column width="20px"
+					style="text-align:center; background-color: 0xff0000; ">
+					<f:facet name="header">
+						<t:graphicImage title="Ablehnen" url="/weblets/icons/conflict.gif"
+							alt="Ablehnen" />
+					</f:facet>
+					<sr:checkboxField id="chk_ablehnen"
+						readonly="#{tc.getModusBean(bean[10]).genehmigt}"
+						value="#{tc.getModusBean(bean[10]).abgelehnt}">
+						<p:ajax event="click" update="datatable" />
+					</sr:checkboxField>
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Wann" />
+					</f:facet>
+					<h:outputText value="#{bean[5]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Kontext" />
+					</f:facet>
+					<h:outputText value="#{bean[12]}" />
+				</t:column>
+
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Tabelle" />
+					</f:facet>
+					<h:outputText value="#{bean[3]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Spalte" />
+					</f:facet>
+					<h:outputText value="#{bean[0]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Alter Wert" />
+					</f:facet>
+					<h:outputText value="#{bean[1]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Neuer Wert" />
+					</f:facet>
+					<h:outputText value="#{bean[2]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="Username" />
+					</f:facet>
+					<h:outputText value="#{bean[9]}" />
+				</t:column>
+				<t:column width="120px">
+					<f:facet name="header">
+						<h:outputText value="ID" />
+					</f:facet>
+					<h:outputText value="#{bean[13]}" />
+				</t:column>
+			</sr:dataTable>
+		</t:div>
+	</ui:define>
+
+</ui:composition>
+</html>

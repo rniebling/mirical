@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<h:panelGrid columns="2">
+
+		<sr:textField id="prozess_name" value="#{workflow.value.name}"
+			maxlength="80" size="60"
+			label="#{sr:text('label.admin.prozess.name')}" required="true" />
+
+		<sr:checkboxField id="aktivExtern" value="#{workflow.value.aktiv}"
+			label="Aktiv" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="3">
+		<sr:comboboxField id="prozess" value="#{workflow.value.phaseId}"
+			items="#{workflow.controller.prozessDefs}" required="true"
+			emptyItem="true" label="#{sr:text('label.admin.prozess.id')}"
+			render="prozessPanel"
+			disabled="#{workflow.controller.teilprozessVorhanden}">
+			<p:ajax event="change" update="prozessPanel"
+				listener="#{controller.resetProzess}" />
+		</sr:comboboxField>
+
+		<sr:textField id="schablone" maxlength="30" size="30"
+			label="#{sr:text('label.admin.externe-prozesse.prozessSchablone')}"
+			value="#{workflow.value.prozessSchablone}" />
+
+		<sr:textField id="externeId" maxlength="30" size="30"
+			label="#{sr:text('label.admin.externe-prozesse.externeProzessId')}"
+			value="#{workflow.value.prozessExtern}" />
+	</h:panelGrid>
+
+</ui:composition>
+
+</html>

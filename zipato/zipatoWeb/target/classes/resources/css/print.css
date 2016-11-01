@@ -1,0 +1,11 @@
+#header, #nav, #sub, #sub h2, #footer, #local, #c_left {
+    display: none;
+}
+
+#main, #content, .table {
+    width: 700px;
+}
+
+fieldset {
+    page-break-inside:avoid;
+}

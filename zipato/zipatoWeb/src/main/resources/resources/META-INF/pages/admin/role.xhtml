@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.rollen.Rollen')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:tabs base="admin/role" />
+
+	</ui:define>
+
+	<ui:define name="_saveButton">
+
+		<h:commandButton id="action_save" styleClass="_button btn_save"
+			rendered="#{workflow.actualTabIndex == 1}"
+			value="#{sr:text('label.save')}" action="#{workflow.save}" />
+
+	</ui:define>
+</ui:composition>
+</html>

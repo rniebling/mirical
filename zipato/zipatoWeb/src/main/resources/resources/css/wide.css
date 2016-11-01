@@ -1,0 +1,17 @@
+.normalWidth, #commandBar {
+	width: 74em;
+}
+
+.fullscreenWidth {
+	min-width: 74em;
+}
+
+.addBausteinPanel {
+	height: 40em;
+	width: 17em;
+}
+
+.bausteinPanel {
+	width: 50em;
+	height: 40em;
+}

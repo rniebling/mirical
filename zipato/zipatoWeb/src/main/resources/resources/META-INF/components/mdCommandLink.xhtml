@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<!-- Parameter: backingbean: Bean, auf der die action aufgerufen wird
+					action: 	 Name der Funktion, die aufgerufen werden soll
+					binding: 	 evtl. binding für einen commandButton
+					mbtitle: 	 Titel der Messagebox
+					mbmessage: 	 Text in der Messagebox
+					url:		 Wenn vorhanden wird ein Image mit der betrf. url erzeugt
+					link:		 Wenn keine url vorhanden, Textlink mit diesem Text
+					update:      Komponenten, die nach Bestätigung aktualisiert werden sollen
+	-->
+
+<ui:component>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<c:if test="#{label == null}">
+		<c:set var="label" value="#{sr:text('label.ok')}" />
+	</c:if>
+
+	<c:if test="#{cancellabel == null}">
+		<c:set var="cancellabel" value="#{sr:text('label.abbrechen')}" />
+	</c:if>
+
+	<c:if test="#{disabled or readonly or workflow.readonly}">
+		<t:graphicImage rendered="#{rendered}" url="#{url}" alt="#{alt}" />
+	</c:if>
+
+	<c:if test="#{!disabled and !readonly and !workflow.readonly}">
+
+		<p:commandLink id="#{id}" title="#{title}"
+			onclick="PF('#{id}_confirm').show();" process="@this">
+			<t:graphicImage rendered="#{rendered}" url="#{url}" alt="#{alt}" />
+			<ui:insert />
+		</p:commandLink>
+
+		<p:dialog modal="true" widgetVar="#{id}_confirm"
+			styleClass="dojoDialog" width="400" minHeight="100">
+
+			<h:panelGrid columns="1">
+				<t:outputText value="#{mbmessage}" />
+
+				<h:panelGrid columns="2">
+					<t:div id="#{id}_obd1" styleClass="_btn"
+						rendered="#{binding == null}">
+						<p:commandButton id="#{id}_ok1" styleClass="_button btn_save"
+							oncomplete="PF('#{id}_confirm').hide();" value="#{label}"
+							action="#{backingbean[action]}" process="@this"
+							update="#{update}">
+						</p:commandButton>
+					</t:div>
+
+					<t:div id="#{id}_obd2" styleClass="_btn"
+						rendered="#{binding != null}">
+						<p:commandButton id="#{id}_ok2" styleClass="_button btn_save"
+							value="#{label}" oncomplete="PF('#{id}_confirm').hide();"
+							action="#{backingbean[action]}" process="@this"
+							update="#{update}">
+						</p:commandButton>
+					</t:div>
+
+					<t:div id="#{id}_cbd" styleClass="_btn">
+						<p:commandButton id="#{id}_cancel1" value="#{cancellabel}"
+							onclick="PF('#{id}_confirm').hide();" process="@this"
+							styleClass="_button btn_abort" forceId="true">
+						</p:commandButton>
+					</t:div>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:dialog>
+	</c:if>
+
+
+</ui:component>
+</html>

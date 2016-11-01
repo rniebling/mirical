@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="vorgang.xhtml">
+
+	<ui:define name="_commandButtons" />
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.mandantenauswahl')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<h:panelGrid>
+			<t:div>
+				<t:selectOneMenu id="select_mandant"
+					value="#{mandantenController.selectedMandant}">
+					<f:selectItems value="#{mandantenController.mandanten}" />
+				</t:selectOneMenu>
+				<sr:outputLabel value="#{sr:text('label.mandant')}" />
+			</t:div>
+			<t:div styleClass="_btn">
+				<h:commandButton id="change_client_action"
+					styleClass="_button btn_save" value="#{sr:text('label.aendern')}"
+					action="#{workflow.closeAll}" />
+			</t:div>
+		</h:panelGrid>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

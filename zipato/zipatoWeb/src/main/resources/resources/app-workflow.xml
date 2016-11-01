@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://www.subito.de/sunrise-workflow"
+	xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance">
+
+	<phase id="filemanager" pos="97" name="label.menu.filemanager"
+		page="filemanager/filemanager" role="ROLE_FILEMANAGER" controller="filemanagerController"
+		module="Dateimanager" />
+
+	<!-- Benutzereinstellungen -->
+	<phase name="label.menu.benutzereinstellungen" pos="98"
+		id="usereinstellungen" page="redirect:preferences" bean="de.subito.sunrise.model.security.User"
+		controller="userPrefs">
+		<tab page="allgemein" label="Allgemein" />
+		<tab page="favoriten" label="Favoriten" rendered="#{favoritesController.favoritenSichtbar}"/>
+		<tab page="version" label="Version" controller="versionController" />
+		<phase id="usr-change-password" name="label.menu.change-password"
+			page="change-password" private="true" />
+	</phase>
+
+	<phase name="label.menu.auswertungen" expand="true" module="Steuerungstool"
+		role="ROLE_PROZESS_AUSWERTUNG">
+		<phase name="label.menu.reportAntragseingaenge" page="admin/prozesskosten/report-antragseingaenge"
+			controller="antragseingaengeController"
+			bean="de.subito.sunrise.logic.prozess.reporting.model.AuswertungKonfig" />
+		<phase name="label.menu.reportKontrollergebnisse" page="admin/prozesskosten/report-kontrollergebnisse"
+			controller="kontrollergebnisseController"
+			bean="de.subito.sunrise.logic.prozess.reporting.model.AuswertungKonfig" />
+		<phase name="label.menu.externeProzesse" page="admin/prozesskosten/report-externeprozesse"
+			controller="externeProzesseController"
+			bean="de.subito.sunrise.logic.prozess.reporting.model.GprAuswertungKonfig"
+			module="Prozessauswertung_extern" />
+	</phase>
+
+	<phase id="adm-db-protokoll" name="label.menu.dbprotokoll" page="admin/dbprotokoll"
+		controller="dbProtokollPruefController" module="Datenbankprotokollierung"
+		condition="#{dbProtokollPruefController.isPhaseProtokollVisible()}">
+		<tab page="pruefen" rendered="#{dbProtokollPruefController.isTabPruefenVisible()}"/>
+		<tab page="abfragen" controller="dbProtokollAbfrageController"/>
+	</phase>				
+
+	<!-- Administration -->
+	<phase id="admin" name="label.menu.administration" page="redirect:admin/administration"
+		expand="true" role="ROLE_ADMIN" pos="99">
+		<phases>
+			<phase id="adm-common" name="label.menu.allgemein" page="admin/allgemein"
+				expand="true" controller="admAllgemeinController" role="ROLE_ADMIN">
+				<phase id="adm-mandanten" name="label.menu.mandantenverwaltung"
+					page="admin/mandantenliste" controller="mandantenAdminController">
+					<phase id="adm-mandant" name="label.menu.mandant" page="admin/mandant"
+						private="true" bean="de.subito.sunrise.model.Mandant" validator="mandantValidator">
+						<phase name="label.menu.sla" page="admin/mandant/service-level"
+							controller="serviceLevelController" private="true"
+							evaluator="serviceLevelEvaluator" bean="de.subito.sunrise.model.prozess.ServiceLevel">
+							<tab page="sla" />
+							<tab page="anmerkungen" />
+						</phase>
+					</phase>
+				</phase>
+
+				<phase name="label.menu.kapazitaetssteuerung" controller="kapazitaetsController"
+					bean="de.subito.sunrise.model.security.User" page="admin/kapazitaetssteuerung"
+					module="Prozess" />
+				<!-- phase id="adm-lizenzen" name="label.menu.lizenzen" page="admin/license" 
+					controller="moduleController" / -->
+				<phase id="adm-protokoll" name="label.menu.protokoll" page="admin/protokoll"
+					controller="admProtokollController">
+					<tab page="protokoll" controller="protokollSucheController"
+						rendered="#{moduleManager.isEnabled('Datenbankprotokollierung')}" />
+					<tab page="protokoll-historie" controller="protokollHistorieController"
+						rendered="#{moduleManager.isEnabled('Datenbankprotokollierung')}" />
+					<tab page="feldvorgaben" controller="feldVorgabenController"
+						rendered="#{moduleManager.isEnabled('Datenbankprotokollierung')}" />
+					<tab page="pruefen" />
+					<tab page="vorgaben" />
+					<tab page="log" />
+					<tab page="users" />
+					<tab page="systemeigenschaften" />
+					<tab page="umgebungsvariablen" />
+				</phase>
+
+				<phase name="label.menu.wechselkurse" page="admin/wechselkurse"
+					controller="wechselkurseController" module="Währungen" />
+				<phase name="label.menu.datensatzsperren" controller="sperrenController"
+					page="admin/sperren" />
+				<phase name="label.menu.begruessungstext" page="admin/begruessungstext"
+					controller="admBegruessungController" />
+				<!-- phase name="label.menu.searchIndex" page="admin/searchIndex" / -->
+			</phase>
+
+			<phase name="label.menu.benutzerverwaltung" expand="true"
+				role="ROLE_BENUTZER_VERWALTUNG">
+				<phase name="label.menu.benutzer" controller="userController"
+					id="adm-user-list" page="admin/user">
+					<tab page="list" />
+					<!-- <tab page="search" /> -->
+					<phase name="label.menu.benutzer" page="admin/user/edit"
+						bean="de.subito.sunrise.model.security.User">
+						<tab page="common" />
+						<tab page="rights" controller="userRightsController" />
+						<tab page="roles" controller="userRolesController" />
+						<tab page="groups" controller="userGroupsController" />
+						<tab page="mandanten" controller="userMandantenController"
+							rendered="#{!moduleManager.isEnabled('INKASSO')}" />
+						<tab page="uebertragung" controller="userChangeController"
+							rendered="#{moduleManager.isEnabled('SFDK') || moduleManager.isEnabled('INKASSO')}" />
+					</phase>
+				</phase>
+				<phase name="label.menu.usergroup" controller="userGroupController"
+					id="adm-usergroup" page="admin/usergroup">
+					<tab page="list" />
+					<!-- <tab page="search" /> -->
+					<phase name="label.menu.usergroup.edit" page="admin/usergroup/edit"
+						bean="de.subito.sunrise.model.security.UserGroup">
+						<tab page="common" />
+						<tab page="rights" controller="userGroupRightsController" />
+						<tab page="roles" controller="userGroupRolesController" />
+						<tab page="users" controller="userGroupUsersController" />
+					</phase>
+				</phase>
+				<phase name="label.menu.rollen" controller="roleController"
+					page="admin/role">
+					<tab page="list" />
+					<!-- <tab page="search" /> -->
+					<tab page="assign" controller="roleAssignController" />
+					<phase name="label.menu.rolle" page="admin/role/edit"
+						bean="de.subito.sunrise.model.security.Rolle" />
+				</phase>
+
+				<phase name="label.menu.teams" controller="teamController"
+					page="admin/team" module="Teams" condition="#{teamController.isPhaseTeamsVisible()}">
+					<tab page="list" />
+					<!-- <tab page="search" /> -->
+					<phase name="label.menu.team" page="admin/team/edit"
+						bean="de.subito.sunrise.model.security.Team" />
+				</phase>
+
+				<phase name="label.menu.security-rules" controller="securityRulesController"
+					page="admin/security-rules" />
+			</phase>
+
+			<phase name="label.menu.admin.prozess" expand="true" module="Prozess|Markt"
+				role="ROLE_PROZESS">
+				<phase id="adm-prozesse" name="label.menu.prozesse" page="admin/prozesse"
+					controller="prozessController">
+					<phase name="label.menu.prozessablauf" page="admin/prozess"
+						bean="de.subito.sunrise.model.prozess.Prozess">
+						<tab page="allgemein" />
+						<tab page="teilprozesse" />
+						<tab page="config" rendered="#{workflow.actualTabIndex ge 2}" />
+						<tab page="fall" controller="prozessFallController" rendered="#{workflow.actualTabIndex == 3}" />
+					</phase>
+				</phase>
+				<phase name="label.menu.kontrollergebnisse" page="admin/kontrollergebnisse"
+					controller="kontrollergebnisController" module="Steuerungstool">
+				</phase>
+				<phase name="label.menu.prozessueberwachung" page="admin/prozessueberwachung"
+					controller="admEsmRegelController" module="ESM">
+					<phase name="label.menu.ueberwachungsregel" page="admin/ueberwachungsregel"
+						private="true" bean="de.subito.sunrise.model.esm.AdmEskalationsregel" />
+				</phase>
+				<phase name="label.menu.pausenBegruendungen" page="admin/pausen-begruendungen"
+					controller="pausenBegruendungenController" module="Steuerungstool">
+				</phase>
+				<phase name="label.menu.externeProzesse" page="admin/externe-prozesse"
+					controller="externerProzessController" module="Prozessauswertung_extern"
+					bean="de.subito.sunrise.model.oe.OrganisationsEinheit">
+					<tab page="oenr" />
+					<tab page="upload" />
+				</phase>
+			</phase>
+
+			<phase id="adm-jobs" name="label.menu.jobs" page="admin/jobs"
+				controller="admBatchJobExecutionPlanController" module="Batch">
+				<phase id="adm-job" name="label.menu.job" page="admin/job"
+					controller="admBatchJobExecutionPlanController" bean="de.subito.sunrise.model.batch.BatchJobExecutionPlan">
+					<tab page="edit" />
+					<tab page="steps" />
+					<tab page="executions" />
+					<tab page="protokoll" rendered="#{workflow.actualTabIndex == 3}" />
+					<phase id="adm-job-detail" name="label.menu.jobDetail" page="admin/job/detail"
+						controller="admBatchJobController" bean="de.subito.sunrise.model.batch.BatchJob">
+						<tab page="edit" />
+					</phase>
+				</phase>
+			</phase>
+			<phase id="adm-filemanager" name="label.menu.filemanager" page="filemanager/adm-filemanager"
+				role="ROLE_FILEMANAGER_ADMIN" controller="admFilemanagerController"
+				module="Dateimanager" />
+		</phases>
+	</phase>
+</application>

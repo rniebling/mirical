@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+
+	<h:panelGrid columns="4">
+
+		<sr:textField id="prozess_name" value="#{workflow.value.name}"
+			maxlength="80" size="60"
+			label="#{sr:text('label.admin.prozess.name')}" required="true" />
+
+		<sr:checkboxField id="aktiv" value="#{workflow.value.aktiv}"
+			label="Aktiv" />
+
+		<t:div styleClass="space" />
+
+		<sr:checkboxField id="teilprozess"
+			value="#{workflow.value.teilprozess}"
+			label="#{sr:text('label.admin.prozess.teilprozess')}" />
+
+	</h:panelGrid>
+
+	<h:panelGrid columns="2">
+
+		<sr:comboboxField id="prozess" value="#{workflow.value.phaseId}"
+			items="#{workflow.controller.prozessDefs}" required="true"
+			emptyItem="true" label="#{sr:text('label.admin.prozess.id')}"
+			render="prozessPanel"
+			disabled="#{workflow.controller.teilprozessVorhanden}">
+			<p:ajax event="change" update="prozessPanel"
+				listener="#{controller.resetProzess}" />
+		</sr:comboboxField>
+
+		<sr:comboboxField id="startRolle" items="#{rolleItems.items}"
+			emptyItem="true" value="#{workflow.value.startRolle}"
+			converter="#{rolleItems.converter}"
+			label="#{sr:text('label.admin.prozess.startRolle')}" />
+
+		<sr:comboboxField id="art_1" value="#{workflow.value.prozessArt}"
+			items="#{enumType[controller.kapriosProzessFilter]}" required="true"
+			label="#{sr:text('label.admin.prozess.art')}" />
+
+		<sr:comboboxField id="checkliste"
+			value="#{workflow.value.checklistId}"
+			items="#{controller.checklisten}" emptyItem="true" label="Checkliste" />
+
+		<t:div />
+
+	</h:panelGrid>
+
+
+</ui:composition>
+
+</html>

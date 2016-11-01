@@ -1,0 +1,134 @@
+
+.addBausteinPanel {
+	width: 170px;
+	height: 30em;
+	overflow: auto;
+}
+
+.bausteinPanel {
+	/*
+	display: block;
+	*/
+	overflow: auto;
+	width: 42.5em;
+	height: 30em;
+}
+
+.prozessElement, .prozessElementStart, .prozessElementEnde {
+	/*width: 120px;*/
+	background-color: white;
+	border: 1px solid gray;
+	padding: 1px 3px;
+	margin: 1px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: small;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.prozessElementStart {
+	-moz-border-radius-bottomleft: 0px;
+	-moz-border-radius-bottomright: 0px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.prozessElementEnde {
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+}
+
+
+.dropProzessZone {
+	background: url(images/down2.gif) center no-repeat;
+	margin: 0px;
+	height: 10px;
+	padding: 0px 2px;
+	/*width: 122px;*/
+}
+
+.dropProzessZoneInner {
+	height: 15px;
+	position: relative;
+	top: -4px;
+	z-index: 1;
+}
+
+TD.prozessphases {
+	width: 140px;
+}
+
+/* Menu */
+#subnavigation_outer .dr-tree-h-text,
+#subnavigation_outer .rich-tree-node-text
+	{
+	white-space: normal !important;
+}
+
+img.rich-calendar-button {
+	margin: 0;
+	padding: 0;
+	margin-left: 2px;
+}
+
+/* Title */
+.title TD {
+	margin: 0px 0px 0px 0px;
+	padding: 3px 0px 0px 3px;
+	background-color: #fff;
+}
+
+.title {
+	margin: 0;
+}
+
+.titleText {
+	font-weight: bold;
+	font-size: 14px;
+	padding: 0px 5px 5px 0px;	
+	display:block;
+	white-space: nowrap;
+}
+
+.dr-tree-i-sel,.rich-tree-node-selected {
+	border: 0px solid;
+	padding: 1px 4px;
+}
+
+.klassenTree .dr-tree-i-sel {
+	border: 1px solid;
+}
+
+
+.right {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
+
+.bottom, .align_bottom {
+	vertical-align: bottom;
+}
+
+.rich-mpnl-controls {
+	background-color: white;	
+}

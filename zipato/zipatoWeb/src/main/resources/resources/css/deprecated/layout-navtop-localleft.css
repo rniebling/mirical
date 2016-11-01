@@ -1,0 +1,28 @@
+
+
+/* NAV BAR AT THE TOP, LOCAL NAVIGATION ON THE LEFT AND ONE COLUMN OF CONTENT */
+div#content {
+	width: 100%;
+	margin: 0px;
+	padding: 0;
+	text-align: left;
+}
+
+.normalWidth, #commandBar {
+	width: 63.5em;
+}
+
+.fullscreenWidth {
+	min-width: 63.5em;
+}
+
+
+
+div#sub {
+	display: none;
+}
+
+div#nav { 
+	
+}
+/* END CONTENT */

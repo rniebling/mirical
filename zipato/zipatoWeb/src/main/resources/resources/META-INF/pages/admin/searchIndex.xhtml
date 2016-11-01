@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title value="#{sr:text('label.admin.searchindex.Suchindex')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink ref="" />
+
+		<t:div styleClass="_btn">
+			<p:commandButton id="index_action" render="main"
+				styleClass="_button btn_new" process="@this"
+				value="#{sr:text('label.admin.searchindex.INDIZIEREN')}"
+				action="#{searchIndexController.index}">
+			</p:commandButton>
+		</t:div>
+	</ui:define>
+
+</ui:composition>
+</html>

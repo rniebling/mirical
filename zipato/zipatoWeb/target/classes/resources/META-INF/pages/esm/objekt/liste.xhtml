@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+
+
+	<sr:dataTable value="#{workflow.controller.dataModel}" var="bean"
+		id="data" sortColumn="#{workflow.controller.dataModel.order}"
+		sortAscending="#{workflow.controller.dataModel.ascending}">
+		<t:column id="column_bearbeiter" headerstyle="width:120px;">
+			<f:facet name="header">
+				<t:commandSortHeader id="sort_bearbeiter"
+					columnName="bearbeiter.nachname" arrow="true">
+					<h:outputText
+						value="#{sr:text('label.esm.objekt.liste.Bearbeiter')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:outputText value="#{bean.bearbeiter.name}" />
+		</t:column>
+		<t:column id="column_bezeichnung">
+			<f:facet name="header">
+				<t:commandSortHeader id="sort_bezeichnung"
+					columnName="vorgang.bezeichnung" arrow="true">
+					<h:outputText
+						value="#{sr:text('label.esm.objekt.liste.Bezeichnung')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:outputText value="#{bean.vorgang.bezeichnung}" />
+		</t:column>
+		<t:column id="column_angelegtAm" headerstyle="width:120px;">
+			<f:facet name="header">
+				<t:commandSortHeader id="sort_angelegtAm" columnName="angelegtAm"
+					arrow="true">
+					<h:outputText
+						value="#{sr:text('label.esm.objekt.liste.Anlagedatum')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:outputText value="#{bean.angelegtAm}">
+				<sr:convertDateTime type="both" />
+			</t:outputText>
+		</t:column>
+		<t:column id="column_stufe" headerstyle="width:18px;"
+			style="text-align:center;">
+			<f:facet name="header">
+				<t:commandSortHeader id="sort_stufe" columnName="aktuelleStufe"
+					arrow="true">
+					<t:outputText value="#{sr:text('label.esm.objekt.liste.Stufe')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:graphicImage title="#{enumText[bean.aktuelleStufe]}"
+				rendered="#{bean.aktuelleStufe == 'OK'}"
+				url="/weblets/icons/status_green.gif" />
+			<t:graphicImage title="#{enumText[bean.aktuelleStufe]}"
+				rendered="#{bean.aktuelleStufe == 'WARNUNG'}"
+				url="/weblets/icons/status_yellow.gif" />
+			<t:graphicImage title="#{enumText[bean.aktuelleStufe]}"
+				rendered="#{bean.aktuelleStufe == 'STUFE1'}"
+				url="/weblets/icons/status_red.gif" />
+			<t:graphicImage title="#{enumText[bean.aktuelleStufe]}"
+				rendered="#{bean.aktuelleStufe == 'STUFE2'}"
+				url="/weblets/icons/status_red.gif" />
+			<t:graphicImage title="#{enumText[bean.aktuelleStufe]}"
+				rendered="#{bean.aktuelleStufe == 'STUFE3'}"
+				url="/weblets/icons/status_red.gif" />
+		</t:column>
+		<t:column id="column_zeitpunkt" headerstyle="width:120px;">
+			<f:facet name="header">
+				<t:commandSortHeader id="sort_eskalationszeitpunkt"
+					columnName="eskalationszeitpunkt" arrow="true">
+					<t:outputText
+						value="#{sr:text('label.esm.objekt.liste.Eskalationszeitpunkt')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<t:outputText value="#{bean.eskalationszeitpunkt}">
+				<sr:convertDateTime type="both" />
+			</t:outputText>
+		</t:column>
+	</sr:dataTable>
+
+
+</ui:composition>
+
+</html>

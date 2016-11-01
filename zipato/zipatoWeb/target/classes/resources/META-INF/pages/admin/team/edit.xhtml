@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/vorgang.xhtml">
+	<ui:define name="_title">
+		<sr:title
+			value="#{sr:text('label.admin.team.Team')}#{workflow.value.teamname}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<sr:helpLink
+			ref="Administration/Administration Benutzerverwaltung.htm#AdminiBenutzerverwaltung_Team" />
+
+		<h:panelGrid columns="5">
+
+			<sr:textField id="tn" value="#{workflow.value.teamname}"
+				maxlength="40" size="30" compute="true"
+				label="#{sr:text('label.admin.team.teamname')}" required="true" />
+
+			<sr:textField id="sz" value="#{workflow.value.schriftzeichen}"
+				maxlength="40" size="10"
+				label="#{sr:text('label.admin.team.schriftzeichen')}" />
+
+			<sr:comboboxField id="select_teamleiter" compute="true"
+				value="#{workflow.controller.value.teamleiter}"
+				items="#{workflow.controller.mitglieder}" emptyItem="true"
+				label="#{sr:text('label.admin.team.teamleiter')}" />
+
+			<t:div styleClass="space" />
+
+			<t:div>
+
+				<sr:checkboxField id="teamkorb" compute="true"
+					value="#{workflow.controller.value.teamkorb}"
+					label="#{sr:text('label.admin.team.TeamBisAufgabenkorb')}" />
+
+				<sr:checkboxField id="mailVersand"
+					value="#{controller.value.mailVersand}"
+					label="Automatischer Mail-Versand bei Aufgabenzuordnung" />
+
+			</t:div>
+
+		</h:panelGrid>
+
+		<t:fieldset id="aufn"
+			legend="#{sr:text('label.admin.team.Teammitgliederaufnehmen')}">
+
+			<h:panelGrid columns="2">
+
+				<sr:comboboxField id="add_user"
+					value="#{workflow.controller.addUser}" emptyItem="true"
+					items="#{teamController.userList}" compute="true"
+					label="#{sr:text('label.admin.team.aufzunehmenderUser')}" />
+
+
+				<t:div styleClass="_btn">
+					<t:commandButton id="aufnehmen_action" styleClass="_button btn_new"
+						value="#{sr:text('label.admin.team.INSTEAM')}"
+						disabled="#{workflow.readonly}"
+						action="#{teamController.mitgliedAufnehmen}" />
+				</t:div>
+
+			</h:panelGrid>
+
+		</t:fieldset>
+
+		<t:fieldset id="liste"
+			legend="#{sr:text('label.admin.team.UebersichtallerTeammitglieder')}">
+
+			<h:panelGrid columns="1">
+
+				<sr:dataTable value="#{workflow.controller.value.mitglieder}"
+					var="mitglied" sortColumn="#{workflow.controller.sortTeam}"
+					sortAscending="#{workflow.controller.ascendingTeam}"
+					preserveSort="true" id="teammitglieder" rows="6"
+					forceIdIndexFormula="#{mitglied.id}" dataScrollerInfo="true"
+					deleteAction="removeMitglied"
+					deleteMessage="#{sr:text('label.admin.team.Teammitgliedentfernen')}">
+
+					<t:column style="width:150px;">
+						<f:facet name="header">
+							<t:commandSortHeader columnName="username" arrow="true">
+								<h:outputText value="#{sr:text('label.admin.user.username')}" />
+							</t:commandSortHeader>
+						</f:facet>
+						<h:outputText value="#{mitglied.username}" />
+					</t:column>
+
+					<t:column style="width:150px;">
+						<f:facet name="header">
+							<t:commandSortHeader columnName="vorname" arrow="true">
+								<h:outputText value="#{sr:text('label.admin.user.vorname')}" />
+							</t:commandSortHeader>
+						</f:facet>
+						<h:outputText value="#{mitglied.vorname}" />
+					</t:column>
+
+					<t:column style="width:150px;">
+						<f:facet name="header">
+							<t:commandSortHeader columnName="nachname" arrow="true">
+								<h:outputText value="#{sr:text('label.admin.user.nachname')}" />
+							</t:commandSortHeader>
+						</f:facet>
+						<h:outputText value="#{mitglied.nachname}" />
+					</t:column>
+
+					<t:column style="width:18px;">
+						<f:facet name="header">
+							<h:outputText value=" " />
+						</f:facet>
+						<p:commandLink id="remove" rendered="#{!workflow.readonly}"
+							process="@this"
+							onclick="PF('teammitglieder_confirm_delete').show();">
+							<h:graphicImage value="/weblets/icons/delete.gif"></h:graphicImage>
+							<f:setPropertyActionListener
+								target="#{workflow.controller.mitgliedId}"
+								value="#{mitglied.id}"></f:setPropertyActionListener>
+						</p:commandLink>
+						<h:graphicImage rendered="#{workflow.readonly}"
+							value="/weblets/icons/dis_delete.gif" />
+					</t:column>
+
+				</sr:dataTable>
+			</h:panelGrid>
+
+		</t:fieldset>
+
+	</ui:define>
+
+</ui:composition>
+</html>

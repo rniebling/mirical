@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink ref="" />
+
+	<h:panelGrid columns="3">
+		<rich:panel xmlns:rich="http://richfaces.org/rich" style="width:190px"
+			styleClass="odd">
+			<f:facet name="header">
+				<h:outputText
+					value="#{sr:text('label.admin.teilprozess.verfuegbareRollen')}" />
+			</f:facet>
+			<rich:dropSupport id="role2" acceptedTypes="ROLE2" dropValue="role"
+				dropListener="#{workflow.controller.removeRolle}"
+				render="roletable  src">
+			</rich:dropSupport>
+			<center>
+				<t:dataTable id="src" value="#{workflow.controller.rollen}"
+					var="role">
+					<t:column>
+						<p:outputPanel styleClass="even"
+							style="width:170px;border:1px solid gray;padding:1px;margin:0px;"
+							layout="block">
+							<rich:dragSupport 
+								dragType="ROLE" dragValue="#{role}" dragIndicator=":indicator">
+								<rich:dndParam name="label" value="#{role}" />
+							</rich:dragSupport>
+							<h:outputText 
+								value="#{sr:text(role)}"></h:outputText>
+						</p:outputPanel>
+					</t:column>
+				</t:dataTable>
+			</center>
+		</rich:panel>
+
+		<t:div style="width: 10px;" />
+
+		<rich:panel xmlns:rich="http://richfaces.org/rich" style="width:190px"
+			styleClass="odd">
+			<f:facet name="header">
+				<h:outputText
+					value="#{sr:text('label.admin.teilprozess.zugewieseneRollen')}" />
+			</f:facet>
+			<rich:dropSupport id="role" acceptedTypes="ROLE" dropValue="role"
+				dropListener="#{workflow.controller.addRolle}"
+				render="roletable  src">
+			</rich:dropSupport>
+			<t:htmlTag value="center">
+				<t:dataTable id="roletable"
+					value="#{workflow.controller.value.rollen}" var="role">
+					<t:column>
+						<p:outputPanel styleClass="even"
+							style="width:170px;border:1px solid gray;padding:1px;margin:0px;"
+							layout="block">
+							<rich:dragSupport 
+								dragType="ROLE2" dragValue="#{role}" dragIndicator=":indicator">
+								<rich:dndParam name="label" value="#{role.authority}" />
+							</rich:dragSupport>
+							<h:outputText 
+								value="#{sr:text(role.authority)}"></h:outputText>
+						</p:outputPanel>
+					</t:column>
+				</t:dataTable>
+			</t:htmlTag>
+		</rich:panel>
+	</h:panelGrid>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Gruppenbenutzer" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink
+			ref="Administration/Administration Benutzerverwaltung.htm#Gruppenbenutzer" />
+	</t:div>
+
+	<h:panelGrid column="2">
+
+		<sr:textField id="filter" value="#{tc.users.searchObject.filter}"
+			size="30" label="Filter">
+			<p:ajax event="keyup" ignoreDupResponses="true" delay="200"
+				listener="#{tc.users.refresh}" update="datagroup" />
+		</sr:textField>
+
+		<sr:checkboxField id="only_selected"
+			value="#{tc.users.searchObject.selected}"
+			label="Nur Benutzer mit diesem Recht als Gruppenrecht">
+			<p:ajax event="click" ignoreDupResponses="true" delay="200"
+				listener="#{tc.users.refresh}" update="datagroup" />
+		</sr:checkboxField>
+
+	</h:panelGrid>
+
+	<h:panelGrid cellspacing="0" cellpadding="0">
+		<sr:dataTable id="data" value="#{tc.users}" var="bean"
+			dataScrollerInfo="true" sortColumn="#{tc.users.order}"
+			sortAscending="#{tc.users.ascending}">
+			<t:column headerstyle="width:18px;" style="text-align:center;">
+				<sr:checkboxField id="selUser" value="#{bean.selected}" />
+			</t:column>
+			<t:column style="width:150px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="username" arrow="true">
+						<h:outputText value="#{sr:text('label.admin.user.username')}" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data.username}" />
+			</t:column>
+			<t:column style="width:250px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="vorname" arrow="true">
+						<h:outputText value="#{sr:text('label.admin.user.vorname')}" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data.vorname}" />
+			</t:column>
+			<t:column style="width:250px;">
+				<f:facet name="header">
+					<t:commandSortHeader columnName="nachname" arrow="true">
+						<h:outputText value="#{sr:text('label.admin.user.nachname')}" />
+					</t:commandSortHeader>
+				</f:facet>
+				<h:outputText value="#{bean.data.nachname}" />
+			</t:column>
+
+		</sr:dataTable>
+	</h:panelGrid>
+
+</ui:composition>
+</html>

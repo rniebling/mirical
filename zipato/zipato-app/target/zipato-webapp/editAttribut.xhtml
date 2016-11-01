@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="/META-INF/templates/customerTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:mg="http://at.irian/mygourmet"
+                xmlns:mc="http://xmlns.jcp.org/jsf/composite/mygourmet">
+    <ui:param name="title" value="#{msgs.title_main} - #{msgs.title_show_customer}"/>
+    <ui:define name="content">
+        <h2><h:outputText value="Eigenschaften"/></h2>
+        <h:form id="form">
+	         <h:commandButton id="login" action="#{editAttributBean.showListe}" value="Liste"/>
+            <h:panelGrid id="grid" columns="2">
+                <h:outputText value="Name:"/>
+                <h:outputText value="#{editAttributBean.attribut.name}"/>
+            </h:panelGrid>
+         
+
+            <mc:collapsiblePanel id="addressPanel" collapsed="#{editAttributBean.collapsed}">
+                <f:facet name="header">
+                    <h3><h:outputText value="Attribut"/></h3>
+                </f:facet>
+                <h:panelGrid id="grid" columns="2">
+            
+                        
+                            <h:outputText value="Wert"/>
+                        <h:inputText id="value" size="30" maxlength="40"
+                             value="#{editAttributBean.value}"/>
+                        
+                        <h:commandLink action="#{editAttributBean.saveAttribut()}" value="Speichern" />
+         	   </h:panelGrid>
+         
+            </mc:collapsiblePanel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,260 @@
+.dataTable INPUT[type=checkbox],.dataTable .checkbox {
+	padding: 0px;
+	margin: 0px;
+}
+
+TH.rich-table-subheadercell {
+	background: #a6cbaf !important;
+	color: #505050;
+}
+
+.rich-table thead TR {
+	background: #a6cbaf !important;
+}
+
+TABLE.rich-table {
+	border-top: 1px solid #919191;
+	border-left: 1px solid #919191;
+	border-right: 1px solid #919191;
+	border-bottom: 1px solid #919191;
+	border-collapse: collapse;
+}
+
+TR.rich-table-header {
+	border: 1px solid #505050;
+}
+
+TH.rich-table-headercell {
+	border: 1px solid #505050;
+	border-left: 1px solid #505050;
+	border-right: 1px solid #505050;
+	padding: 2px;
+	margin: 0px;
+}
+
+TD.rich-table-cell {
+	border: 1px solid #919191;
+}
+
+DIV.dataTableFrame {
+	padding: 0px 2px;
+	overflow: auto;
+	/*height: 350px;*/
+}
+
+DIV.dataTableFrame .dataTable {
+	table-layout: fixed;
+}
+
+.dataTable {
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	padding: 0px;
+	width: 100%;
+	background: #c0c0c0;
+	border-collapse: collapse;
+}
+
+.dataTable TH,.dataTable .headerInfo {
+	color: #505050;
+	padding: 2px;
+	text-align: center;
+	background: #a6cbaf;
+	empty-cells: show;
+	font-weight: normal;
+	border: 1px solid #505050;
+}
+
+.dataTableTHLeft TH {
+	text-align: left;
+}
+
+.dataTable .odd .headerInfo {
+	background: #E0EFE3;
+	border: 1px solid #919191;
+}
+
+.dataTable .even .headerInfo {
+	background: #C3DFC9;
+	border: 1px solid #919191;
+}
+
+.dataTable .headerInfo {
+	text-align: left;
+	font-weight: normal;
+	padding-top: 2px;
+}
+
+.headerInfoFixed {
+	width: 25em;
+}
+
+.dataTable TH A {
+	font-weight: normal;
+	color: #505050;
+}
+
+.dataTable TH A:hover {
+	color: #e70036;
+}
+
+.dataTable TD {
+	padding: 2px;
+	border: 1px solid #919191;
+}
+
+.dataTable TD TD {
+	padding: 0px;
+	border: 0px none;
+}
+
+.tree TD.treenode {
+	padding: 2px 5px;
+}
+
+TD.tree {
+	padding: 2px 5px;
+}
+
+IMG.rich-calendar-button {
+	border: 0px !important;
+}
+
+TABLE.dataTable,TABLE.standardTable {
+	margin: 3px 0px 5px 0px;
+}
+
+.standardTable_FooterRight {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.standardTable_Column {
+	
+}
+
+.standardTable_ColumnCentered {
+	text-align: center
+}
+
+.even {
+	background-color: #ffffff;
+}
+
+.odd {
+	background: white url(images/bg_tab.gif) top left repeat;
+}
+
+.even>TD,.odd>TD,.highlight>TD {
+	height: 18px;
+}
+
+TABLE.dataTable tfoot TD,.footer {
+	background: white url(images/bg_footer.gif) top left repeat;
+}
+
+.mark {
+	background: white url(images/bg_footer.gif) top left repeat;
+}
+
+.footer2 {
+	background: white url(images/bg_footer2.gif) top left repeat;
+}
+
+.header2 {
+	background: white url(images/bg_footer.gif) top left repeat !important;
+	border: 1px solid #919191 !important;
+}
+
+FORM SPAN TABLE {
+	margin: 0px;
+	border: 0px;
+}
+
+TD.dr-table-cell {
+	padding: 2px !important;
+}
+
+TABLE {
+	margin: 0;
+	padding: 0;
+	border-spacing: 0px;
+}
+
+table.scroller {
+	border-spacing: 2px;
+}
+
+TABLE.noPad {
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+TABLE.noPad TD {
+	padding-right: 2px;
+}
+
+TABLE CAPTION {
+	font-weight: bold;
+	margin: 0 0 0 0;
+	padding: 0 0 1.5em 0;
+}
+
+TH {
+	font-weight: bold;
+	text-align: left;
+}
+
+TD {
+	font-size: 1em;
+}
+
+TABLE.infoTable {
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	margin: 10px 5px;
+	padding: 0px;
+	background: #c0c0c0;
+	border-collapse: collapse;
+}
+
+TABLE.infoTable TH {
+	color: #505050;
+	padding: 2px;
+	text-align: left;
+	background: #a6cbaf;
+	empty-cells: show;
+	font-weight: normal;
+	border: 1px solid #505050;
+}
+
+TABLE.infoTable TD {
+	padding: 2px;
+	border: 1px solid #919191;
+	background: #fff;
+}
+
+TABLE.infoTable .numericCell {
+	text-align: right;
+	padding-right: 5px;
+}
+
+TABLE.infoTable .stateCell {
+	text-align: center;
+	width: 35px;
+}
+
+TABLE.infoTable .textCell {
+	text-align: left;
+	width: 250px;
+}
+
+TABLE.main {
+	width: 100%;
+}
+
+TD.local {
+	width: 19em;
+}

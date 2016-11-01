@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Administration/Administration Prozess.htm#AdminiProzess_Prozesse_Ueberwachung_Uebe" />
+
+	<h:panelGroup>
+		<t:fieldset>
+			<sr:dataScroller for="data" />
+			<t:dataTable value="#{workflow.controller.dataModel}" var="bean"
+				styleClass="dataTable" rowClasses="even,odd" id="data"
+				sortColumn="#{workflow.controller.dataModel.order}"
+				sortAscending="#{workflow.controller.dataModel.ascending}"
+				rowIndexVar="rowIndex" preserveRowStates="false"
+				preserveDataModel="false" rows="10">
+				<t:column id="column_open" headerstyle="width:18px;">
+					<f:facet name="header">
+						<h:outputText value="" />
+					</f:facet>
+					<t:commandLink id="vorgang_load_action" immediate="true"
+						action="#{workflow.controller.open}">
+						<f:setPropertyActionListener target="#{workflow.controller.value}"
+							value="#{bean}" />
+						<t:graphicImage url="/weblets/icons/open.gif" />
+					</t:commandLink>
+				</t:column>
+				<t:column id="column_bezeichnung">
+					<f:facet name="header">
+						<t:commandSortHeader id="sort_bezeichnung"
+							columnName="regel.bezeichnung" arrow="true">
+							<t:outputText
+								value="#{sr:text('label.esmregelliste.bezeichnung')}" />
+						</t:commandSortHeader>
+					</f:facet>
+					<t:commandLink id="vorgang_load_action2" immediate="true"
+						action="#{workflow.controller.open}">
+						<f:setPropertyActionListener target="#{workflow.controller.value}"
+							value="#{bean}" />
+						<t:outputText value="#{bean.regel.bezeichnung}" />
+					</t:commandLink>
+				</t:column>
+				<t:column headerstyle="width:80px;" style="text-align:right;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.esmregelliste.warnung')}" />
+					</f:facet>
+					<h:outputText value="#{bean.regel.warnung}" />
+				</t:column>
+				<t:column headerstyle="width:80px;" style="text-align:right;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.esmregelliste.stufe1')}" />
+					</f:facet>
+					<h:outputText value="#{bean.regel.stufe1}" />
+				</t:column>
+				<t:column headerstyle="width:80px;" style="text-align:right;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.esmregelliste.stufe2')}" />
+					</f:facet>
+					<h:outputText value="#{bean.regel.stufe2}" />
+				</t:column>
+				<t:column headerstyle="width:80px;" style="text-align:right;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.esmregelliste.stufe3')}" />
+					</f:facet>
+					<h:outputText value="#{bean.regel.stufe3}" />
+				</t:column>
+				<t:column headerstyle="width:130px;">
+					<f:facet name="header">
+						<h:outputText value="#{sr:text('label.esmregelliste.empfaenger')}" />
+					</f:facet>
+					<h:outputText value="#{bean.regel.empfaenger.name}" />
+				</t:column>
+			</t:dataTable>
+			<h:panelGrid>
+				<sr:dataScrollerInfo for="data" />
+
+				<t:div styleClass="_btn">
+					<t:commandButton id="vorgang_create_action" immediate="true"
+						styleClass="_button btn_new" value="#{sr:text('label.new')}"
+						action="#{workflow.controller.create}">
+					</t:commandButton>
+				</t:div>
+			</h:panelGrid>
+		</t:fieldset>
+	</h:panelGroup>
+
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Bankverbindung" />
+
+	<t:div id="ddbvs">
+		<t:fieldset legend="Bankverbindungen">
+
+			<sr:dataTable id="bankverbindungenTable" var="bankverbindung"
+				deleteMessage="Bankverbindung löschen?"
+				deleteAction="removeBankverbindung"
+				value="#{workflow.value.bankverbindungen}">
+
+				<t:column id="column_open" headerstyle="width:18px;">
+					<sr:iconActionOpenClose id="oc_gr"
+						render="#{p:component('ddbvs')} #{p:component('bankverbindungDetail')} #{p:component('errorBox')}"
+						target="#{pc.bankverbindung}" value="#{bankverbindung}"
+						alt="Bankverbindung öffnen" title="Bankverbindung öffnen">
+					</sr:iconActionOpenClose>
+				</t:column>
+
+
+				<t:column headerstyle="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="IBAN" />
+					</f:facet>
+					<h:outputText value="#{bankverbindung.iban}" />
+				</t:column>
+
+				<t:column headerstyle="width:120px;">
+					<f:facet name="header">
+						<h:outputText value="BIC" />
+					</f:facet>
+					<h:outputText value="#{bankverbindung.bic}" />
+				</t:column>
+
+				<t:column>
+					<f:facet name="header">
+						<h:outputText value="Kreditinstitut" />
+					</f:facet>
+					<h:outputText value="#{bankverbindung.kreditinstitut}" />
+				</t:column>
+
+				<t:column headerstyle="width:120px;">
+					<f:facet name="header">
+						<h:outputText value="Löschung am" />
+					</f:facet>
+					<h:outputText value="#{bankverbindung.loeschungsdatum}">
+						<sr:convertDateTime type="date" />
+					</h:outputText>
+				</t:column>
+
+				<t:column headerstyle="width:18px;text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="" />
+					</f:facet>
+					<p:commandLink process="@this"
+						onclick="PF('bankverbindungenTable_confirm_delete').show();"
+						id="removeBankverbindungLink" rendered="#{!workflow.readonly}">
+						<h:graphicImage value="/weblets/icons/delete.gif" alt="" />
+						<f:setPropertyActionListener
+							target="#{workflow.controller.bankverbindung}"
+							value="#{bankverbindung}" />
+					</p:commandLink>
+					<h:graphicImage rendered="#{workflow.readonly}"
+						value="/weblets/icons/dis_delete.gif" alt="" />
+				</t:column>
+
+			</sr:dataTable>
+
+		</t:fieldset>
+
+		<h:panelGrid cellspacing="0" cellpadding="0">
+			<t:div styleClass="_btn">
+				<t:commandButton id="bankverbindung_neu_action"
+					styleClass="_button btn_new" value="NEU"
+					disabled="#{workflow.readonly}"
+					action="#{workflow.controller.createBankverbindung}">
+				</t:commandButton>
+			</t:div>
+		</h:panelGrid>
+
+		<t:div id="bankverbindungDetail"
+			rendered="#{workflow.controller.bankverbindung != null}">
+
+			<h:panelGrid columns="3" cellspacing="0" cellpadding="0">
+				<sr:textField id="kontonummer"
+					value="#{workflow.controller.bankverbindung.kontonummer}"
+					maxlength="10" size="15" label="Kontonummer"
+					render="bankverbindungenTable kontonummer #{p:component('errorBox')}">
+					<f:validateLongRange />
+				</sr:textField>
+
+				<sr:blzInstitut id="blz_institut" value="#{workflow.controller.bankverbindung}"
+					labelBlz="Bankleitzahl" labelInstitut="Kreditinstitut"
+					render="bankverbindungenTable" />
+
+				<sr:dateField id="loeschungAm"
+					value="#{workflow.controller.bankverbindung.loeschungsdatum}"
+					compute="true" label="Löschung am" render="bankverbindungenTable" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="6" cellspacing="0" cellpadding="0">
+				<sr:textField id="bic"
+					value="#{workflow.controller.bankverbindung.bic}" maxlength="11"
+					size="25" label="BIC" render="bankverbindungenTable" />
+
+				<sr:textField id="iban"
+					value="#{workflow.controller.bankverbindung.iban}" maxlength="34"
+					size="38" label="IBAN" render="bankverbindungenTable" />
+
+				<t:div styleClass="space-wide" />
+
+				<t:div styleClass="_btn">
+					<t:commandButton id="bvber" style="width:14em;"
+						styleClass="_button btn_restdaten" value="IBAN/BIC ERMITTELN"
+						disabled="#{workflow.readonly}" action="#{pc.computeIbanBic}" />
+				</t:div>
+
+				<t:div styleClass="space" />
+				<sr:checkboxField id="lastschrifteingangskonto"
+					value="#{workflow.controller.bankverbindung.lastschrifteingangskonto}"
+					label="Lastschrifteingangskonto"
+					rendered="#{sr:module('FMM-Lastschriften')}"
+					disabled="#{workflow.controller.lastschrifteingangskontoDisabled}" />
+			</h:panelGrid>
+		</t:div>
+
+	</t:div>
+</ui:composition>
+
+</html>

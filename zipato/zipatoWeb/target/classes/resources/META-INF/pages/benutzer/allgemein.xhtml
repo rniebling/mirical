@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink
+		ref="Benutzereinstellungen/Benutzereinstellungen.htm#Dialog_Benutzereinstellungen" />
+	<h:panelGrid columns="3" cellspacing="0" cellpadding="0">
+		<h:panelGrid cellspacing="0" cellpadding="0">
+			<h:panelGrid columns="2">
+				<sr:textField id="username" value="#{workflow.value.username}"
+					maxlength="40" size="15" readonly="true"
+					label="#{sr:text('label.admin.user.username')}" />
+
+				<t:div />
+
+				<sr:comboboxField id="anrede" value="#{workflow.value.anrede}"
+					required="true"
+					items="#{enumType['de.subito.sunrise.model.Anrede']}"
+					disabled="#{workflow.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.anrede')}" />
+
+				<sr:textField id="titel" value="#{workflow.value.titel}"
+					maxlength="40" size="10"
+					disabled="#{workflow.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.titel')}">
+					<f:validateLength minimum="2" />
+				</sr:textField>
+
+				<sr:textField id="given_name" value="#{workflow.value.vorname}"
+					maxlength="40" size="20" required="true" autocomplete="off"
+					disabled="#{workflow.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.vorname')}">
+					<f:validateLength minimum="2" />
+				</sr:textField>
+
+				<sr:textField id="surname" value="#{workflow.value.nachname}"
+					maxlength="40" size="20" autocomplete="off"
+					disabled="#{workflow.value.externVerwaltet}"
+					label="#{sr:text('label.admin.user.nachname')}" required="true">
+					<f:validateLength minimum="3" />
+				</sr:textField>
+
+
+				<!-- 						<t:div styleClass="group2"> -->
+				<!-- 							<t:inputSecret id="password" autocomplete="off" -->
+				<!-- 								value="#{workflow.controller.password}" maxlength="40" size="20" -->
+				<!-- 								readonly="#{workflow.controller.value.externVerwaltet}" -->
+				<!-- 								disabled="#{workflow.controller.value.externVerwaltet}"> -->
+				<!-- 								<f:validateLength minimum="6" /> -->
+				<!-- 								<sr:error /> -->
+				<!-- 							</t:inputSecret> -->
+				<!-- 							<sr:outputLabel for="password" -->
+				<!-- 								value="#{sr:text('label.admin.user.password')}" /> -->
+				<!-- 						</t:div> -->
+
+				<!-- 						<t:div styleClass="group2"> -->
+				<!-- 							<t:inputSecret id="password2" autocomplete="off" -->
+				<!-- 								value="#{workflow.controller.password2}" maxlength="40"	size="20"  -->
+				<!-- 								readonly="#{workflow.controller.value.externVerwaltet}" -->
+				<!-- 								disabled="#{workflow.controller.value.externVerwaltet}"> -->
+				<!-- 								<sr:error /> -->
+				<!-- 							</t:inputSecret> -->
+				<!-- 							<sr:outputLabel for="password2" -->
+				<!-- 								value="#{sr:text('label.admin.user.password2')}" /> -->
+				<!-- 						</t:div> -->
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+
+				<sr:textField id="telefon" value="#{workflow.value.telefon}"
+					maxlength="30" compute="true" size="20" required="true"
+					label="#{sr:text('label.admin.user.telefon')}"
+					disabled="#{workflow.value.externVerwaltet}" />
+
+				<sr:textField id="telefax" value="#{workflow.value.telefax}"
+					maxlength="30" compute="true" size="20"
+					label="#{sr:text('label.admin.user.telefax')}"
+					disabled="#{workflow.value.externVerwaltet}" />
+
+				<t:div rendered="#{sr:module('FMM-TAPI')}">
+					<sr:textField id="durchwahl" value="#{workflow.value.durchwahl}"
+						maxlength="30" compute="true" size="20"
+						label="#{sr:text('label.admin.user.durchwahl')}"
+						disabled="#{workflow.value.externVerwaltet}" />
+				</t:div>
+
+				<t:div rendered="#{!sr:module('FMM-TAPI')}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<sr:textField id="email" value="#{workflow.value.email}"
+					maxlength="60" compute="true" size="49"
+					label="#{sr:text('label.admin.user.email')}"
+					disabled="#{workflow.value.externVerwaltet}" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<t:div styleClass="space" />
+
+		<h:panelGrid cellspacing="0" cellpadding="0">
+			<t:fieldset legend="Einstellungen">
+				<h:panelGrid columns="1">
+					<sr:comboboxField id="resolution" value="#{controller.resolution}"
+						readonly="never" label="#{sr:text('label.userPrefs.resolution')}">
+						<f:selectItem itemValue="NORMAL"
+							itemLabel="#{sr:text('label.userPrefs.resolution.normal')}" />
+						<f:selectItem itemValue="HIGH"
+							itemLabel="#{sr:text('label.userPrefs.resolution.high')}" />
+					</sr:comboboxField>
+
+					<sr:comboboxField id="screenSize" value="#{controller.screenSize}"
+						readonly="never" label="#{sr:text('label.userPrefs.screenSize')}">
+						<f:selectItem itemValue="NORMAL"
+							itemLabel="#{sr:text('label.userPrefs.screenSize.normal')}" />
+						<f:selectItem itemValue="WIDE"
+							itemLabel="#{sr:text('label.userPrefs.screenSize.wide')}" />
+					</sr:comboboxField>
+
+					<sr:comboboxField id="listSize" value="#{controller.listSize}"
+						readonly="never" label="#{sr:text('label.admin.user.eintraege')}">
+						<f:selectItem itemValue="10" itemLabel="10" />
+						<f:selectItem itemValue="15" itemLabel="15" />
+						<f:selectItem itemValue="20" itemLabel="20" />
+						<f:selectItem itemValue="25" itemLabel="25" />
+						<f:selectItem itemValue="30" itemLabel="30" />
+					</sr:comboboxField>
+
+					<t:div>
+						<sr:comboboxField id="locale" value="#{controller.locale}"
+							items="#{controller.locales}" readonly="never"
+							label="#{sr:text('label.userPrefs.locale')}" />
+					</t:div>
+
+
+				</h:panelGrid>
+			</t:fieldset>
+		</h:panelGrid>
+
+	</h:panelGrid>
+
+	<h:panelGrid>
+		<h:commandLink value="Passwort ändern"
+			action="#{workflow.open('change-password')}" />
+	</h:panelGrid>
+</ui:composition>
+
+</html>

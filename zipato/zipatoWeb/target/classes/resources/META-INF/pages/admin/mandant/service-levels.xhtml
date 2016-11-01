@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:dataTable value="#{workflow.controller.serviceLevels}"
+		var="serviceLevel" id="data">
+
+		<t:column headerstyle="width:18px;">
+			<f:facet name="header">
+				<h:outputText value="" />
+			</f:facet>
+			<h:commandLink id="load_action"
+				action="#{serviceLevelController.open}">
+				<f:setPropertyActionListener
+					target="#{serviceLevelController.value}" value="#{serviceLevel}" />
+				<t:graphicImage url="/weblets/icons/open.gif" />
+			</h:commandLink>
+		</t:column>
+
+		<t:column>
+			<f:facet name="header">
+				<t:commandSortHeader columnName="prozess" arrow="true">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.servicelevels.Prozess')}" />
+				</t:commandSortHeader>
+			</f:facet>
+			<h:commandLink id="load_action2"
+				action="#{serviceLevelController.open}">
+				<f:setPropertyActionListener
+					target="#{serviceLevelController.value}" value="#{serviceLevel}" />
+				<h:outputText value="#{serviceLevel.prozess.name}" />
+			</h:commandLink>
+		</t:column>
+
+		<t:column headerstyle="width:100px;" style="text-align:right;">
+			<f:facet name="header">
+				<h:outputText
+					value="#{sr:text('label.admin.prozesskosten.servicelevels.Stueckpreis')}" />
+			</f:facet>
+			<h:outputText value="#{serviceLevel.stueckpreis}" />
+		</t:column>
+
+		<t:column id="remove" headerstyle="width:18px;">
+			<f:facet name="header">
+				<h:outputText value="" />
+			</f:facet>
+			<t:commandLink id="vorgang_delete_action"
+				action="#{serviceLevelController.remove}">
+				<f:setPropertyActionListener
+					target="#{serviceLevelController.value}" value="#{serviceLevel}" />
+				<t:graphicImage url="/weblets/icons/delete.gif" />
+			</t:commandLink>
+		</t:column>
+
+	</sr:dataTable>
+
+	<t:div styleClass="_btn">
+		<h:commandButton id="create_action" immediate="true"
+			styleClass="_button btn_new" value="#{sr:text('label.new')}"
+			action="#{serviceLevelController.create}" />
+	</t:div>
+
+
+
+</ui:composition>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{! empty workflow.actualPhase.tabs}">
+		<sr:panelTabbedPane id="tabs">
+			<ui:insert />
+			<c:forEach items="#{workflow.actualPhase.tabs}" var="tab">
+				<c:if test="#{tab.visible}">
+
+					<c:set var="tabLabel"
+						value="label.#{sr:toLabel(workflow.actualPhase.page)}.#{sr:toLabel(tab.page)}" />
+					<t:panelTab id="#{sr:toId(tab.page)}" styleClass="tabContent"
+						label="#{tab.label == null ? sr:text(tabLabel) : sr:eval(tab.label)}"
+						rendered="#{sr:isElTrue(tab.rendered)}">
+						<c:if test="#{sr:isElTrue(tab.marked)}">
+							<f:attribute name="styleClass" value="tabMarked" />
+						</c:if>
+						<c:if
+							test="#{sr:isElTrue(tab.rendered) and sr:isElTrue(tab.parent.tabs.indexOf(tab) == workflow.actualTabIndex)}">
+							<ui:include src="/pages/#{base}/#{tab.page}.xhtml" />
+						</c:if>
+					</t:panelTab>
+				</c:if>
+			</c:forEach>
+		</sr:panelTabbedPane>
+	</c:if>
+
+</ui:component>
+
+</html>

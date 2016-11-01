@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/admin/adminVorgang.xhtml">
+
+	<ui:define name="_title">
+		<sr:title
+			value="#{sr:text('label.admin.prozesskosten.mandantenuebersicht')}" />
+	</ui:define>
+
+	<ui:define name="_form">
+
+		<t:fieldset id="liste">
+			<sr:dataScroller for="data" render="liste" />
+			<t:dataTable value="#{workflow.controller.mandanten}" var="mandant"
+				styleClass="dataTable" rowClasses="even,odd" cellpadding="0"
+				cellspacing="1" sortColumn="#{workflow.controller.sort}"
+				sortAscending="#{workflow.controller.ascending}"
+				preserveDataModel="true" preserveSort="true" id="data" rows="10"
+				forceIdIndexFormula="#{mandant.id}">
+
+				<t:column style="width:18px;">
+					<f:facet name="header">
+						<h:outputText value="" />
+					</f:facet>
+					<h:commandLink id="load_action"
+						action="#{workflow.controller.openServiceLevels}">
+						<f:setPropertyActionListener
+							target="#{workflow.controller.mandantSelected}"
+							value="#{mandant}" />
+						<t:graphicImage url="/weblets/icons/open.gif" />
+					</h:commandLink>
+				</t:column>
+
+				<t:column style="width:100px;">
+					<f:facet name="header">
+						<t:commandSortHeader columnName="name" arrow="true">
+							<h:outputText
+								value="#{sr:text('label.admin.prozesskosten.mandanten.Mandant')}" />
+						</t:commandSortHeader>
+					</f:facet>
+					<h:commandLink id="load_action2"
+						action="#{workflow.controller.openServiceLevels}">
+						<f:setPropertyActionListener
+							target="#{workflow.controller.mandantSelected}"
+							value="#{mandant}" />
+						<h:outputText value="#{mandant.name}" />
+					</h:commandLink>
+				</t:column>
+
+				<t:column style="width:100px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.mandanten.Anschrift')}" />
+					</f:facet>
+					<h:outputText value="#{mandant.adresse.strasse}" />
+				</t:column>
+
+				<t:column style="width:70px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.mandanten.PLZ')}" />
+					</f:facet>
+					<h:outputText value="#{mandant.adresse.plz}" />
+				</t:column>
+
+				<t:column style="width:120px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.mandanten.Ort')}" />
+					</f:facet>
+					<h:outputText value="#{mandant.adresse.ort}" />
+				</t:column>
+
+				<t:column style="width:70px;">
+					<f:facet name="header">
+						<h:outputText
+							value="#{sr:text('label.admin.prozesskosten.mandanten.AnzahlSLA')}" />
+					</f:facet>
+					<h:outputText value="#{mandant.anzahlSla}" />
+				</t:column>
+
+			</t:dataTable>
+		</t:fieldset>
+
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:div rendered="#{moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="ink"
+			ref="SFDK/Administration SFDK/Adm_Benutzerverwaltung.htm#Rechte" />
+	</t:div>
+
+	<t:div rendered="#{!moduleManager.isEnabled('SFDK')}">
+		<sr:helpLink id="rest"
+			ref="Administration/Administration Benutzerverwaltung.htm#Rechte" />
+	</t:div>
+
+	<h:dataTable id="at" value="#{authorityRoles.categories}" var="cat"
+		style="width:100%;">
+		<h:column id="xx">
+			<t:fieldset legend="#{sr:text(cat.label())}">
+				<t:dataTable id="rt" value="#{authorityRoles.getRights(cat)}"
+					var="right" newspaperColumns="4" newspaperOrientation="horizontal">
+					<t:column id="cbc" style="width:190px;">
+						<c:set var="rightDescription" value="#{right}_Description" />
+						<sr:checkboxField id="t1" value="#{true}"
+							rendered="#{tc.isGroupRight(right)}" disabled="true"
+							label="#{sr:text(right)}" title="#{sr:text(rightDescription)}" />
+						<sr:checkboxField id="t2" value="#{tc.active[right]}"
+							rendered="#{!tc.isGroupRight(right)}" label="#{sr:text(right)}"
+							disabled="#{workflow.controller.value.externVerwaltet}"
+							title="#{sr:text(rightDescription)}" />
+					</t:column>
+				</t:dataTable>
+			</t:fieldset>
+		</h:column>
+	</h:dataTable>
+
+</ui:composition>
+</html>

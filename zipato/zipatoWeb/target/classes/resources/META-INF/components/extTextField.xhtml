@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{size == null}">
+		<c:set var="size" value="40" />
+	</c:if>
+
+	<c:if test="#{maxlength == null}">
+		<c:set var="maxlength" value="#{size}" />
+	</c:if>
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+
+	<c:if test="#{valueChangeListener == null}">
+		<c:set var="valueChangeListener" value="#{workflowState}" />
+	</c:if>
+
+	<t:div styleClass="fieldBox" style="#{style}" rendered="#{rendered}">
+		<sr:inputText id="#{id}" showControls="false" value="#{value}"
+			maxlength="#{maxlength}"
+			readonly="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}"
+			autocomplete="#{autocomplete}" size="#{size}" styleClass="inputText"
+			style="#{inputStyle}"
+			valueChangeListener="#{valueChangeListener.processValueChange}"
+			required="#{required and workflow.required}">
+			<sr:dbref />
+			<!-- <sr:error/> -->
+			<ui:insert />
+			<c:if test="#{render == null}">
+				<p:ajax event="blur" listener="#{workflow.compute}"
+					update="#{id},#{p:component('errorBox')}" />
+			</c:if>
+			<c:if test="#{render != null}">
+				<p:ajax event="blur" listener="#{workflow.compute}"
+					update="#{id},#{render},#{p:component('errorBox')}" />
+			</c:if>
+			<c:if test="#{reRenderInstantly != null}">
+				<p:ajax event="keyup" listener="#{workflow.compute}"
+					update="#{id},#{reRenderInstantly},#{p:component('errorBox')}" delay="500" />
+			</c:if>
+		</sr:inputText>
+		<c:if test="#{label != null }">
+			<sr:outputLabel for="#{id}" value="#{label}" required="#{required}"
+				style="#{labelStyle}" />
+		</c:if>
+	</t:div>
+
+</ui:component>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd"
+	default-lazy-init="true">
+
+	<!-- <context:spring-configured />
+	<context:annotation-config />
+
+	<import resource="classpath*:/META-INF/spring-orchestra-init.xml" />
+
+	<context:component-scan base-package="de.subito.sunrise"
+		resource-pattern="**/*.class"
+		scope-resolver="de.subito.sunrise.webapp.spring.SunriseScopeMetadataResolver"
+		name-generator="de.subito.sunrise.logic.spring.LogicBeanNameGenerator" />
+
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="schema">
+					<bean class="de.subito.sunrise.webapp.spring.DbSchemaScope" />
+				</entry>
+				<entry key="conversation.access">
+					<bean
+						class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
+						<property name="timeout" value="30" />
+						<property name="lifetime" value="access" />
+					</bean>
+				</entry>
+				<entry key="conversation.manual">
+					<bean
+						class="org.apache.myfaces.orchestra.conversation.spring.SpringConversationScope">
+						<property name="timeout" value="30" />
+						<property name="lifetime" value="manual" />
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean
+		name="org.apache.myfaces.orchestra.conversation.AccessScopeManagerConfiguration"
+		class="org.apache.myfaces.orchestra.conversation.AccessScopeManagerConfiguration"
+		scope="singleton">
+		<property name="ignoreViewIds">
+			<set>
+				<value>/errors/401.xhtml</value>
+				<value>/errors/403.xhtml</value>
+				<value>/errors/404.xhtml</value>
+				<value>/errors/500.xhtml</value>
+				<value>/errors/error.xhtml</value>
+			</set>
+		</property>
+	</bean>
+
+	<import resource="persistContext.xml" />
+	<import resource="securityContext.xml" />
+	<import resource="classpath*:de/subito/sunrise/webapp/controllerContext.xml" />
+	<import resource="classpath*:/controllerContext.xml" />
+
+	<import resource="classpath*:de/subito/sunrise/logic/logicContext.xml" />
+	<import resource="classpath*:de/subito/sunrise/logic/interfaceContext.xml" />
+
+	<bean id="setCurrentUserAdvice" class="de.subito.sunrise.logic.util.SetCurrentUserAdvice" />
+
+	<bean id="entityInterceptorAdvisor" lazy-init="false"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="setCurrentUserAdvice" />
+		<property name="patterns">
+			<list>
+				<value>.*onFlushDirty</value>
+				<value>.*onSave</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" /> -->
+
+</beans>

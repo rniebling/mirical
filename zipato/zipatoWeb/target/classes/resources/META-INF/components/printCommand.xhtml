@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{printController.value != null}">
+		<script language="javascript">
+			window.open('#{environmentInfo.requestContextPath}/download/#{printController.name}','Report','toolbar=no,location=no,directories=no,menubar=no');
+		</script>
+	</c:if>
+	<c:if test="#{icon}">
+		<t:commandLink id="print_action" action="#{printController.print}"
+			disabled="#{disabled}">
+			<f:setPropertyActionListener target="#{printController.value}"
+				value="#{value}" />
+			<f:setPropertyActionListener target="#{printController.name}"
+				value="#{name}" />
+			<c:if test="#{report != null}">
+				<f:setPropertyActionListener target="#{printController.report}"
+					value="#{report}" />
+			</c:if>
+			<t:graphicImage styleClass="icon"
+				url="#{resource['icons:print.gif']}" />
+			<ui:insert />
+		</t:commandLink>
+	</c:if>
+	<c:if test="#{!icon}">
+		<t:commandButton id="print_action" styleClass="_button btn_print"
+			action="#{printController.print}" value="DRUCKEN"
+			disabled="#{disabled}">
+			<f:setPropertyActionListener target="#{printController.value}"
+				value="#{value}" />
+			<f:setPropertyActionListener target="#{printController.name}"
+				value="#{name}" />
+			<c:if test="#{report != null}">
+				<f:setPropertyActionListener target="#{printController.report}"
+					value="#{report}" />
+			</c:if>
+			<ui:insert />
+		</t:commandButton>
+	</c:if>
+</ui:component>
+</html>

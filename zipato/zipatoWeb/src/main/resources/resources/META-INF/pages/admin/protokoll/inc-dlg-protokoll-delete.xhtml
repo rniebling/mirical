@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<p:dialog modal="true" widgetVar="confirm_prot_del_dlg"
+		styleClass="dojoDialog" hidth="500" meight="100"
+		header="Löschen der Protokolldaten">
+
+		<f:facet name="controls">
+			<h:graphicImage id="close_dlg" alt="Schliessen"
+				value="/weblets/icons/close.gif"
+				onclick="PF('confirm_prot_del_dlg').hide();"
+				style="cursor:pointer;border:1px solid #fff;">
+			</h:graphicImage>
+		</f:facet>
+
+		<p:outputPanel ajaxRendered="true">
+
+			<p:progressBar value="#{tc.progress}" interval="1000"
+				id="progressPanel" ajax="true" global="false"
+				widgetVar="deleteProgressBar"
+				style="display:block;width:450px;align:left;text-align:left;"
+				labelTemplate="Anzahl der gelöschten Datensätze: {value}">
+			</p:progressBar>
+
+		</p:outputPanel>
+
+		<h:panelGrid id="sicherheitfragen" columns="1">
+			<h:outputText
+				value="Es werden alle Protokolldaten, die den Filterkriterien entsprechen gelöscht. Die Löschung ist vollständig und endgültig. Der Auftrag zur Löschung wird protokolliert.       Eine Wiederherstellung der Daten ist nicht möglich.       Eine Datensicherung wird dringend empfohlen." />
+			<t:div id="pnl_inputs" style="margin-left:1em;"
+				rendered="#{!tc.inProgressDelete}">
+				<sr:checkboxField id="geprueft"
+					label="Ich habe die Filterkriterien überprüft."
+					render="div_btns pnl_inputs" value="#{tc.filterUeberprueft}">
+				</sr:checkboxField>
+				<sr:checkboxField id="sicherungErfolgt"
+					label="Ich habe sichergestellt, dass eine Datensicherung soweit erforderlich, erfolgt ist."
+					value="#{tc.datensicherungErfolgt}" render="div_btns pnl_inputs">
+				</sr:checkboxField>
+				<sr:checkboxField id="berechtigung"
+					label="Ich habe die Berechtigung die Löschung durchzuführen."
+					value="#{tc.hatBerechtigung}" render="div_btns pnl_inputs">
+				</sr:checkboxField>
+				<sr:checkboxField id="willloeschen"
+					label="Ich habe die Protkolldaten, die den Filterkriterien entsprechen jetzt löschen."
+					value="#{tc.wirklichLoeschen}" render="div_btns pnl_inputs">
+				</sr:checkboxField>
+			</t:div>
+		</h:panelGrid>
+
+		<p:outputPanel id="div_btns" ajaxRendered="true">
+			<p:commandButton id="deleteProtokoll" value="DATEN JETZT LÖSCHEN"
+				rendered="#{!tc.inProgressDelete}" disabled="#{!tc.loeschenErlaubt}"
+				style="width:14em;" styleClass="_button btn_delete" process="@this"
+				action="#{tc.doDelete}" update="pnl_inputs,progressPanel,div_btns">
+			</p:commandButton>
+			<p:commandButton id="cancel" value="ABBRECHEN OHNE ZU LÖSCHEN"
+				disabled="#{!tc.inProgressDelete}" style="width:18em;"
+				styleClass="_button btn_stop" process="@this"
+				update="#{p:component('div_buttons')}"
+				onclick="PF('confirm_prot_del_dlg').hide();">
+				<p:ajax event="click" listener="#{tc.actionAbbrechen}"
+					update="progressPanel,sicherheitfragen,div_btns,div_buttons">
+				</p:ajax>
+			</p:commandButton>
+			<p:commandButton id="cmd_close" value="SCHLIESSEN" process="@this"
+				onclick="PF('confirm_prot_del_dlg').hide();"
+				update="#{p:component('div_buttons')}"
+				styleClass="_button btn_abort" forceId="true">
+			</p:commandButton>
+
+		</p:outputPanel>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

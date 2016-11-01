@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+	<sr:helpLink ref="" />
+
+	<t:div id="fall_details" style="width:650px;"
+		rendered="#{! empty tc.fall}">
+
+		<t:fieldset
+			legend="#{sr:text('label.admin.prozess.fall.Verzweigung')}">
+			<h:panelGrid columns="3">
+
+				<sr:textField id="fall_bezeichnung" value="#{tc.fall.bezeichnung}"
+					maxlength="80" size="30" required="true"
+					label="#{sr:text('label.admin.prozess.entscheidung.fall.bezeichnung')}" />
+
+				<t:div />
+				<t:div />
+
+				<sr:comboboxField id="fall_typ" value="#{tc.fall.fallTyp}"
+					items="#{enumType['de.subito.sunrise.model.prozess.FallTyp']}"
+					required="true" label="Entscheidungstyp" render="conditions params" />
+
+				<sr:checkboxField id="doku" compute="true"
+					value="#{tc.fall.ergebnisDoku}" render="kontroll"
+					label="Dokumentation Kontrollergebnisse">
+				</sr:checkboxField>
+
+				<t:div id="kontroll">
+					<sr:comboboxField id="kontroll_typ" value="#{tc.fall.kontrollTyp}"
+						rendered="#{tc.fall.ergebnisDoku}"
+						items="#{enumType['de.subito.sunrise.model.prozess.KontrollTyp']}"
+						rlabel="Kontrolltyp" />
+				</t:div>
+
+				<t:div id="params">
+					<sr:percentField id="wahrschein" required="true"
+						label="Wahrscheinlichkeit" value="#{tc.fall.wahrscheinlichkeit}"
+						rendered="#{tc.fall.random}" />
+
+					<t:div rendered="#{tc.fall.random}" />
+				</t:div>
+
+				<sr:checkboxField id="schleife" compute="true"
+					value="#{tc.fall.schleife}" label="Entscheidungszweig mit Schleife">
+				</sr:checkboxField>
+
+				<t:div />
+
+			</h:panelGrid>
+
+		</t:fieldset>
+		<t:div id="conditions">
+			<t:fieldset rendered="#{tc.fall.fallTyp == 'SYSTEM'}"
+				legend="#{sr:text('label.admin.prozess.fall.Bedingungen')}">
+
+				<sr:comboboxField id="fall_junktor" value="#{tc.fall.bedingung.typ}"
+					items="#{enumType['de.subito.sunrise.model.prozess.Junktor']}"
+					required="true"
+					label="#{sr:text('label.admin.prozess.entscheidung.fall.junktor')}" />
+
+				<sr:dataTable id="cases2" value="#{tc.fall.bedingung.aussagen}"
+					var="aussage" rowIndexVar="rowIndex" deleteAction="removeAussage"
+					deleteController="#{prozessFallController}"
+					deleteMessage="#{sr:text('label.deleteProzessAussage')}">
+
+					<t:column style="vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.fall.Feld')}" />
+						</f:facet>
+						<sr:comboboxField id="bedingung_feld2_#{rowIndex}"
+							value="#{aussage.property}" render="cases2" emptyItem="true"
+							items="#{tc.fallProperties}" />
+					</t:column>
+					<t:column headerstyle="width:50px;">
+						<f:facet name="header">
+							<sr:outputLabel for="fall_junktor_#{rowIndex}"
+								value="#{sr:text('label.admin.prozess.fall.Operator')}" />
+						</f:facet>
+						<sr:comboboxField id="bedingung_junktor_#{rowIndex}"
+							value="#{aussage.typ}" render="cases2"
+							items="#{enumType['de.subito.sunrise.model.prozess.Praedikat']}" />
+					</t:column>
+					<t:column style="vertical-align: middle;">
+						<f:facet name="header">
+							<h:outputText value="#{sr:text('label.admin.prozess.fall.Wert')}" />
+						</f:facet>
+						<t:div id="bedingung_x_value_#{rowIndex}">
+							<c:set var="typ" value="#{tc.getFieldType(aussage.property)}" />
+							<t:div rendered="#{typ == 'MonetaryAmount'}">
+								<sr:moneyField id="bedingung_amount_value_#{rowIndex}"
+									render="cases2" value="#{aussage.amountValue}" compute="true" />
+							</t:div>
+							<t:div rendered="#{typ == 'String'}">
+								<sr:textField id="bedingung_value_#{rowIndex}"
+									value="#{aussage.value}" maxlength="80" size="20"
+									compute="true" />
+							</t:div>
+							<t:div rendered="#{typ == 'Boolean'}">
+								<sr:comboboxField id="bedingung_bool_value_#{rowIndex}"
+									value="#{aussage.value}">
+									<f:selectItem itemValue="" itemLabel="" />
+									<f:selectItem itemValue="true" itemLabel="Ja" />
+									<f:selectItem itemValue="false" itemLabel="Nein" />
+								</sr:comboboxField>
+							</t:div>
+							<t:div rendered="#{typ == 'Integer'}">
+								<sr:integerField id="bedingung_integer_value_#{rowIndex}"
+									value="#{aussage.value}" maxlength="10" size="3" compute="true" />
+							</t:div>
+						</t:div>
+					</t:column>
+					<t:column headerstyle="width:18px;" style="vertical-align: middle;">
+						<p:commandLink id="remove" disabled="#{workflow.readonly}"
+							process="@this" onclick="PF('cases2_confirm_delete').show();">
+							<h:graphicImage value="/weblets/icons/delete.gif"></h:graphicImage>
+							<f:setPropertyActionListener target="#{tc.aussage}"
+								value="#{aussage}"></f:setPropertyActionListener>
+						</p:commandLink>
+					</t:column>
+
+				</sr:dataTable>
+				<t:div styleClass="_btn">
+					<h:commandButton id="add_aussage_action" action="#{tc.addAussage}"
+						styleClass="_button btn_new"
+						value="#{sr:text('label.admin.prozess.fall.HINZUFUeGEN')}" />
+				</t:div>
+			</t:fieldset>
+
+		</t:div>
+
+	</t:div>
+
+</ui:composition>
+
+</html>

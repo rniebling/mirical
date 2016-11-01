@@ -1,0 +1,23 @@
+/*
+ * Stylesheet für die Auflösung "HOCH"
+ *
+ */
+BODY,P,DIV,LABEL,TD {
+	font-size: 14px;
+}
+
+.dataTable {
+	font-size: 1em;
+}
+
+.blankline {
+	height: 45px;
+}
+
+.space-wide {
+	height: 24px;
+}
+/* Menu */
+/*A.rootMenuItem {*/
+/*	font-size: 16px;*/
+/*}*/

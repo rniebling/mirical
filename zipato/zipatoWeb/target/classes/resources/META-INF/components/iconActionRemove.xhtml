@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:component>
+
+	<c:if test="#{tableId == null}">
+		<c:set var="tableId" value="data" />
+	</c:if>
+
+	<t:div rendered="#{!workflow.readonly and !disabled}">
+		<p:commandLink id="ra_#{id}" title="#{sr:text('label.icon.remove')}"
+			process="@this" onclick="PF('#{tableId}_confirm_delete').show();">
+			<h:graphicImage alt="#{sr:text('label.icon.remove')}"
+				value="/weblets/icons/delete.gif" />
+			<ui:insert />
+		</p:commandLink>
+	</t:div>
+
+	<h:graphicImage alt="#{sr:text('label.icon.remove')}"
+		rendered="#{workflow.readonly or disabled}"
+		value="/weblets/icons/dis_delete.gif" />
+
+
+</ui:component>
+</html>

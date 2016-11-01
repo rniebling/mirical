@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<context-root>/FactoryBanking</context-root>
+
+	<container-descriptor>
+		<prefer-web-inf-classes>false</prefer-web-inf-classes>
+		<prefer-application-packages>
+			<package-name>javax.persistence.*</package-name>
+			<package-name>org.apache.commons.lang.*</package-name>
+			<package-name>com.ctc.wstx.*</package-name>
+		</prefer-application-packages>
+	</container-descriptor>
+	
+	
+	<resource-description>
+		<res-ref-name>jdbc/Default</res-ref-name>
+		<jndi-name>jdbc/factoryBanking</jndi-name>
+	</resource-description>
+
+	<resource-description>
+		<res-ref-name>mail/Session</res-ref-name>
+		<jndi-name>mail/Session</jndi-name>
+	</resource-description>
+
+
+</weblogic-web-app>

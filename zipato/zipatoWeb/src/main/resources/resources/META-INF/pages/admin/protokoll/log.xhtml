@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<sr:helpLink
+		ref="Administration/Administration Allgemein.htm#Administration_Dialog_Log" />
+
+	<t:fieldset legend="Konfiguration">
+		<h:panelGrid columns="2">
+
+			<sr:comboboxField id="level" value="#{controller.logLevel}"
+				style="width:13em;" render="logTable" label="Log Level"
+				emptyItem="false"
+				items="#{enumType['de.subito.sunrise.webapp.AppLogLevel']}" />
+
+
+			<sr:comboboxField id="bs" value="#{controller.logBufferSize}"
+				style="width:13em;" render="logTable" compute="true"
+				label="Max. Anzahl Logzeilen">
+				<f:selectItem itemValue="200" itemLabel="200" />
+				<f:selectItem itemValue="500" itemLabel="500" />
+				<f:selectItem itemValue="1000" itemLabel="1000" />
+				<f:selectItem itemValue="2000" itemLabel="2000" />
+			</sr:comboboxField>
+
+		</h:panelGrid>
+
+
+
+	</t:fieldset>
+
+	<t:fieldset legend="Ausgaben">
+
+		<t:div styleClass="_btn">
+			<p:commandButton id="ca" styleClass="_button btn_close"
+				onclick="PF('popup').show();" value="LOG LEEREN"
+				disabled="#{workflow.readonly}">
+				<p:ajax onstart="setSize()" />
+			</p:commandButton>
+		</t:div>
+
+		<t:div id="logTable">
+			<t:htmlTag value="table">
+				<f:param name="class" value="dataTable" />
+				<c:forEach items="#{controller.logs}" var="log">
+					<h:outputText value="#{log}" escape="false" />
+				</c:forEach>
+			</t:htmlTag>
+		</t:div>
+
+	</t:fieldset>
+
+
+	<p:dialog modal="true" id="popup" widgetVar="popup" position="center"
+		header="#{sr:text('label.value.admini.protokoll.log.clear')}">
+		<h:panelGrid columns="2">
+			<t:commandButton id="clear_ok" immediate="true"
+				action="#{controller.clear}" styleClass="_button btn_save"
+				value="#{sr:text('label.button.admini.protokoll.log.ok')}">
+			</t:commandButton>
+			<p:commandButton id="clear_cancel" styleClass="_button btn_abort"
+				onclick="PF('popup').hide()"
+				value="#{sr:text('label.button.admini.protokoll.log.cancel')}">
+			</p:commandButton>
+		</h:panelGrid>
+	</p:dialog>
+
+	<script>
+		function setSize() {
+			$(".ui-dialog").css({
+				"left" : "50%",
+				"top" : "50%",
+				"margin-left" : -150,
+				"margin-top" : -100
+			});
+		}
+	</script>
+</ui:composition>
+</html>

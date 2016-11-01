@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="/pages/template.xhtml">
+
+	<ui:define name="_logout" />
+	<ui:define name="_content">
+		<t:div style="margin: 20px 10px;">
+			<ui:insert name="_title" />
+			<t:div style="width:750px; height:400px; overflow:auto;">
+				<t:div style="width: 96%; background-color: white; padding: 5px;">
+					<ui:insert name="_main" />
+				</t:div>
+			</t:div>
+			<t:div style="width:750px;">
+				<ui:insert name="_bottomBar" />
+			</t:div>
+		</t:div>
+	</ui:define>
+
+</ui:composition>
+
+</html>

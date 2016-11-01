@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition template="../template.xhtml">
+
+	<ui:define name="_module">
+		<h:outputText value="#{sr:text('label.modul.administration')}" />
+	</ui:define>
+
+	<ui:define name="_buttonBar">
+		<t:div styleClass="buttonBar">
+			<t:div styleClass="commandBar" style="float:right;">
+				<ui:insert name="_commandButtons">
+					<t:div styleClass="_btn">
+
+						<h:commandButton styleClass="_button btn_back"
+							value="#{sr:text('label.back')}" action="#{workflow.back}" />
+						<ui:insert name="_saveButton">
+							<c:if test="#{!workflow.readonly}">
+								<p:hotkey bind="ctrl+s" actionListener="#{workflow.save}"
+									update="main" />
+							</c:if>
+							<t:commandButton id="action_save"
+								binding="#{workflow.saveButton}" styleClass="_button btn_save"
+								value="#{sr:text('label.save')}" action="#{workflow.save}"
+								actionFor="admin_form" disabled="#{workflow.readonly}" />
+						</ui:insert>
+						<t:commandButton styleClass="_button btn_overview"
+							value="#{sr:text('label.close')}" action="#{workflow.close}" />
+						<t:commandButton styleClass="_button btn_next"
+							value="#{sr:text('label.next')}" action="#{workflow.next}" />
+
+					</t:div>
+				</ui:insert>
+			</t:div>
+		</t:div>
+	</ui:define>
+
+	<ui:define name="_main">
+
+		<t:subform id="admin_form">
+
+			<c:choose>
+				<c:when test="#{workflow.allowed}">
+					<ui:insert name="_title" />
+
+					<t:div id="contentBox" forceId="true">
+						<t:div styleClass="contentBoxInner">
+							<ui:include src="../inc-errorbox.xhtml" />
+							<h:panelGroup>
+								<ui:insert name="_form" />
+							</h:panelGroup>
+						</t:div>
+					</t:div>
+				</c:when>
+				<c:otherwise>
+					<sr:title
+						value="#{sr:text('label.admin.adminvorgang.UnzulaessigeNavigation')}" />
+					<t:div id="contentBox" forceId="true">
+						<t:div styleClass="contentBoxInner">
+							<t:htmlTag value="p">
+								<h:outputText
+									value="#{sr:text('label.admin.adminvorgang.KlickenSie')}" />
+								<h:commandLink id="home" action="#{workflow.home}"
+									value="#{sr:text('label.admin.adminvorgang.hier')}" />
+								<h:outputText
+									value="#{sr:text('label.admin.adminvorgang.KommaumwiederaufeinezulaessigeSeitezukommen')}" />
+							</t:htmlTag>
+						</t:div>
+					</t:div>
+				</c:otherwise>
+
+			</c:choose>
+
+		</t:subform>
+	</ui:define>
+</ui:composition>
+</html>

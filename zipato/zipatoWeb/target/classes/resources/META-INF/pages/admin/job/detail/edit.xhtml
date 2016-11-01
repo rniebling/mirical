@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<h:panelGrid>
+
+		<sr:checkboxField id="on" value="#{pc.value.bedingtStarten}"
+			label="Nur starten am?" render="timeplan" />
+
+		<t:div id="timeplan">
+			<t:fieldset legend="Starten am" rendered="#{pc.value.bedingtStarten}">
+
+				<sr:comboboxField id="mt" value="#{pc.value.monatstag}"
+					label="Monatstag">
+					<f:selectItem itemValue="" itemLabel="*" />
+					<f:selectItem itemValue="1" itemLabel=" 1." />
+					<f:selectItem itemValue="2" itemLabel=" 2." />
+					<f:selectItem itemValue="3" itemLabel=" 3." />
+					<f:selectItem itemValue="4" itemLabel=" 4." />
+					<f:selectItem itemValue="5" itemLabel=" 5." />
+					<f:selectItem itemValue="6" itemLabel=" 6." />
+					<f:selectItem itemValue="7" itemLabel=" 7." />
+					<f:selectItem itemValue="8" itemLabel=" 8." />
+					<f:selectItem itemValue="9" itemLabel=" 9." />
+					<f:selectItem itemValue="10" itemLabel="10." />
+					<f:selectItem itemValue="11" itemLabel="11." />
+					<f:selectItem itemValue="12" itemLabel="12." />
+					<f:selectItem itemValue="13" itemLabel="13." />
+					<f:selectItem itemValue="14" itemLabel="14." />
+					<f:selectItem itemValue="15" itemLabel="15." />
+					<f:selectItem itemValue="16" itemLabel="16." />
+					<f:selectItem itemValue="17" itemLabel="17." />
+					<f:selectItem itemValue="18" itemLabel="18." />
+					<f:selectItem itemValue="19" itemLabel="19." />
+					<f:selectItem itemValue="20" itemLabel="20." />
+					<f:selectItem itemValue="21" itemLabel="21." />
+					<f:selectItem itemValue="22" itemLabel="22." />
+					<f:selectItem itemValue="23" itemLabel="23." />
+					<f:selectItem itemValue="24" itemLabel="24." />
+					<f:selectItem itemValue="25" itemLabel="25." />
+					<f:selectItem itemValue="26" itemLabel="26." />
+					<f:selectItem itemValue="27" itemLabel="27." />
+					<f:selectItem itemValue="28" itemLabel="28." />
+					<f:selectItem itemValue="29" itemLabel="29." />
+					<f:selectItem itemValue="30" itemLabel="30." />
+					<f:selectItem itemValue="31" itemLabel="31." />
+				</sr:comboboxField>
+
+				<sr:comboboxField id="wt" value="#{pc.value.wochentag}"
+					label="Wochentag">
+					<f:selectItem itemValue="" itemLabel="*" />
+					<f:selectItem itemValue="2" itemLabel="Montag" />
+					<f:selectItem itemValue="3" itemLabel="Dienstag" />
+					<f:selectItem itemValue="4" itemLabel="Mittwoch" />
+					<f:selectItem itemValue="5" itemLabel="Donnerstag" />
+					<f:selectItem itemValue="6" itemLabel="Freitag" />
+					<f:selectItem itemValue="7" itemLabel="Samstag" />
+					<f:selectItem itemValue="1" itemLabel="Sonntag" />
+				</sr:comboboxField>
+
+			</t:fieldset>
+		</t:div>
+
+	</h:panelGrid>
+
+	<t:div styleClass="space" />
+
+	<h:panelGrid>
+		<t:fieldset legend="Parameter" rendered="#{! empty pc.parameters}">
+
+			<sr:dataTable id="params" value="#{pc.parameters}" var="bean"
+				deleteAction="removeParameter"
+				deleteMessage="Soll dieser Parameter gelöscht werden?">
+
+				<t:column headerstyle="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="Parameter" />
+					</f:facet>
+					<h:outputText value="#{bean.name}" />
+				</t:column>
+				<t:column headerstyle="width:300px;">
+					<f:facet name="header">
+						<h:outputText value="Wert" />
+					</f:facet>
+
+					<t:div rendered="#{bean.typ == 'STRING'}">
+						<sr:textField id="stringValue" value="#{bean.stringValue}" />
+					</t:div>
+					<t:div rendered="#{bean.typ == 'DATE'}">
+						<sr:dateField id="dateValue" value="#{bean.dateValue}" />
+					</t:div>
+					<t:div rendered="#{bean.typ == 'INTEGER'}">
+						<sr:integerField id="integerValue" value="#{bean.integerValue}" />
+					</t:div>
+					<t:div rendered="#{bean.typ == 'BOOLEAN'}">
+						<sr:checkboxField id="cbbv" value="#{bean.booleanValue}" />
+					</t:div>
+					<t:div rendered="#{bean.typ == 'ENUMTYP'}">
+						<sr:comboboxField id="cbev" value="#{bean.stringValue}">
+							<f:selectItems value="#{pc.getEnumValues(bean)}" />
+						</sr:comboboxField>
+					</t:div>
+					<t:div rendered="#{bean.typ == 'OBJECT'}">
+						<sr:comboboxField id="cobj" value="#{bean.objectId}"
+							emptyItem="true" required="true">
+							<f:selectItems value="#{pc.getObjectValues(bean)}" />
+						</sr:comboboxField>
+					</t:div>
+					<t:div rendered="#{bean.typ == 'OBJECTLIST'}">
+
+						<h:panelGrid columns="2">
+							<sr:comboboxField id="objlv" value="#{pc.objectId}"
+								emptyItem="true">
+								<f:selectItems value="#{pc.getObjectValues(bean)}" />
+								<p:ajax event="change" update="add_btn" />
+							</sr:comboboxField>
+
+							<t:div id="add_btn">
+								<t:div styleClass="_btn">
+									<t:commandButton id="neu_obj" styleClass="_button btn_next"
+										value="HINZUFÜGEN" action="#{pc.addObject(bean)}">
+									</t:commandButton>
+								</t:div>
+							</t:div>
+
+						</h:panelGrid>
+
+						<t:div rendered="#{!empty bean.objectIds}">
+							<t:div styleClass="space-small" />
+
+							<t:fieldset>
+								<sr:dataTable id="added_objects" value="#{bean.objectIds}"
+									var="obj">
+
+									<t:column>
+										<h:outputText value="#{pc.getName(obj,bean)}" />
+									</t:column>
+
+									<t:column headerstyle="width:18px;" style="text-align:center;">
+										<t:commandLink id="rm_obj" disabled="#{workflow.readonly}"
+											render="added_objects" action="#{pc.removeObject(obj,bean)}">
+											<h:graphicImage value="/weblets/icons/delete.gif"
+												alt="Löschen" />
+										</t:commandLink>
+									</t:column>
+
+								</sr:dataTable>
+							</t:fieldset>
+
+						</t:div>
+					</t:div>
+				</t:column>
+			</sr:dataTable>
+
+		</t:fieldset>
+	</h:panelGrid>
+
+</ui:composition>
+</html>

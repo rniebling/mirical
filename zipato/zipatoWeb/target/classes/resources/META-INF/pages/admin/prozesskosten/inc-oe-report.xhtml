@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<ui:composition>
+
+	<t:panelTab id="report_oe"
+		label="#{sr:text('label.admin.prozesskosten.report')}">
+
+		<sr:helpLink
+			ref="Administration/Administration Auswertungen.htm#AdminiProzess_Report_Kontroll" />
+
+		<t:fieldset id="oe_konfiguration_neu"
+			legend="#{sr:text('label.admin.prozesskosten.konfiguration')}">
+
+			<h:panelGrid columns="2" cellspacing="1">
+
+				<h:panelGrid style="width:170px">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.auswertungsZeitPunkt')}" />
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText
+						value="#{controller.datumString(controller.konfig.zeitPunktStart)}" />
+				</h:panelGrid>
+
+				<h:panelGrid style="width:170px">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.auswertungsZeitRaum')}" />
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText
+						value="#{controller.datumString(controller.konfig.zeitraumVon)} bis #{controller.datumString(controller.konfig.zeitraumBis)}" />
+				</h:panelGrid>
+
+				<h:panelGrid style="width:170px">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.organisationsEinheiten')}" />
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText value="#{pc.konfig.organisationsEinheitenString}" />
+				</h:panelGrid>
+
+				<h:panelGrid style="width:170px">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.prozesse')}" />
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText value="#{pc.konfig.prozesseString}" />
+				</h:panelGrid>
+
+				<h:panelGrid style="width:170px">
+					<h:outputText
+						value="#{sr:text('label.admin.prozesskosten.anmerkungen')} :" />
+				</h:panelGrid>
+				<h:panelGrid style="word-wrap:break-word">
+					<h:outputText value="#{pc.konfig.anmerkungen}" />
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</t:fieldset>
+
+		<t:fieldset id="ergebnis_rich" legend="Reportergebnis">
+
+			<sr:dataScroller for="dataWertanpassungenMA" />
+			<p:dataTable value="#{pc.ergebnis.listProzess}"
+				id="dataWertanpassungenMA" var="gprErgebnis" rows="10"
+				rowClasses="odd,even" styleClass="dataTable"
+				style="border-color:#505050">
+
+				<f:facet name="header">
+					<p:columnGroup>
+						<p:column rowspan="2">
+							<h:outputText value="Prozess" />
+						</p:column>
+						<p:column rowspan="2">
+							<h:outputText
+								value="#{sr:text('label.admin.prozesskosten.anzahlGestartet')}" />
+						</p:column>
+						<p:column rowspan="2">
+							<h:outputText
+								value="#{sr:text('label.admin.prozesskosten.anzahlBearbeitet')}" />
+						</p:column>
+						<p:column rowspan="2">
+							<h:outputText value="SLA eingehalten" />
+						</p:column>
+						<p:column rowspan="2">
+							<h:outputText value="SLA überschritten" />
+						</p:column>
+						<p:column colspan="3">
+							<h:outputText value="Durchlaufzeit Gesamtprozess" />
+						</p:column>
+						<p:column breakBefore="true">
+							<h:outputText value="Durchschnitt" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Min." />
+						</p:column>
+						<p:column>
+							<h:outputText value="Max." />
+						</p:column>
+					</p:columnGroup>
+				</f:facet>
+
+				<p:column style="width:390px;">
+					<h:outputText value="#{gprErgebnis.prozess.name}" />
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText value="#{gprErgebnis.anzahlGestartet}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText value="#{gprErgebnis.anzahlBearbeitet}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText
+							value="#{pc.anzahlSlaEingehaltenString(gprErgebnis)}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText
+							value="#{pc.anzahlSlaUeberschrittenString(gprErgebnis)}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText
+							value="#{pc.formatMilliseconds(gprErgebnis.vorgangDurchlaufzeitDurchschnitt)}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText
+							value="#{pc.formatMilliseconds(gprErgebnis.vorgangDurchlaufzeitMin)}" />
+					</t:div>
+				</p:column>
+
+				<p:column style="width:150px;">
+					<t:div style="text-align:right;">
+						<h:outputText
+							value="#{pc.formatMilliseconds(gprErgebnis.vorgangDurchlaufzeitMax)}" />
+					</t:div>
+				</p:column>
+			</p:dataTable>
+			<sr:dataScrollerInfo for="dataWertanpassungenMA" />
+
+		</t:fieldset>
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="print_action_liste"
+				styleClass="_button btn_print"
+				disabled="#{workflow.readonly or pc.ergebnis == null}" value="LISTE"
+				action="#{workflow.controller.printListe}" />
+		</t:div>
+
+		<t:div styleClass="space-wide" />
+
+		<t:fieldset id="bericht" legend="Berichte">
+
+			<h:panelGrid>
+
+				<sr:checkboxField id="showGesamtReport"
+					value="#{pc.showGesamtReport}" label="Übersicht" />
+
+				<sr:checkboxField id="showJahresReport"
+					value="#{pc.showJahresReport}" label="Jahre" />
+
+				<sr:checkboxField id="showQuartalsReport"
+					value="#{pc.showQuartalsReport}" label="Quartale" />
+
+				<sr:checkboxField id="showMonatsReport"
+					value="#{pc.showMonatsReport}" label="Monate" />
+			</h:panelGrid>
+		</t:fieldset>
+
+		<t:div styleClass="_btn">
+			<h:commandButton id="print_action_bericht"
+				styleClass="_button btn_print"
+				disabled="#{workflow.readonly or pc.ergebnis == null}"
+				value="BERICHT" action="#{workflow.controller.printReport}" />
+		</t:div>
+
+	</t:panelTab>
+
+</ui:composition>
+</html>

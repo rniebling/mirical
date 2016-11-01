@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:sr="http://subito.de/sunrise">
+
+<!-- Parameter: backingbean: Bean, auf der die action aufgerufen wird
+					action: 	 Name der Funktion, die aufgerufen werden soll
+					binding: 	 evtl. binding für einen commandButton
+					mbmessage: 	 Text in der Messagebox
+					url:		 Wenn vorhanden wird ein Image mit der betrf. url erzeugt
+					link:		 Wenn keine url vorhanden, Textlink mit diesem Text
+	-->
+
+<ui:component>
+	<c:set var="_ro"
+		value="#{readonly != 'never' ? readonly or disabled or workflow.readonly : false}" />
+	<c:set var="_ro2"
+		value="#{readonly == 'dependsondisabled' ? disabled : disabled or workflow.readonly}" />
+	<c:set var="_ro3" value="#{_ro2 == false ? false : _ro}" />
+
+	<c:if test="#{rendered == null}">
+		<c:set var="rendered" value="true" />
+	</c:if>
+
+	<c:if test="#{label == null}">
+		<c:set var="label" value="#{sr:text('label.ok')}" />
+	</c:if>
+
+	<c:if test="#{cancellabel == null}">
+		<c:set var="cancellabel" value="#{sr:text('label.abbrechen')}" />
+	</c:if>
+
+	<c:if test="#{buttonStyleClass == null}">
+		<c:set var="buttonStyleClass" value="btn_default" />
+	</c:if>
+
+	<c:if test="#{rendered}">
+		<t:div styleClass="_btn" style="display:inline;">
+			<h:commandButton id="#{id}" style="#{buttonStyle}"
+				styleClass="_button #{buttonStyleClass}" value="#{value}"
+				disabled="#{_ro3}" onclick="PF('#{id}_confirm').show();">
+				<c:if test="#{buttonStyle  != null}">
+					<f:attribute name="style" value="#{buttonStyle}" />
+				</c:if>
+				<f:ajax />
+			</h:commandButton>
+		</t:div>
+	</c:if>
+
+	<c:if test="#{!_ro3}">
+		<p:dialog modal="true" id="#{id}_confirm" widgetVar="#{id}_confirm"
+			width="300" styleClass="dojoDialog" visible="false" minHeight="100">
+
+			<c:if test="#{! empty mbtitle}">
+				<f:facet name="header">
+					<t:outputText value="#{mbtitle}" />
+				</f:facet>
+			</c:if>
+
+			<h:panelGrid>
+				<t:outputText value="#{mbmessage}" />
+
+				<t:div styleClass="space" />
+
+				<h:panelGrid columns="2">
+					<t:div styleClass="_btn">
+						<c:if test="#{binding == null}">
+							<h:commandButton id="#{id}_ok1" styleClass="_button btn_save"
+								value="#{label}" action="#{backingbean[action]}"
+								onclick="PF('#{id}_confirm').hide()">
+								<ui:insert />
+							</h:commandButton>
+						</c:if>
+
+						<c:if test="#{binding != null}">
+							<h:commandButton id="#{id}_ok2" binding="#{backingbean[binding]}"
+								styleClass="_button btn_save" value="#{label}"
+								action="#{backingbean[action]}"
+								onclick="PF('#{id}_confirm').hide()">
+								<ui:insert />
+							</h:commandButton>
+						</c:if>
+					</t:div>
+
+					<t:div id="#{id}_cbd" styleClass="_btn">
+						<p:commandButton id="#{id}_cancel1" value="#{cancellabel}"
+							styleClass="_button btn_abort" process="@this"
+							onclick="PF('#{id}_confirm').hide()">
+						</p:commandButton>
+					</t:div>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</p:dialog>
+	</c:if>
+</ui:component>
+</html>
