@@ -46,7 +46,7 @@ public class Login {
 		webTarget = client.target(ZipatoSession.getREST_URL()).path("user/login");
 
 		Invocation.Builder invocationBuilder2 = webTarget
-				.queryParam("username", "user")
+				.queryParam("username", user)
 				.queryParam("token", token).request(MediaType.APPLICATION_JSON);
 		invocationBuilder2.cookie("JSESSIONID",jessionid);
 		Response response2 = invocationBuilder2.get();

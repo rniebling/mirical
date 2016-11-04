@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 
 public class EntityManagerProducer {
 
-    @PersistenceContext(unitName = "mygourmet")
+    @PersistenceContext(unitName = "mirical")
     private EntityManager entityManager;
 
     @Produces @Default @RequestScoped

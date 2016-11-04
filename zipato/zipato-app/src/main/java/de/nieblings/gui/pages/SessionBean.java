@@ -45,7 +45,7 @@ public class SessionBean implements Serializable {
 
     @PostConstruct
     public void init() {
-    	user="ralf.niebling@subito.de";
+    	user="ralf@nieblings.de";
     	passwort="privat10";
     }
     

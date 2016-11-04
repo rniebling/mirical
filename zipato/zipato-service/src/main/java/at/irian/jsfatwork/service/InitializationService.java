@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 @ApplicationScoped
 public class InitializationService {
 
-    @PersistenceContext(unitName = "mygourmet")
+    @PersistenceContext(unitName = "mirical")
     private EntityManager em;
 
     public void init() {
